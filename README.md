@@ -1,0 +1,1 @@
+Our project is an application that stores player match data for the game: League of Legends. It will allow you to query information about user match histories, champion statistics and view team and item compositions. This project aims to help players improve their gameplay in League of Legends and assist developers through the use of historical data stored in our application.
