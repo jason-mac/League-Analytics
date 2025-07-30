@@ -1,21 +1,19 @@
 #!/bin/bash
 
 # Set Oracle environment
-if [ -d /opt/oracle/instantclient_19_8 ]; then
-    export ORACLE_HOME=/opt/oracle/instantclient_19_8
-    export LD_LIBRARY_PATH=$ORACLE_HOME
-elif [ -d /usr/lib/oracle/19.6/client64/lib ]; then
-    export ORACLE_HOME=/usr/lib/oracle/19.6/client64
-    # 19.* libraries will be already configured by ldconfig
-    #export LD_LIBRARY_PATH=$ORACLE_HOME/lib
-elif [ -d /usr/lib/oracle/12.2/client64/lib ]; then
-    export ORACLE_HOME=/usr/lib/oracle/12.2/client64
-    export LD_LIBRARY_PATH=$ORACLE_HOME/lib
+if [ -d /cs/software/rpms/oracle_client-signed/instantclient_23_7/instantclient_23_7 ]; then
+export ORACLE_HOME=/cs/software/rpms/oracle_client-signed/instantclient_23_7/instantclient_23_7
+export LD_LIBRARY_PATH=$ORACLE_HOME
+elif [ -d /cs/software/rpms/oracle_client-signed/instantclient_23_4 ]; then
+export ORACLE_HOME=/cs/software/rpms/oracle_client-signed/instantclient_23_4
+export LD_LIBRARY_PATH=$ORACLE_HOME
+elif [ -d /cs/software/rpms/oracle_client-signed/instantclient_21_11 ]; then
+export ORACLE_HOME=/cs/software/rpms/oracle_client-signed/instantclient_21_11
+export LD_LIBRARY_PATH=$ORACLE_HOME
 else
-    echo "Oracle not found..."
-    exit 1
+echo "Oracle not found..."
+exit 1
 fi
-
 
 # Configure the shared Node library on the undergrad server.
 export NODE_PATH=/cs/local/generic/lib/cs304/node_modules
