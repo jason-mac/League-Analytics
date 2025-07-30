@@ -10,7 +10,7 @@
 
     <title>Database Application</title>
 </head>
-<body>
+<body style>
     <!-- ===================================================================================== -->
     <!-- Display the current status of the database connection. 
          !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
@@ -78,7 +78,376 @@
     <!-- A placeholder to display the count result. -->
     <div id="countResultMsg"></div> <br>
 
-    <!-- ===================================================================================== -->
+
+
+
+<!-- Table 2 -->
+
+
+    <h2>Players</h2>
+    <table id="demotable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>PlayerID</th>
+		<th>Email</th>
+                <th>Country</th>
+		<th>Account Created</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+	<h2>Reset Players</h2>
+    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+    <button id="resetDemotable"> reset </button> <br>
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2> Insert New Players </h2>
+    <form id="insertDemotable">
+        PlayerID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
+        Email: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
+	Country: <input type="text" id="insertName" placeholder="Enter Country" maxlength="20"> <br><br>
+ 	Account Created: <input type="text" id="insertName" placeholder="Enter Date" maxlength="10"> <br><br>
+       <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2>Update Email for Players</h2>
+    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <form id="updataNameDemotable">
+        Old Email: <input type="text" id="updateOldName" placeholder="Enter Old Email" required> <br><br>
+        New Email: <input type="text" id="updateNewName" placeholder="Enter New Email" maxlength="20"> <br><br>
+
+        <button type="submit"> update </button> <br>
+    </form>
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateNameResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+<!-- Table 3 -->
+
+
+
+    <h2>Champions</h2>
+    <table id="demotable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>ChampionID</th>
+                <th>Class</th>
+                <th>Race</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+        <h2>Reset Champions</h2>
+    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+    <button id="resetDemotable"> reset </button> <br>
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2> Insert New Champions </h2>
+    <form id="insertDemotable">
+        ChampionID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
+        Class: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
+        Race: <input type="text" id="insertName" placeholder="Enter Country" maxlength="20"> <br><br>
+       <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2>Update Class for Champion</h2>
+    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <form id="updataNameDemotable">
+        Old Class: <input type="text" id="updateOldName" placeholder="Enter Old Class" required> <br><br>
+        New Class: <input type="text" id="updateNewName" placeholder="Enter New Class" maxlength="20"> <br><br>
+
+        <button type="submit"> update </button> <br>
+    </form>
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateNameResultMsg"></div>
+
+
+
+
+    <h2>Number of Champions in Database</h2>
+
+
+
+
+<!-- Table 4 -->
+
+
+
+    <h2>Match</h2>
+    <table id="demotable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>MatchID</th>
+                <th>Winning Team</th>
+                <th>Game Mode</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+        <h2>Reset Matches</h2>
+    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+    <button id="resetDemotable"> reset </button> <br>
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2> Insert New Matches </h2>
+    <form id="insertDemotable">
+        MatchID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
+        Winning Team: <input type="text" id="insertName" placeholder="Enter Team" maxlength="4"> <br><br>
+        Game Mode: <input type="text" id="insertName" placeholder="Enter Mode" maxlength="20"> <br><br>
+       <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2>Update Winning Team for Match</h2>
+    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <form id="updataNameDemotable">
+        Old Winning Team: <input type="text" id="updateOldName" placeholder="Enter Old Winning Team" required> <br><br>
+        New Winning Team: <input type="text" id="updateNewName" placeholder="Enter New Winning Team" maxlength="20"> <br><br>
+
+        <button type="submit"> update </button> <br>
+    </form>
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateNameResultMsg"></div>
+
+
+
+
+    <h2>Number of Matches in Database</h2>
+
+
+
+	<!-- Table 5 -->
+
+
+
+    <h2>Game Performance</h2>
+    <table id="demotable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>Kills</th>
+                <th>Deaths</th>
+                <th>Assists</th>
+		<th>Performance</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+        <h2>Reset Game Performance</h2>
+    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+    <button id="resetDemotable"> reset </button> <br>
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+<h2> Insert New Game Performanes </h2>
+    <form id="insertDemotable">
+        Kills: <input type="number" id="insertId" placeholder="Enter Kills" required> <br><br>
+	Deaths: <input type="number" id="insertId" placeholder="Enter Deaths" required> <br><br>
+	Assists: <input type="number" id="insertId" placeholder="Enter Assists" required> <br><br>
+        Performance: <input type="text" id="insertName" placeholder="Enter Performance" maxlength="20"> <br><br>
+       <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2>Update Performance for Game Performance</h2>
+    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <form id="updataNameDemotable">
+        Old Performance: <input type="text" id="updateOldName" placeholder="Enter Old Performance" required> <br><br>
+        New Winning Team: <input type="text" id="updateNewName" placeholder="Enter New Performance" maxlength="20"> <br><br>
+
+        <button type="submit"> update </button> <br>
+    </form>
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateNameResultMsg"></div>
+
+
+    <h2>Number of Game Performances in Database</h2>
+
+
+
+ <!-- Table 6 -->
+
+
+
+    <h2>Played In</h2>
+    <table id="demotable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>MatchID</th>
+                <th>PlayerID</th>
+                <th>ChampionID</th>
+                <th>Spell (D-key)</th>
+		<th>Spell (F-key)</th>
+		<th>Rune (Primary)</th>
+		<th>Rune (Secondary)</th>
+		<th>Role</th>
+		<th>Team</th>
+		<th>Kills</th>
+		<th>Deaths</th>
+		<th>Assists</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+        <h2>Reset Played In</h2>
+    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+    <button id="resetDemotable"> reset </button> <br>
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+
+
+<h2> Insert New Played In </h2>
+    <form id="insertDemotable">
+        MatchID: <input type="number" id="insertId" placeholder="Enter MatchID" required> <br><br>
+        PlayerID: <input type="number" id="insertId" placeholder="Enter PlayerID" required> <br><br>
+        ChampionID: <input type="number" id="insertId" placeholder="Enter ChampionID" required> <br><br>
+        Spell (D-key): <input type="text" id="insertName" placeholder="Enter Spell" maxlength="20"> <br><br>
+	Spell (F-key): <input type="number" id="insertId" placeholder="Enter Spell" required> <br><br>
+	Rune (Primary): <input type="number" id="insertId" placeholder="Enter Rune" required> <br><br>
+	Rune (Secondary): <input type="number" id="insertId" placeholder="Enter Rune" required> <br><br>
+	Role: <input type="number" id="insertId" placeholder="Enter Role" required> <br><br>
+	Team: <input type="number" id="insertId" placeholder="Enter Team" required> <br><br>
+	Kills: <input type="number" id="insertId" placeholder="Enter Kills" required> <br><br>
+	Deaths: <input type="number" id="insertId" placeholder="Enter Deaths" required> <br><br>
+	Assists: <input type="number" id="insertId" placeholder="Enter Assists" required> <br><br>
+       <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+
+
+<br><hr><br> <!-- ========================================================================= -->
+
+
+
+    <h2>Update Player Loadout for PlayedIn</h2>
+    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <form id="updataNameDemotable">
+        Old Spell (D-key): <input type="text" id="updateOldName" placeholder="Enter Old Spell" required> <br><br>
+	Old Spell (F-key): <input type="text" id="updateOldName" placeholder="Enter Old Spell" required> <br><br>
+	Old Rune (Primary): <input type="text" id="updateOldName" placeholder="Enter Old Rune" required> <br><br>
+	Old Spell (Secondary): <input type="text" id="updateOldName" placeholder="Enter Old Rune" required> <br><br>
+        New Spell (D-key): <input type="text" id="updateNewName" placeholder="Enter New Spell" maxlength="20"> <br><br>
+	New Spell (F-key): <input type="text" id="updateNewName" placeholder="Enter New Spell" maxlength="20"> <br><br>
+	New Rune (Primary): <input type="text" id="updateNewName" placeholder="Enter New Rune" maxlength="20"> <br><br>
+	New Rune (Secondary): <input type="text" id="updateNewName" placeholder="Enter New Rune" maxlength="20"> <br><br>
+        <button type="submit"> update </button> <br>
+    </form>
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateNameResultMsg"></div>
+
+
+    <h2>Number of Played Ins in Database</h2>
+
+   <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>
 </body>
