@@ -1,29 +1,34 @@
--- Table creation statements
+-- Drop table statements
+DROP TABLE PlayedIn
+DROP TABLE PlayerBuildsItems;
+DROP TABLE BannedChampion;
+DROP TABLE AffectedPatch;
+DROP TABLE PlayerPlaysChampion;
+DROP TABLE ChampionHasSkin;
+DROP TABLE Rune;
+DROP TABLE Player;
+DROP TABLE Item;
+DROP TABLE Match;
+DROP TABLE SummonerSpell;
+DROP TABLE GamePerformance;
+DROP TABLE SkinCollection;
+DROP TABLE RuneFamily;
+DROP TABLE Champion;
+DROP TABLE Location;
+DROP TABLE ItemInfo;
+
 CREATE TABLE Location (
   country VARCHAR2(50) NOT NULL,
   region VARCHAR2(3),
-
   CONSTRAINT pk_Location PRIMARY KEY (country)
-);
-
-CREATE TABLE Player (
-    playerID VARCHAR2(50) NOT NULL,
-    country VARCHAR2(50) NOT NULL,
-    dateCreated DATE, 
-    email VARCHAR2(50),
-
-    CONSTRAINT pk_Player PRIMARY KEY (playerID),
-    CONSTRAINT fk_Player FOREIGN KEY (country) REFERENCES Location(country)
 );
 
 CREATE TABLE Champion (
   championID VARCHAR2(50) NOT NULL,
   class VARCHAR2(50),
   race VARCHAR2(50),
-
   CONSTRAINT pk_Champion PRIMARY KEY (championID)
 );
-
 
 CREATE TABLE SkinCollection (
   collectionName VARCHAR(50) NOT NULL,
@@ -32,39 +37,110 @@ CREATE TABLE SkinCollection (
   CONSTRAINT pk_SkinCollection PRIMARY KEY (collectionName)
 );
 
-
-
-CREATE TABLE ChampionHasSkin (
-  cName VARCHAR2(50) NOT NULL,
-  skinID VARCHAR2(50) NOT NULL,
-  collectionName VARCHAR2(50) NOT NULL,
-
-  CONSTRAINT pk_ChampionHasSkin PRIMARY KEY (skinID, cName),
-
-  CONSTRAINT fk1_ChampionHasSkin FOREIGN KEY (cName) 
-    REFERENCES Champion(championID)
-    ON DELETE CASCADE,
-
-  CONSTRAINT fk2_ChampionHasSkin FOREIGN KEY (collectionName) 
-    REFERENCES SkinCollection(collectionName)
-    ON DELETE CASCADE
-);
-
 CREATE TABLE RuneFamily (
   principal VARCHAR2(50) NOT NULL,
   statBonus VARCHAR2(50),
   CONSTRAINT pk_RuneFamily PRIMARY KEY (principal)
 );
 
+CREATE TABLE Item (
+  itemID VARCHAR2(50),
+  bonus VARCHAR2(50) UNIQUE,
+  CONSTRAINT pk_Item PRIMARY KEY (itemID)
+);
 
+CREATE TABLE Match (
+  matchID INTEGER,
+  winningTeam CHAR(10),
+  gameMode CHAR(10),
+  CONSTRAINT pk_Match PRIMARY KEY (matchID)
+);
+
+CREATE TABLE SummonerSpell (
+  ssID  VARCHAR2(50),
+  cooldown INTEGER,
+  CONSTRAINT pk_SummonerSpell PRIMARY KEY (ssID)
+);
+
+CREATE TABLE GamePerformance (
+    kills INTEGER,
+    deaths INTEGER,
+    assists INTEGER,
+  	performance VARCHAR2(50),
+    CONSTRAINT pk_gamePerformance PRIMARY KEY (kills, deaths, assists)
+);
+
+
+CREATE TABLE Player (
+    playerID VARCHAR2(50) NOT NULL,
+    country VARCHAR2(50) NOT NULL,
+    dateCreated DATE, 
+    email VARCHAR2(50),
+    CONSTRAINT pk_Player PRIMARY KEY (playerID),
+    CONSTRAINT fk_Player FOREIGN KEY (country) REFERENCES Location(country)
+);
+
+CREATE TABLE ChampionHasSkin (
+  cName VARCHAR2(50) NOT NULL,
+  skinID VARCHAR2(50) NOT NULL,
+  collectionName VARCHAR2(50) NOT NULL,
+  CONSTRAINT pk_ChampionHasSkin PRIMARY KEY (skinID, cName),
+  CONSTRAINT fk1_ChampionHasSkin FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE,
+  CONSTRAINT fk2_ChampionHasSkin FOREIGN KEY (collectionName) REFERENCES SkinCollection(collectionName) ON DELETE CASCADE
+);
 
 CREATE TABLE Rune (
   principal VARCHAR2(50) NOT NULL,
   secondary VARCHAR2(50) NOT NULL,
-  constraint pk_Rune PRIMARY KEY (principal, secondary),
-  constraint fk_Rune FOREIGN KEY (principal) REFERENCES RuneFamily (principal)
+  CONSTRAINT pk_Rune PRIMARY KEY (principal, secondary),
+  CONSTRAINT fk_Rune FOREIGN KEY (principal) REFERENCES RuneFamily (principal)
 );
 
+CREATE TABLE ItemInfo (
+  bonus VARCHAR2(50), 
+  cost INTEGER, 
+  numberOfUses INTEGER, 		                 	
+  buildsInto VARCHAR2(50),
+  CONSTRAINT pk_ItemInfo PRIMARY KEY (bonus),
+  CONSTRAINT fk_BuildsInto FOREIGN KEY (buildsInto) REFERENCES Item(itemID) ON DELETE CASCADE
+);
+
+CREATE TABLE BannedChampion (
+  matchID INTEGER,
+  cName VARCHAR2(50),
+  CONSTRAINT pk_BannedChampion PRIMARY KEY (matchID, cName),
+  CONSTRAINT fk1_BannedChampion FOREIGN KEY (matchID) REFERENCES Match(matchID) ON DELETE CASCADE,
+  CONSTRAINT fk2_BannedChampion FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE SET NULL 
+);
+
+CREATE TABLE AffectedPatch (
+  cName VARCHAR2(50),
+  patchID INTEGER,
+  description VARCHAR2(50),
+  patchType VARCHAR2(50),
+  CONSTRAINT pk_AffectedPatch PRIMARY KEY (cName, patchID),
+  CONSTRAINT fk_AffectedPatch FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE
+);
+
+
+CREATE TABLE PlayerPlaysChampion (
+  pName VARCHAR2(50),
+  cName VARCHAR2(50),
+  role CHAR(10),
+  CONSTRAINT pk_PlayerPlaysChampion PRIMARY KEY (pName, cName),
+  CONSTRAINT fk1_PlayerPlaysChampion FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE,
+  CONSTRAINT fk2_PlayerPlaysChampion FOREIGN KEY (pName) REFERENCES Player(playerID) ON DELETE CASCADE
+);
+
+CREATE TABLE PlayerBuildsItems (
+  matchID INTEGER,
+  pName VARCHAR2(50),
+  item VARCHAR2(50),
+  PRIMARY KEY (matchID, pName, item),
+  FOREIGN KEY (matchID) REFERENCES Match(matchID),
+  FOREIGN KEY (pName) REFERENCES Player(playerID),
+  FOREIGN KEY (item) REFERENCES Item(itemID)
+);
 
 CREATE TABLE PlayedIn (
   matchID INTEGER NOT NULL,
@@ -79,119 +155,12 @@ CREATE TABLE PlayedIn (
   kills INTEGER,
   assists INTEGER,
   deaths INTEGER,
-
   CONSTRAINT pk_PlayedIn PRIMARY KEY (matchID, uName, cName),
-  
   CONSTRAINT ck_PlayedIn UNIQUE (matchID, role, team),
-
-  CONSTRAINT fk1_PlayedIn FOREIGN KEY (matchID) REFERENCES Match (matchID)
-    ON DELETE CASCADE,
-
-  CONSTRAINT fk2_PlayedIn FOREIGN KEY (uName, cName) REFERENCES PlayerPlaysChampion (pName, cName)
-    ON DELETE SET NULL,
-
-  CONSTRAINT fk3_PlayedIn FOREIGN KEY (rPrincipal, rSecondary) REFERENCES Rune (principal, secondary)
-    ON DELETE SET NULL
-  
+  CONSTRAINT fk1_PlayedIn FOREIGN KEY (matchID) REFERENCES Match (matchID) ON DELETE CASCADE,
+  CONSTRAINT fk2_PlayedIn FOREIGN KEY (uName, cName) REFERENCES PlayerPlaysChampion (pName, cName),
+  CONSTRAINT fk3_PlayedIn FOREIGN KEY (rPrincipal, rSecondary) REFERENCES Rune (principal, secondary),
   CONSTRAINT fK4_PlayedIn FOREIGN KEY (kills, deaths, assists) REFERENCES GamePerformance(kills, deaths, assists)
-  	ON DELETE NO ACTION
-);
-
-CREATE TABLE ItemInfo (
-  bonus VARCHAR2(50), 
-  cost INTEGER, 
-  numberOfUses INTEGER, 		                 	
-  buildsInto VARCHAR2(50),
-
-  CONSTRAINT pk_ItemInfo PRIMARY KEY (bonus),
-
-  CONSTRAINT fk_BuildsInto FOREIGN KEY (buildsInto) REFERENCES Item(itemID) 
-    ON DELETE CASCADE
-);
-
-CREATE TABLE Item (
-  itemID VARCHAR2(50),
-  bonus VARCHAR2(50) UNIQUE,
-  CONSTRAINT pk_Item PRIMARY KEY (itemID)
-);
-
-
-CREATE TABLE Match (
-  matchID INTEGER,
-  winningTeam CHAR(10),
-  gameMode CHAR(10),
-
-  CONSTRAINT pk_Match PRIMARY KEY (matchID)
-);
-
-CREATE TABLE BannedChampion (
-  matchID INTEGER,
-  cName VARCHAR2(50),
-
-  CONSTRAINT pk_BannedChampion PRIMARY KEY (matchID, cName),
-
-  CONSTRAINT fk1_BannedChampion FOREIGN KEY (matchID) REFERENCES Match(matchID)
-    ON DELETE CASCADE,
-  CONSTRAINT fk2_BannedChampion FOREIGN KEY (cName) REFERENCES Champion(championID)
-    ON DELETE SET NULL 
-);
-
-
-CREATE TABLE SummonerSpell (
-  ssID  VARCHAR2(50),
-  cooldown INTEGER,
-
-  CONSTRAINT pk_SummonerSpell PRIMARY KEY (ssID)
-);
-
-
-CREATE TABLE PlayerBuildsItems (
-  matchID INTEGER,
-  pName VARCHAR2(50),
-  item VARCHAR2(50),
-  PRIMARY KEY (matchID, pName, item),
-
-  FOREIGN KEY (matchID) REFERENCES MATCH(matchID),
-
-  FOREIGN KEY (pName) REFERENCES Player(playerID),
-  
-  FOREIGN KEY (item) REFERENCES Item(itemID)
-
-);
-
-
-CREATE TABLE AffectedPatch (
-  cName VARCHAR2(50),
-  patchID INTEGER,
-  description VARCHAR2(50),
-  patchType VARCHAR2(50),
-  CONSTRAINT pk_AffectedPatch PRIMARY KEY (cName, patchID),
-
-  CONSTRAINT fk_AffectedPatch FOREIGN KEY (cName) REFERENCES Champion(championID)
-    ON DELETE CASCADE
-);
-
-CREATE TABLE PlayerPlaysChampion (
-  pName VARCHAR2(50),
-  cName VARCHAR2(50),
-  role CHAR(10),
-
-  CONSTRAINT pk_PlayerPlaysChampion PRIMARY KEY (pName, cName),
-
-  CONSTRAINT fk1_PlayerPlaysChampion FOREIGN KEY (cName) REFERENCES Champion(championID)
-    ON DELETE CASCADE,
-
-  CONSTRAINT fk2_PlayerPlaysChampion FOREIGN KEY (pName) REFERENCES Player(playerID)
-    ON DELETE CASCADE
-);
-
-
-CREATE TABLE GamePerformance (
-    kills INTEGER,
-    deaths INTEGER,
-    assists INTEGER,
-  	performance VARCHAR2(50),
-    CONSTRAINT pk_gamePerformance PRIMARY KEY (kills, deaths, assists)
 );
 
 
@@ -247,7 +216,7 @@ INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Caitlyn', '
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lulu', 'Lulu001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Irelia', 'Irelia001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Ahri', 'Ahri001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('K''Sante', 'KSante001', 'Default');
+INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('K’Sante', 'KSante001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Yasuo', 'Yasuo001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lucian', 'Lucian001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Azir', 'Azir001', 'Default');
@@ -261,7 +230,7 @@ INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Ahri', 'Ahr
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Yasuo', 'Yasuo002', 'Enduring Sword');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lulu', 'Lulu002', 'Star Guardian');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Irelia', 'Irelia002', 'Arcade');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Azir', 'Azir002', 'Warring Kingdom');
+INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Azir', 'Azir002', 'Warring Kingdoms');
 
 
 -- Inserting into Match Table
@@ -311,6 +280,16 @@ INSERT INTO BannedChampion (matchID, cName) VALUES (5, 'Azir');
 INSERT INTO BannedChampion (matchID, cName) VALUES (5, 'Talon');
 INSERT INTO BannedChampion (matchID, cName) VALUES (5, 'Yasuo');
 
+-- INSERT INTO Item Table
+INSERT INTO Item (itemID, bonus) VALUES ('Dark Seal', 'Glory');
+INSERT INTO Item (itemID, bonus) VALUES ('Eclipse', 'Ever Rising Moon');
+INSERT INTO Item (itemID, bonus) VALUES ('Manamune', 'Manaflow');
+INSERT INTO Item (itemID, bonus) VALUES ('Elixir of Wraith', 'Drain');
+INSERT INTO Item (itemID, bonus) VALUES ('Bami’s Cinder', 'Immolate');
+INSERT INTO Item (itemID, bonus) VALUES ('Sunfire Aegis', 'Resilience');
+INSERT INTO Item (itemID, bonus) VALUES ('Mejais Soulstealer', 'Focus');
+INSERT INTO Item (itemID, bonus) VALUES ('Muramana', 'Wave');
+
 -- INSERT INTO ItemInfo Table
 INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
 			('Glory', 350, NULL, 'Mejais Soulstealer');
@@ -322,13 +301,6 @@ INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
 			('Drain', 500, 1, NULL);
 INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
 			('Immolate', 900, NULL, 'Sunfire Aegis');
-
--- INSERT INTO Item Table
-INSERT INTO Item (itemID, bonus) VALUES ('Dark Seal', 'Glory');
-INSERT INTO Item (itemID, bonus) VALUES ('Eclipse', 'Ever Rising Moon');
-INSERT INTO Item (itemID, bonus) VALUES ('Manamune', 'Manaflow');
-INSERT INTO Item (itemID, bonus) VALUES ('Elixir of Wraith', 'Drain');
-INSERT INTO Item (itemID, bonus) VALUES ('Bami’s Cinder', 'Immolate');
 
 -- INSERT INTO PlayerBuildsItems
 INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (1, 'theshy', 'Eclipse');
@@ -348,25 +320,6 @@ INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('doinb', 'Talon', '
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Azir', 'Mid');
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('topLaneLegend', 'Garen', 'Top');
 
--- INSERT INTO PlayedIn
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'theshy', 'Irelia', 'Flash', 'Teleport', 'Precision', 'Domination', 'Top', 'Blue', 10, 8, 2);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'hideonbush', 'Ahri', 'Flash', 'Ignite', 'Domination', 'Sorcery', 'Mid', 'Blue', 12, 9, 1);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'DoubleLift', 'Caitlyn', 'Flash', 'Heal', 'Precision', 'Domination', 'ADC', 'Blue', 7, 11, 0);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'rekkless', 'Lulu', 'Flash', 'Heal', 'Sorcery', 'Inspiration', 'Support', 'Blue', 2, 22, 5);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'doinb', 'Talon', 'Flash', 'Smite', 'Domination', 'Sorcery', 'Jungle', 'Blue', 5, 4, 6);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (2, 'G2Caps', 'Azir', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'Mid', 'Red', 1, 3, 9);
-
 -- INSERT INTO GamePerformance
 -- Great: KDA >= 4.0 or 0 Deaths | Good: KDA >= 2.0 | Poor: KDA >= 1.0 | Bad: KDA < 1.0
 INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (15, 1, 5, 'Great');
@@ -375,3 +328,22 @@ INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (3, 4, 
 INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (8, 4, 3, 'Good');
 INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (5, 5, 2, 'Poor');
 INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (2, 7, 3, 'Bad');
+
+-- INSERT INTO PlayedIn
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (1, 'theshy', 'Irelia', 'Flash', 'Teleport', 'Precision', 'Domination', 'Top', 'Blue', 10, 8, 2);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (1, 'hideonbush', 'Ahri', 'Flash', 'Ignite', 'Domination', 'Sorcery', 'Mid', 'Blue', 15, 5, 1);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (1, 'DoubleLift', 'Caitlyn', 'Flash', 'Heal', 'Precision', 'Domination', 'ADC', 'Blue', 3, 25, 4);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (1, 'rekkless', 'Lulu', 'Flash', 'Heal', 'Sorcery', 'Inspiration', 'Support', 'Blue', 8, 3, 4);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (1, 'doinb', 'Talon', 'Flash', 'Smite', 'Domination', 'Sorcery', 'Jungle', 'Blue', 5, 2, 5);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (2, 'G2Caps', 'Azir', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
