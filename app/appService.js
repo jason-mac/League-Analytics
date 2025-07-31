@@ -75,7 +75,6 @@ async function testOracleConnection() {
 // Fetch table data
 async function fetchTableDataFromDb(tableName) {
   return await withOracleDB(async (connection) => {
-    console.log(`${tableName}`);
     const result = await connection.execute(`SELECT * FROM ${tableName}`);
     return result.rows;
   }).catch(() => {
@@ -98,6 +97,20 @@ async function initiateDemotable() {
             )
         `);
     return true;
+  }).catch(() => {
+    return false;
+  });
+}
+
+async function insertPlayer(playerId, country, dateCreated, email) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `INSERT INTO PLAYER (playerId, country, dateCreated, email) VALUES (:playerId, :country, TO_DATE(:dateCreated, 'YYYY-MM-DD'), :email)`,
+      [playerId, country, dateCreated, email],
+      { autoCommit: true },
+    );
+
+    return result.rowsAffected && result.rowsAffected > 0;
   }).catch(() => {
     return false;
   });
@@ -145,6 +158,7 @@ module.exports = {
   fetchTableDataFromDb,
   initiateDemotable,
   insertDemotable,
+  insertPlayer,
   updateNameDemotable,
   countDemotable,
 };

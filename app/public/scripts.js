@@ -83,6 +83,47 @@ async function resetDemotable() {
 }
 
 // Inserts new records into the demotable.
+async function insertPlayertable(event) {
+  event.preventDefault();
+
+  const idValue = document.getElementById("insertPlayerID").value;
+  const countryValue = document.getElementById("insertPlayerCountry").value;
+  const dateCreatedValue = document.getElementById(
+    "insertPlayerDateCreated",
+  ).value;
+  const emailValue = document.getElementById("insertPlayerEmail").value;
+
+  console.log("hello");
+  console.log(idValue);
+  console.log(countryValue);
+  console.log(dateCreatedValue);
+  console.log(emailValue);
+
+  const response = await fetch("/insert-player", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      playerId: idValue,
+      country: countryValue,
+      dateCreated: dateCreatedValue,
+      email: emailValue,
+    }),
+  });
+
+  const responseData = await response.json();
+  const messageElement = document.getElementById("insertResultMsgPlayer");
+
+  if (responseData.success) {
+    messageElement.textContent = "Data inserted successfully!";
+    fetchTableData();
+  } else {
+    messageElement.textContent = "Error inserting data!";
+  }
+}
+
+// Inserts new records into the demotable.
 async function insertDemotable(event) {
   event.preventDefault();
 
@@ -101,7 +142,7 @@ async function insertDemotable(event) {
   });
 
   const responseData = await response.json();
-  const messageElement = document.getElementById("insertResultMsg");
+  const messageElement = document.getElementById("insertResultMsgPlayer");
 
   if (responseData.success) {
     messageElement.textContent = "Data inserted successfully!";
@@ -170,6 +211,9 @@ window.onload = function () {
   document
     .getElementById("insertDemotable")
     .addEventListener("submit", insertDemotable);
+  document
+    .getElementById("insertPlayerTable")
+    .addEventListener("submit", insertPlayertable);
   document
     .getElementById("updataNameDemotable")
     .addEventListener("submit", updateNameDemotable);

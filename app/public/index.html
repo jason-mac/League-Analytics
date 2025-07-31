@@ -163,37 +163,42 @@
     <!-- ========================================================================= -->
 
     <h2>Insert New Players</h2>
-    <form id="insertDemotable">
+    <form id="insertPlayerTable">
       PlayerID:
-      <input type="number" id="insertId" placeholder="Enter ID" required />
-      <br /><br />
-      Email:
       <input
         type="text"
-        id="insertName"
-        placeholder="Enter Name"
-        maxlength="20"
+        id="insertPlayerID"
+        placeholder="Enter ID"
+        required
       />
       <br /><br />
       Country:
       <input
         type="text"
-        id="insertName"
+        id="insertPlayerCountry"
         placeholder="Enter Country"
         maxlength="20"
-      />
+      /insertPlayerEmail>
       <br /><br />
-      Account Created:
+      Date Created:
       <input
         type="text"
-        id="insertName"
-        placeholder="Enter Date"
+        id="insertPlayerDateCreated"
+        placeholder="Enter Date yyyy-mm-dd"
         maxlength="10"
+      />
+      <br /><br />
+      Email:
+      <input
+        type="text"
+        id="insertPlayerEmail"
+        placeholder="Enter Name"
+        maxlength="20"
       />
       <br /><br />
       <button type="submit">insert</button> <br />
     </form>
-    <div id="insertResultMsg"></div>
+    <div id="insertResultMsgPlayer"></div>
 
     <br />
     <hr />
