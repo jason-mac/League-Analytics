@@ -72,6 +72,16 @@ async function testOracleConnection() {
   });
 }
 
+// Fetch data from Player table
+async function fetchPlayerTableFromDb() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT * FROM PLAYER");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function fetchDemotableFromDb() {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute("SELECT * FROM DEMOTABLE");
@@ -106,7 +116,7 @@ async function insertDemotable(id, name) {
     const result = await connection.execute(
       `INSERT INTO DEMOTABLE (id, name) VALUES (:id, :name)`,
       [id, name],
-      { autoCommit: true }
+      { autoCommit: true },
     );
 
     return result.rowsAffected && result.rowsAffected > 0;
@@ -120,7 +130,7 @@ async function updateNameDemotable(oldName, newName) {
     const result = await connection.execute(
       `UPDATE DEMOTABLE SET name=:newName where name=:oldName`,
       [newName, oldName],
-      { autoCommit: true }
+      { autoCommit: true },
     );
 
     return result.rowsAffected && result.rowsAffected > 0;
@@ -141,6 +151,7 @@ async function countDemotable() {
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
+  fetchPlayerTableFromDb,
   initiateDemotable,
   insertDemotable,
   updateNameDemotable,
