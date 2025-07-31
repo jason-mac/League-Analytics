@@ -116,6 +116,23 @@ async function insertPlayer(playerId, country, dateCreated, email) {
   });
 }
 
+async function insertChampion(championId, championClass, race) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `INSERT INTO CHAMPION (championId, class, race) VALUES (:championId, :championClass, :race)`,
+      [championId, championClass, race],
+      { autoCommit: true },
+    );
+    console.log(championId);
+    console.log(championClass);
+    console.log(race);
+
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
 async function insertDemotable(id, name) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
@@ -159,6 +176,7 @@ module.exports = {
   initiateDemotable,
   insertDemotable,
   insertPlayer,
+  insertChampion,
   updateNameDemotable,
   countDemotable,
 };

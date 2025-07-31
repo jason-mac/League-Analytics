@@ -6,6 +6,8 @@ const router = express.Router();
 // ----------------------------------------------------------
 // API endpoints
 // Modify or extend these routes based on your project's needs.
+
+// TODO: REMOVE UNNECESSARY CONSOLE LOG STATEMENTS
 router.get("/check-db-connection", async (req, res) => {
   const isConnect = await appService.testOracleConnection();
   if (isConnect) {
@@ -71,6 +73,20 @@ router.post("/insert-player", async (req, res) => {
     country,
     dateCreated,
     email,
+  );
+  if (insertResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
+});
+
+router.post("/insert-champion", async (req, res) => {
+  const { championId, championClass, race } = req.body;
+  const insertResult = await appService.insertChampion(
+    championId,
+    championClass,
+    race,
   );
   if (insertResult) {
     res.json({ success: true });

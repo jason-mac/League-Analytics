@@ -12,6 +12,8 @@
  *
  */
 
+// TODO: REMOVE UNNECESSARY CONSOLE LOG STATEMENTS WHEN FINISHED
+
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
   const statusElem = document.getElementById("dbStatus");
@@ -82,8 +84,45 @@ async function resetDemotable() {
   }
 }
 
-// Inserts new records into the demotable.
-async function insertPlayertable(event) {
+// Inserts new records into the player table.
+async function insertChampion(event) {
+  event.preventDefault();
+
+  const idValue = document.getElementById("insertChampionId").value;
+  const classValue = document.getElementById("insertChampionClass").value;
+  const raceValue = document.getElementById("insertChampionRace").value;
+
+  console.log("InsertChampion start");
+  console.log(classValue);
+  console.log(idValue);
+  console.log(classValue);
+  console.log("InsertChampion end");
+
+  const response = await fetch("/insert-champion", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      championId: idValue,
+      championClass: classValue,
+      race: raceValue,
+    }),
+  });
+
+  const responseData = await response.json();
+  const messageElement = document.getElementById("insertResultMsgChampion");
+
+  if (responseData.success) {
+    messageElement.textContent = "Data inserted successfully!";
+    fetchTableData();
+  } else {
+    messageElement.textContent = "Error inserting data!";
+  }
+}
+
+// Inserts new records into the player table.
+async function insertPlayer(event) {
   event.preventDefault();
 
   const idValue = document.getElementById("insertPlayerID").value;
@@ -213,7 +252,10 @@ window.onload = function () {
     .addEventListener("submit", insertDemotable);
   document
     .getElementById("insertPlayerTable")
-    .addEventListener("submit", insertPlayertable);
+    .addEventListener("submit", insertPlayer);
+  document
+    .getElementById("insertChampion")
+    .addEventListener("submit", insertChampion);
   document
     .getElementById("updataNameDemotable")
     .addEventListener("submit", updateNameDemotable);
