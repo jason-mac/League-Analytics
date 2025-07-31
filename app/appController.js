@@ -15,13 +15,33 @@ router.get("/check-db-connection", async (req, res) => {
   }
 });
 
+router.get("/matchtable", async (req, res) => {
+  const tableContent = await appService.fetchTableDataFromDb("match");
+  res.json({ data: tableContent });
+});
+
 router.get("/playertable", async (req, res) => {
-  const tableContent = await appService.fetchPlayerTableFromDb();
+  const tableContent = await appService.fetchTableDataFromDb("player");
+  res.json({ data: tableContent });
+});
+
+router.get("/championtable", async (req, res) => {
+  const tableContent = await appService.fetchTableDataFromDb("champion");
+  res.json({ data: tableContent });
+});
+
+router.get("/playedintable", async (req, res) => {
+  const tableContent = await appService.fetchTableDataFromDb("playedin");
+  res.json({ data: tableContent });
+});
+
+router.get("/gameperformancetable", async (req, res) => {
+  const tableContent = await appService.fetchTableDataFromDb("gameperformance");
   res.json({ data: tableContent });
 });
 
 router.get("/demotable", async (req, res) => {
-  const tableContent = await appService.fetchDemotableFromDb();
+  const tableContent = await appService.fetchTableDataFromDb("demotable");
   res.json({ data: tableContent });
 });
 

@@ -36,52 +36,30 @@ async function checkDbConnection() {
     });
 }
 
-// Fetches data from the demotable and displays it.
-async function fetchAndDisplayPlayers() {
-  const tableElement = document.getElementById("playertable");
+async function fetchAndDisplayTable(tableid) {
+  const tableElement = document.getElementById(tableid);
   const tableBody = tableElement.querySelector("tbody");
 
-  const response = await fetch("/playertable", {
+  if (!tableElement) {
+    console.error(`Table with id ${tableid} not found.`);
+    return;
+  }
+
+  const response = await fetch("/" + tableid, {
     method: "GET",
   });
 
   const responseData = await response.json();
-  const playertableContent = responseData.data;
+  const data = responseData.data;
 
   // Always clear old, already fetched data before new fetching process.
   if (tableBody) {
     tableBody.innerHTML = "";
   }
 
-  playertableContent.forEach((player) => {
+  data.forEach((element) => {
     const row = tableBody.insertRow();
-    player.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
-}
-
-// Fetches data from the demotable and displays it.
-async function fetchAndDisplayUsers() {
-  const tableElement = document.getElementById("demotable");
-  const tableBody = tableElement.querySelector("tbody");
-
-  const response = await fetch("/demotable", {
-    method: "GET",
-  });
-
-  const responseData = await response.json();
-  const demotableContent = responseData.data;
-
-  // Always clear old, already fetched data before new fetching process.
-  if (tableBody) {
-    tableBody.innerHTML = "";
-  }
-
-  demotableContent.forEach((user) => {
-    const row = tableBody.insertRow();
-    user.forEach((field, index) => {
+    element.forEach((field, index) => {
       const cell = row.insertCell(index);
       cell.textContent = field;
     });
@@ -203,6 +181,16 @@ window.onload = function () {
 // General function to refresh the displayed table data.
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-  fetchAndDisplayUsers();
-  fetchAndDisplayPlayers();
+  // Add table name for fetching more tables, ensure to add router function in appController file
+  const tableNames = [
+    "championtable",
+    "playertable",
+    "playedintable",
+    "gameperformancetable",
+    "matchtable",
+    "demotable",
+  ];
+  for (const tableName of tableNames) {
+    fetchAndDisplayTable(tableName);
+  }
 }

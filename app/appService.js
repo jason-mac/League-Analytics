@@ -72,19 +72,11 @@ async function testOracleConnection() {
   });
 }
 
-// Fetch data from Player table
-async function fetchPlayerTableFromDb() {
+// Fetch table data
+async function fetchTableDataFromDb(tableName) {
   return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM PLAYER");
-    return result.rows;
-  }).catch(() => {
-    return [];
-  });
-}
-
-async function fetchDemotableFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM DEMOTABLE");
+    console.log(`${tableName}`);
+    const result = await connection.execute(`SELECT * FROM ${tableName}`);
     return result.rows;
   }).catch(() => {
     return [];
@@ -149,9 +141,8 @@ async function countDemotable() {
 }
 
 module.exports = {
-  testOracleConnection,
-  fetchDemotableFromDb,
-  fetchPlayerTableFromDb,
+  testOracleConnection, // 1
+  fetchTableDataFromDb,
   initiateDemotable,
   insertDemotable,
   updateNameDemotable,
