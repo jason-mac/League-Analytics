@@ -7,7 +7,7 @@ const router = express.Router();
 // API endpoints
 // Modify or extend these routes based on your project's needs.
 
-// TODO: REMOVE UNNECESSARY CONSOLE LOG STATEMENTS
+// TODO: REMOVE DEBUGGING CONSOLE LOG STATEMENTS WHEN FINISHED
 router.get("/check-db-connection", async (req, res) => {
   const isConnect = await appService.testOracleConnection();
   if (isConnect) {
@@ -118,6 +118,18 @@ router.get("/count-demotable", async (req, res) => {
       count: tableCount,
     });
   }
+});
+
+// workking on
+router.get("/player-region-count-data-table", async (req, res) => {
+  const num = parseInt(req.query.num) || 0;
+  const result = await appService.fetchNumPlayersByRegionDataFromDb(num);
+  res.json({ data: result });
+});
+
+router.get("/players-avg-kda", async (req, res) => {
+  const tableContent = await appService.fetchPlayersAvgKda();
+  res.json({ data: tableContent });
 });
 
 module.exports = router;

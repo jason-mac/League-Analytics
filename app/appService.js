@@ -170,8 +170,64 @@ async function countDemotable() {
   });
 }
 
+// WORKING ON
+async function fetchNumPlayersByRegionDataFromDb(num) {
+  console.log(num);
+  return await withOracleDB(async (connection) => {
+    const query = `
+    SELECT l.region, count(p.playerId) AS PlayerCount
+    FROM Player p INNER JOIN Location l
+    ON p.country = l.country
+    GROUP BY l.region 
+    HAVING count(p.playerId) >= :num
+    ORDER BY count(p.playerId) Asc, l.region Asc
+    `;
+    const result = await connection.execute(query, [num]);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function fetchNumPlayersByRegionDataFromDb(num) {
+  console.log(num);
+  return await withOracleDB(async (connection) => {
+    const query = `
+    SELECT l.region, count(p.playerId) AS PlayerCount
+    FROM Player p INNER JOIN Location l
+    ON p.country = l.country
+    GROUP BY l.region 
+    HAVING count(p.playerId) >= :num
+    ORDER BY count(p.playerId) Asc, l.region Asc
+    `;
+    const result = await connection.execute(query, [num]);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function fetchPlayersAvgKda() {
+  return await withOracleDB(async (connection) => {
+    const query = `
+    SELECT p.uName, TRUNC((sum(p.kills) + sum(p.assists)) / GREATEST(1, sum(p.deaths)), 2) AS KDA
+    FROM playedin p
+    GROUP BY p.uName
+    HAVING 1 < (SELECT COUNT(*) 
+		            FROM playedin p2
+		            WHERE p2.uName = p.uName)
+    ORDER BY KDA Desc, p.uName Asc
+    `;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 module.exports = {
   testOracleConnection, // 1
+  fetchPlayersAvgKda,
   fetchTableDataFromDb,
   initiateDemotable,
   insertDemotable,
@@ -179,4 +235,7 @@ module.exports = {
   insertChampion,
   updateNameDemotable,
   countDemotable,
+
+  // WORKKING ON
+  fetchNumPlayersByRegionDataFromDb,
 };

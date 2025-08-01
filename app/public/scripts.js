@@ -12,7 +12,7 @@
  *
  */
 
-// TODO: REMOVE UNNECESSARY CONSOLE LOG STATEMENTS WHEN FINISHED
+// TODO: REMOVE DEBUGGING CONSOLE LOG STATEMENTS WHEN FINISHED
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -36,6 +36,16 @@ async function checkDbConnection() {
     .catch((error) => {
       statusElem.textContent = "connection timed out"; // Adjust error handling if required.
     });
+}
+
+async function fetchMatchHistory(event) {
+  event.preventDefault();
+
+  const tableElement = document.getElementById("matchHistory");
+  const tableBody = tableElement.querySelector("tbody");
+
+  const playerIdValue = document.getElementById("championIdMatchHistory");
+  const championIdValue = document.getElementById("playerIdMatchHistory");
 }
 
 async function fetchAndDisplayTable(tableid) {
@@ -238,12 +248,49 @@ async function countDemotable() {
   }
 }
 
+async function playerRegionCountData(event) {
+  event.preventDefault();
+  console.log("ran in here");
+  const tableElement = document.getElementById("regionPlayerCountTable");
+  const tableBody = tableElement.querySelector("tbody");
+
+  if (!tableElement) {
+    console.error(`Table with id regionPlayerCountTable not found.`);
+    return;
+  }
+
+  const numInput = document.getElementById("minPlayerCount");
+  const num = numInput.value;
+  console.log(num);
+
+  const response = await fetch(`/player-region-count-data-table?num=${num}`, {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function () {
   checkDbConnection();
   fetchTableData();
+  document
+    .getElementById("playerRegionCountData")
+    .addEventListener("submit", playerRegionCountData);
   document
     .getElementById("resetDemotable")
     .addEventListener("click", resetDemotable);
@@ -256,6 +303,9 @@ window.onload = function () {
   document
     .getElementById("insertChampion")
     .addEventListener("submit", insertChampion);
+  document
+    .getElementById("matchHistory")
+    .addEventListener("submit", fetchMatchHistory);
   document
     .getElementById("updataNameDemotable")
     .addEventListener("submit", updateNameDemotable);
@@ -275,6 +325,7 @@ function fetchTableData() {
     "gameperformancetable",
     "matchtable",
     "demotable",
+    "players-avg-kda",
   ];
   for (const tableName of tableNames) {
     fetchAndDisplayTable(tableName);

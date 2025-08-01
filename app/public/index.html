@@ -33,6 +33,45 @@
     <br />
     <!-- ========================================================================= -->
 
+    <h2>avg kkda at least two games played</h2>
+    <table id="players-avg-kda" border="1">
+      <thead>
+        <tr>
+          <!--Table head, need to be adjusted accordingly to align with your own.-->
+          <th>Player ID</th>
+          <th>KDA</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+   <div id="playersAvgKdaMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+
+    <h2>Group Users By Region Having more than x Players</h2>
+    <form id="playerRegionCountData">
+      Minimum Player Count: 
+      <input type="number" id="minPlayerCount" required />
+      <button type="submit">Filter</button>
+    </form>
+    <br />
+    <table id="regionPlayerCountTable" border="1">
+      <thead>
+        <tr>
+          <th>Region</th>
+          <th>Player Count</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="filterResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
     <!-- Show 'Demotable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
     <h2>Demotable</h2>
@@ -128,6 +167,8 @@
     <br />
 
     <!-- Table 2 -->
+
+    <h2>Number Of Players In Each Region</h2>
 
     <h2>Players</h2>
     <table id="playertable" border="1">
