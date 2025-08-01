@@ -254,14 +254,17 @@ window.onload = function () {
     .getElementById("insertChampion")
     .addEventListener("submit", insertChampion);
   document
-    .getElementById("matchHistory")
-    .addEventListener("submit", fetchMatchHistory);
-  document
     .getElementById("updatePlayerEmail")
     .addEventListener("submit", updatePlayer);
   document
     .getElementById("updateChampionClass")
     .addEventListener("submit", updateChampion);
+  document
+    .getElementById("playerWinRates")
+    .addEventListener("click", updateChampion);
+  document
+    .getElementById("championBanRate")
+    .addEventListener("click", updateChampion);
 };
 
 // General function to refresh the displayed table data.
@@ -275,7 +278,10 @@ function fetchTableData() {
     "gameperformancetable",
     "matchtable",
     "demotable",
+    // TODO:separate these three into their own functions
     "players-avg-kda",
+    "player-win-rate",
+    "champion-ban-rate",
   ];
   for (const tableName of tableNames) {
     fetchAndDisplayTable(tableName);

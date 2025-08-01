@@ -196,15 +196,54 @@ async function fetchPlayersAvgKda() {
   });
 }
 
+async function fetchPlayersWinRate() {
+  return await withOracleDB(async (connection) => {
+    const query = `
+  WITH PlayerWinCounts AS ( SELECT uName, count(*) AS winCount
+                            FROM playedin pi INNER JOIN MATCH m
+                            ON pi.matchid = m.matchid
+                            WHERE pi.team = m.winningteam
+                            GROUP BY uName)
+  SELECT pwc.uName, pwc.winCount, count(pi2.matchid) AS MatchesPlayed, 1.0 * pwc.winCount / count(pi2.matchid) AS WinRate
+  FROM playerWinCounts pwc 
+  LEFT OUTER JOIN playedin pi2 ON pwc.uName = pi2.uName
+  GROUP BY pwc.uName, pwc.winCount
+    `;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function fetchChampionBanRate() {
+  return await withOracleDB(async (connection) => {
+    const query = `
+    WITH ChampBanRate AS (
+						SELECT cname, count(cname) / (SELECT count(m.matchid) FROM MATCH m WHERE m.gamemode = 'Ranked') AS BanRate 
+						FROM bannedChampion bc 
+						GROUP BY cname)
+    SELECT * FROM champbanrate
+    `;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 module.exports = {
   testOracleConnection, // 1
-  fetchPlayersAvgKda,
   fetchTableDataFromDb,
   insertPlayer,
   insertChampion,
 
-  // WORKKING ON
+  // working on
+  fetchChampionBanRate,
   fetchNumPlayersByRegionDataFromDb,
   updatePlayer,
+  fetchPlayersWinRate,
   updateChampion,
+  fetchPlayersAvgKda,
+  fetchPlayersWinRate,
 };

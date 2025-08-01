@@ -42,6 +42,16 @@ router.get("/gameperformancetable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/player-win-rate", async (req, res) => {
+  const tableContent = await appService.fetchPlayersWinRate();
+  res.json({ data: tableContent });
+});
+
+router.get("/champion-ban-rate", async (req, res) => {
+  const tableContent = await appService.fetchChampionBanRate();
+  res.json({ data: tableContent });
+});
+
 router.post("/insert-player", async (req, res) => {
   const { playerId, country, dateCreated, email } = req.body;
   const insertResult = await appService.insertPlayer(

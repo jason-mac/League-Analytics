@@ -33,6 +33,49 @@
     <br />
     <!-- ========================================================================= -->
 
+    <h2>player win rate</h2>
+      <form id = "championBanRate">
+        <button type = "submit"> Show Win Rates </button>
+      </form>
+      <table id="champion-ban-rate" border="1">
+      <thead>
+        <tr>
+          <!--Table head, need to be adjusted accordingly to align with your own.-->
+          <th>Champion</th>
+          <th>Ban Rate</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+   <div id="chapmion-ban-rate-msg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>player win rate</h2>
+      <form id = "playerWinRates">
+        <button type = "submit"> Show Win Rates </button>
+      </form>
+      <table id="player-win-rate" border="1">
+      <thead>
+        <tr>
+          <!--Table head, need to be adjusted accordingly to align with your own.-->
+          <th>Player ID</th>
+          <th>Win Count</th>
+          <th>Matches Played</th>
+          <th>Win Rate</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+   <div id="players-win-rate-msg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+
     <h2>avg kkda at least two games played</h2>
     <table id="players-avg-kda" border="1">
       <thead>
@@ -251,20 +294,20 @@
       The values are case sensitive and if you enter in the wrong case, the
       update statement will not do anything.
     </p>
-    <form id="updatePlayerEmail">
-      PlayerID:
+    <form id="updataNameDemotable">
+      Old Email:
       <input
         type="text"
-        id="updatePlayerID"
-        placeholder="Enter playerID"
+        id="updateOldName"
+        placeholder="Enter Old Email"
         required
       />
       <br /><br />
       New Email:
       <input
         type="text"
-        id="updateNewEmail"
-        placeholder="Enter new email"
+        id="updateNewName"
+        placeholder="Enter New Email"
         maxlength="20"
       />
       <br /><br />
@@ -272,7 +315,7 @@
       <button type="submit">update</button> <br />
     </form>
     <!-- A placeholder to display messages related to the update operation. -->
-    <div id="updateEmailResultMsg"></div>
+    <div id="updateNameResultMsg"></div>
 
     <br />
     <hr />
@@ -280,6 +323,7 @@
     <!-- ========================================================================= -->
 
     <!-- Table 3 -->
+
     <h2>Champions</h2>
     <table id="championtable" border="1">
       <thead>
@@ -347,20 +391,20 @@
       The values are case sensitive and if you enter in the wrong case, the
       update statement will not do anything.
     </p>
-    <form id="updateChampionClass">
-      ChampionID:
+    <form id="updataNameDemotable">
+      Old Class:
       <input
         type="text"
-        id="updateChampionID"
-        placeholder="Enter championID"
+        id="updateOldName"
+        placeholder="Enter Old Class"
         required
       />
       <br /><br />
       New Class:
       <input
         type="text"
-        id="updateNewClass"
-        placeholder="Enter new class"
+        id="updateNewName"
+        placeholder="Enter New Class"
         maxlength="20"
       />
       <br /><br />
@@ -368,7 +412,7 @@
       <button type="submit">update</button> <br />
     </form>
     <!-- A placeholder to display messages related to the update operation. -->
-    <div id="updateChampionClassResultMsg"></div>
+    <div id="updateNameResultMsg"></div>
 
     <h2>Number of Champions in Database</h2>
 
