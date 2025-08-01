@@ -82,31 +82,25 @@ async function fetchTableDataFromDb(tableName) {
   });
 }
 
-async function initiateDemotable() {
-  return await withOracleDB(async (connection) => {
-    try {
-      await connection.execute(`DROP TABLE DEMOTABLE`);
-    } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
-    }
-
-    const result = await connection.execute(`
-            CREATE TABLE DEMOTABLE (
-                id NUMBER PRIMARY KEY,
-                name VARCHAR2(20)
-            )
-        `);
-    return true;
-  }).catch(() => {
-    return false;
-  });
-}
-
 async function insertPlayer(playerId, country, dateCreated, email) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
       `INSERT INTO PLAYER (playerId, country, dateCreated, email) VALUES (:playerId, :country, TO_DATE(:dateCreated, 'YYYY-MM-DD'), :email)`,
       [playerId, country, dateCreated, email],
+      { autoCommit: true },
+    );
+
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
+async function updatePlayer(playerId, email) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `UPDATE PLAYER SET email = :email WHERE playerID = :playerID`,
+      [email, playerId],
       { autoCommit: true },
     );
 
@@ -133,11 +127,11 @@ async function insertChampion(championId, championClass, race) {
   });
 }
 
-async function insertDemotable(id, name) {
+async function updateChampion(championID, championClass) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      `INSERT INTO DEMOTABLE (id, name) VALUES (:id, :name)`,
-      [id, name],
+      `UPDATE CHAMPION SET class = :championClass WHERE championId = :championID`,
+      [championClass, championID],
       { autoCommit: true },
     );
 
@@ -147,36 +141,12 @@ async function insertDemotable(id, name) {
   });
 }
 
-async function updateNameDemotable(oldName, newName) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `UPDATE DEMOTABLE SET name=:newName where name=:oldName`,
-      [newName, oldName],
-      { autoCommit: true },
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
-    return false;
-  });
-}
-
-async function countDemotable() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT Count(*) FROM DEMOTABLE");
-    return result.rows[0][0];
-  }).catch(() => {
-    return -1;
-  });
-}
 
 module.exports = {
   testOracleConnection, // 1
   fetchTableDataFromDb,
-  initiateDemotable,
-  insertDemotable,
   insertPlayer,
   insertChampion,
-  updateNameDemotable,
-  countDemotable,
+  updatePlayer,
+  updateChampion
 };
