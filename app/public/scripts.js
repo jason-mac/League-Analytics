@@ -38,16 +38,6 @@ async function checkDbConnection() {
     });
 }
 
-async function fetchMatchHistory(event) {
-  event.preventDefault();
-
-  const tableElement = document.getElementById("matchHistory");
-  const tableBody = tableElement.querySelector("tbody");
-
-  const playerIdValue = document.getElementById("championIdMatchHistory");
-  const championIdValue = document.getElementById("playerIdMatchHistory");
-}
-
 async function fetchAndDisplayTable(tableid) {
   const tableElement = document.getElementById(tableid);
   const tableBody = tableElement.querySelector("tbody");
@@ -76,22 +66,6 @@ async function fetchAndDisplayTable(tableid) {
       cell.textContent = field;
     });
   });
-}
-
-// This function resets or initializes the demotable.
-async function resetDemotable() {
-  const response = await fetch("/initiate-demotable", {
-    method: "POST",
-  });
-  const responseData = await response.json();
-
-  if (responseData.success) {
-    const messageElement = document.getElementById("resetResultMsg");
-    messageElement.textContent = "demotable initiated successfully!";
-    fetchTableData();
-  } else {
-    alert("Error initiating table!");
-  }
 }
 
 // Inserts new records into the player table.
@@ -172,79 +146,61 @@ async function insertPlayer(event) {
   }
 }
 
-// Inserts new records into the demotable.
-async function insertDemotable(event) {
+async function updatePlayer(event) {
   event.preventDefault();
 
-  const idValue = document.getElementById("insertId").value;
-  const nameValue = document.getElementById("insertName").value;
+  const id = document.getElementById("updatePlayerID").value;
+  const email = document.getElementById("updateNewEmail").value;
 
-  const response = await fetch("/insert-demotable", {
+  const response = await fetch("/updatePlayerEmail", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id: idValue,
-      name: nameValue,
+      playerId: id,
+      email: email,
     }),
   });
 
-  const responseData = await response.json();
-  const messageElement = document.getElementById("insertResultMsgPlayer");
+  const data = await response.json();
+  const messageElement = document.getElementById("updateEmailResultMsg");
 
-  if (responseData.success) {
-    messageElement.textContent = "Data inserted successfully!";
+  if (data.success) {
+    messageElement.textContent = "Data updated successfully!";
     fetchTableData();
   } else {
-    messageElement.textContent = "Error inserting data!";
+    messageElement.textContent = "Error updating data!";
   }
 }
 
-// Updates names in the demotable.
-async function updateNameDemotable(event) {
+async function updateChampion(event) {
   event.preventDefault();
 
-  const oldNameValue = document.getElementById("updateOldName").value;
-  const newNameValue = document.getElementById("updateNewName").value;
+  const id = document.getElementById("updateChampionID").value;
+  const championClass = document.getElementById("updateNewClass").value;
 
-  const response = await fetch("/update-name-demotable", {
+  const response = await fetch("/updateChampionClass", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      oldName: oldNameValue,
-      newName: newNameValue,
+      playerId: id,
+      championClass: championClass,
     }),
   });
 
-  const responseData = await response.json();
-  const messageElement = document.getElementById("updateNameResultMsg");
+  const data = await response.json();
+  const messageElement = document.getElementById(
+    "updateChampionClassResultMsg",
+  );
 
-  if (responseData.success) {
-    messageElement.textContent = "Name updated successfully!";
+  if (data.success) {
+    messageElement.textContent = "Data updated successfully!";
     fetchTableData();
   } else {
-    messageElement.textContent = "Error updating name!";
-  }
-}
-
-// Counts rows in the demotable.
-// Modify the function accordingly if using different aggregate functions or procedures.
-async function countDemotable() {
-  const response = await fetch("/count-demotable", {
-    method: "GET",
-  });
-
-  const responseData = await response.json();
-  const messageElement = document.getElementById("countResultMsg");
-
-  if (responseData.success) {
-    const tupleCount = responseData.count;
-    messageElement.textContent = `The number of tuples in demotable: ${tupleCount}`;
-  } else {
-    alert("Error in count demotable!");
+    messageElement.textContent = "Error updating data!";
   }
 }
 
@@ -292,12 +248,6 @@ window.onload = function () {
     .getElementById("playerRegionCountData")
     .addEventListener("submit", playerRegionCountData);
   document
-    .getElementById("resetDemotable")
-    .addEventListener("click", resetDemotable);
-  document
-    .getElementById("insertDemotable")
-    .addEventListener("submit", insertDemotable);
-  document
     .getElementById("insertPlayerTable")
     .addEventListener("submit", insertPlayer);
   document
@@ -307,11 +257,11 @@ window.onload = function () {
     .getElementById("matchHistory")
     .addEventListener("submit", fetchMatchHistory);
   document
-    .getElementById("updataNameDemotable")
-    .addEventListener("submit", updateNameDemotable);
+    .getElementById("updatePlayerEmail")
+    .addEventListener("submit", updatePlayer);
   document
-    .getElementById("countDemotable")
-    .addEventListener("click", countDemotable);
+    .getElementById("updateChampionClass")
+    .addEventListener("submit", updateChampion);
 };
 
 // General function to refresh the displayed table data.
