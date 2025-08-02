@@ -103,4 +103,20 @@ router.post("/updateChampionClass", async (req, res) => {
   }
 });
 
+router.get("/joinPlayersPlayedIn", async (req, res) => {
+	const { playerID } = req.query;
+	const result = await appService.joinPlayersPlayedIn(playerID);
+
+	if (result && result.length > 0) {
+	res.json({
+		success: true,
+		data: result
+	});
+	} else {
+		res.status(400).json({
+			success: false
+	});
+	}
+});
+
 module.exports = router;

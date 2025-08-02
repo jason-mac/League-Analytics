@@ -141,6 +141,16 @@ async function updateChampion(championID, championClass) {
   });
 }
 
+async function joinPlayersPlayedIn(playerID) {
+	return await withOracleDB(async (connection) => {
+		const result = await connection.execute(
+			`SELECT * FROM PLAYER p, PLAYEDIN m WHERE p.playerID = m.uName AND p.playerID = '${playerID}'`,
+		);
+		return result.rows;
+	}).catch(() => {
+	return [];
+	});
+}
 
 module.exports = {
   testOracleConnection, // 1
@@ -148,5 +158,6 @@ module.exports = {
   insertPlayer,
   insertChampion,
   updatePlayer,
-  updateChampion
+  updateChampion,
+  joinPlayersPlayedIn
 };
