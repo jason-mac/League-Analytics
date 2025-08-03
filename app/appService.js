@@ -141,7 +141,7 @@ async function updateChampion(championID, championClass) {
   });
 }
 
-// WORKING ON
+
 async function fetchNumPlayersByRegionDataFromDb(num) {
   console.log(num);
   return await withOracleDB(async (connection) => {
@@ -230,6 +230,16 @@ async function fetchChampionBanRate() {
   }).catch(() => {
     return [];
   });
+  
+async function joinPlayersPlayedIn(playerID) {
+	return await withOracleDB(async (connection) => {
+		const result = await connection.execute(
+			`SELECT * FROM PLAYER p, PLAYEDIN m WHERE p.playerID = m.uName AND p.playerID = '${playerID}'`,
+		);
+		return result.rows;
+	}).catch(() => {
+	return [];
+	});
 }
 
 module.exports = {
@@ -247,4 +257,5 @@ module.exports = {
   fetchChampionBanRate,
   fetchNumPlayersByRegionDataFromDb,
   fetchPlayersWinRate,
+  joinPlayersPlayedIn
 };

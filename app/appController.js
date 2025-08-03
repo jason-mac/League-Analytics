@@ -101,6 +101,7 @@ router.post("/updateChampionClass", async (req, res) => {
   }
 });
 
+
 router.get("/playerRegionCount", async (req, res) => {
   const num = parseInt(req.query.num) || 0;
   const result = await appService.fetchNumPlayersByRegionDataFromDb(num);
@@ -120,6 +121,22 @@ router.get("/playerWinRate", async (req, res) => {
 router.get("/championBanRate", async (req, res) => {
   const tableContent = await appService.fetchChampionBanRate();
   res.json({ data: tableContent });
+
+router.get("/joinPlayersPlayedIn", async (req, res) => {
+	const { playerID } = req.query;
+	const result = await appService.joinPlayersPlayedIn(playerID);
+
+	if (result && result.length > 0) {
+	res.json({
+		success: true,
+		data: result
+	});
+	} else {
+		res.status(400).json({
+			success: false
+	});
+	}
+
 });
 
 module.exports = router;
