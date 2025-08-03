@@ -82,7 +82,7 @@ async function insertChampion(event) {
   console.log(classValue);
   console.log("InsertChampion end");
 
-  const response = await fetch("/insert-champion", {
+  const response = await fetch("/insertChampion", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -122,7 +122,7 @@ async function insertPlayer(event) {
   console.log(dateCreatedValue);
   console.log(emailValue);
 
-  const response = await fetch("/insert-player", {
+  const response = await fetch("/insertPlayer", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -219,7 +219,7 @@ async function playerRegionCountData(event) {
   const num = numInput.value;
   console.log(num);
 
-  const response = await fetch(`/player-region-count-data-table?num=${num}`, {
+  const response = await fetch(`/playerRegionCount?num=${num}`, {
     method: "GET",
   });
 
@@ -238,6 +238,100 @@ async function playerRegionCountData(event) {
     });
   });
 }
+
+async function fetchPlayerAvgKda() {
+  const tableElement = document.getElementById("playerAvgKdaTable");
+  const tableBody = tableElement.querySelector("tbody");
+
+  if (!tableElement) {
+    console.error(`Table with id playerAvgKdaTable not found.`);
+    return;
+  }
+  const response = await fetch("/playerAvgKda", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  // Always clear old, already fetched data before new fetching process.
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
+async function fetchPlayerWinRate() {
+  const tableElement = document.getElementById("playerWinRateTable");
+  const tableBody = tableElement.querySelector("tbody");
+
+  if (!tableElement) {
+    console.error(`Table with id playerWinRateTable not found.`);
+    return;
+  }
+
+  const response = await fetch("/playerWinRate", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  // Always clear old, already fetched data before new fetching process.
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
+async function fetchChampionBanRate() {
+  const tableName = "championBanRateTable";
+  const tableElement = document.getElementById(tableName);
+  const tableBody = tableElement.querySelector("tbody");
+
+  console.log("avg kda ");
+
+  if (!tableElement) {
+    console.error(`Table with id ${tableName} not found.`);
+    return;
+  }
+  console.log("avg kda ");
+
+  const response = await fetch("/championBanRate", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  // Always clear old, already fetched data before new fetching process.
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -245,26 +339,31 @@ window.onload = function () {
   checkDbConnection();
   fetchTableData();
   document
-    .getElementById("playerRegionCountData")
-    .addEventListener("submit", playerRegionCountData);
-  document
     .getElementById("insertPlayerTable")
     .addEventListener("submit", insertPlayer);
   document
     .getElementById("insertChampion")
     .addEventListener("submit", insertChampion);
+
   document
     .getElementById("updatePlayerEmail")
     .addEventListener("submit", updatePlayer);
   document
     .getElementById("updateChampionClass")
     .addEventListener("submit", updateChampion);
+
   document
-    .getElementById("playerWinRates")
-    .addEventListener("click", updateChampion);
+    .getElementById("fetchPlayerWinRate")
+    .addEventListener("click", fetchPlayerWinRate);
   document
-    .getElementById("championBanRate")
-    .addEventListener("click", updateChampion);
+    .getElementById("fetchChampionBanRate")
+    .addEventListener("click", fetchChampionBanRate);
+  document
+    .getElementById("fetchPlayerRegionCountData")
+    .addEventListener("submit", playerRegionCountData);
+  document
+    .getElementById("fetchPlayerKda")
+    .addEventListener("click", fetchPlayerAvgKda);
 };
 
 // General function to refresh the displayed table data.
@@ -272,16 +371,11 @@ window.onload = function () {
 function fetchTableData() {
   // Add table name for fetching more tables, ensure to add router function in appController file
   const tableNames = [
-    "championtable",
-    "playertable",
-    "playedintable",
-    "gameperformancetable",
-    "matchtable",
-    "demotable",
-    // TODO:separate these three into their own functions
-    "players-avg-kda",
-    "player-win-rate",
-    "champion-ban-rate",
+    "championTable",
+    "playerTable",
+    "playedInTable",
+    "gamePerformanceTable",
+    "matchTable",
   ];
   for (const tableName of tableNames) {
     fetchAndDisplayTable(tableName);

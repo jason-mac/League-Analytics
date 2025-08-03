@@ -178,7 +178,7 @@ async function fetchNumPlayersByRegionDataFromDb(num) {
   });
 }
 
-async function fetchPlayersAvgKda() {
+async function fetchPlayerAvgKda() {
   return await withOracleDB(async (connection) => {
     const query = `
     SELECT p.uName, TRUNC((sum(p.kills) + sum(p.assists)) / GREATEST(1, sum(p.deaths)), 2) AS KDA
@@ -233,17 +233,18 @@ async function fetchChampionBanRate() {
 }
 
 module.exports = {
-  testOracleConnection, // 1
-  fetchTableDataFromDb,
+  testOracleConnection,
+
   insertPlayer,
   insertChampion,
 
-  // working on
+  updatePlayer,
+  updateChampion,
+
+  fetchPlayerAvgKda,
+  fetchPlayersWinRate,
+  fetchTableDataFromDb,
   fetchChampionBanRate,
   fetchNumPlayersByRegionDataFromDb,
-  updatePlayer,
-  fetchPlayersWinRate,
-  updateChampion,
-  fetchPlayersAvgKda,
   fetchPlayersWinRate,
 };
