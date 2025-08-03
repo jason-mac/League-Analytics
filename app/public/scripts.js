@@ -352,6 +352,37 @@ async function fetchChampionBanRate() {
   });
 }
 
+async function fetchPlayerPlayedInJoin(event) {
+  event.preventDefault();
+
+  const playerID = document.getElementById("playerPlayedInID").value;
+  // Specify table????
+  const tableBody = document.querySelector("#playerPlayedInTable tbody");
+
+  if (!playerID) {
+    console.log(`No playerID given`);
+    return;
+  }
+
+  const  response = await fetch(`/joinPlayersPlayedIn?playerID=${playerID}`, {
+    method: "GET",
+  });
+  const responseData = await response.json();
+  const data = responseData.data;
+  
+  if (tableBody) {
+    tableBody.innerHTML ="";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -393,6 +424,9 @@ window.onload = function () {
   } catch (e) {
     console.log(e.message);
   }
+  document 
+  .getElementById("fetchPlayerPlayedInJoin")
+  .addEventListener("submit", fetchPlayerPlayedInJoin);
   
 };
 

@@ -231,13 +231,16 @@ async function fetchChampionBanRate() {
     return [];
   });
 }
-  
+
 async function joinPlayersPlayedIn(playerID) {
 	return await withOracleDB(async (connection) => {
-		const result = await connection.execute(
-			`SELECT * FROM PLAYER p, PLAYEDIN m WHERE p.playerID = m.uName AND p.playerID = '${playerID}'`,
-		);
-		return result.rows;
+    const query = `
+    SELECT p.playerID, m.matchID, m.cname, m.kills, m.assists, m.deaths
+    FROM player p, playedin m
+    WHERE p.playerID = m.uName AND p.playerID = :playerID
+    `;
+    const result = await connection.execute(query, [playerID]);
+    return result.rows;
 	}).catch(() => {
 	return [];
 	});
