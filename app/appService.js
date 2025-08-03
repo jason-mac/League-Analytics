@@ -277,6 +277,35 @@ async function findPlayersUseAllSS() {
 	});
 }
 
+async function filterChampions(cID, cClass, cRace) {
+  return await withOracleDB(async (connection) => {
+    let query = `
+    SELECT *
+    FROM champion C
+    WHERE TRUE`;
+
+    const arg = {};
+
+    if (cID) {
+      query += ` AND C.championID = :cID`;
+      arg.cID =cID;
+    }
+    if (cClass) {
+      query += ` AND C.class = :cClass`;
+      arg.cClass = cClass;
+    }
+    if (cRace) {
+      query += ` AND C.race = :cRace`;
+      arg.cRace = cRace;
+    }
+
+    const result = await connection.execute(query, arg);
+    return result.rows;
+  }).catch(() => {
+    return [];
+    });
+}
+
 module.exports = {
   testOracleConnection,
   insertPlayer,
@@ -291,5 +320,6 @@ module.exports = {
   fetchPlayersWinRate,
   joinPlayersPlayedIn,
   deleteSummonerSpell,
-  findPlayersUseAllSS
+  findPlayersUseAllSS,
+  filterChampions
 }

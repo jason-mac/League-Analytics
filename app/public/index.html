@@ -738,6 +738,50 @@
 
     <div id="joinPlayerPlayedInMsg"></div>
 
+<br />
+<hr />
+<br />
+<!-- ========================================================================= -->
+<h2>Filter Champions (Select)</h2>
+
+<form id="filterChampions">
+  ChampionID:
+  <input
+    type="text"
+    id="filterChampionID"
+    placeholder="Enter ChampionID"
+  />
+  <br /><br />
+  Class:
+  <input
+    type="text"
+    id="filterClass"
+    placeholder="Enter Class"
+  />
+  <br /><br />
+  Race:
+  <input
+    type="text"
+    id="filterRace"
+    placeholder="Enter Race"
+  />
+  <br /><br />
+  <button type ="submit">Search</button>
+</form>
+<br>
+<table id="filterChampionsTable" border="1">
+  <thead>
+    <tr>
+      <th>ChampionID</th>
+      <th>Class</th>
+      <th>Race</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div id="filterChampionsMsg"></div>
+
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>
