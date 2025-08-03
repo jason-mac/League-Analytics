@@ -33,10 +33,8 @@
     <br />
     <!-- ========================================================================= -->
 
-    <!-- Table 2 -->
-
     <h2>Players</h2>
-    <table id="playertable" border="1">
+    <table id="playerTable" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->
@@ -144,10 +142,74 @@
     <br />
     <!-- ========================================================================= -->
 
+    <h2>Player Win Rates</h2>
+      <button type = "button" id = "fetchPlayerWinRate"> Display Win Rates </button>
+      <table id="playerWinRateTable" border="1">
+      <thead>
+        <tr>
+          <!--Table head, need to be adjusted accordingly to align with your own.-->
+          <th>Player ID</th>
+          <th>Win Count</th>
+          <th>Matches Played</th>
+          <th>Win Rate</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+   <div id="playerWinRateMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+
+    <h2>Average KDA of Players with at Least Two Games Played</h2>
+      <button type = "button" id = "fetchPlayerKda">Display Average KDA</button>
+    <table id="playerAvgKdaTable" border="1">
+      <thead>
+        <tr>
+          <th>Player ID</th>
+          <th>KDA</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="playersAvgKdaMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+
+    <h2>Group Users By Region Having more than x Players</h2>
+    <form id="fetchPlayerRegionCountData">
+      Minimum Player Count: 
+      <input type="number" id="minPlayerCount" required />
+      <button type="submit">Filter</button>
+    </form>
+    <br />
+    <table id="regionPlayerCountTable" border="1">
+      <thead>
+        <tr>
+          <th>Region</th>
+          <th>Player Count</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="playerRegionCountMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+
+
     <!-- Table 3 -->
 
     <h2>Champions</h2>
-    <table id="championtable" border="1">
+    <table id="championTable" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->
@@ -235,13 +297,31 @@
     </form>
     <!-- A placeholder to display messages related to the update operation. -->
     <div id="updateChampionClassResultMsg"></div>
-
     <h2>Number of Champions in Database</h2>
 
     <!-- Table 4 -->
+    <h2>Champion Ban Rates</h2>
+        <button type = "submit" id = "fetchChampionBanRate"> Display Ban Rates </button>
+      <table id="championBanRateTable" border="1">
+      <thead>
+        <tr>
+          <!--Table head, need to be adjusted accordingly to align with your own.-->
+          <th>Champion</th>
+          <th>Ban Rate</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+   <div id="championBanRateMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+
 
     <h2>Match</h2>
-    <table id="matchtable" border="1">
+    <table id="matchTable" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->
@@ -335,7 +415,7 @@
     <!-- Table 5 -->
 
     <h2>Game Performance</h2>
-    <table id="gameperformancetable" border="1">
+    <table id="gamePerformanceTable" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->
@@ -433,7 +513,7 @@
     <!-- Table 6 -->
 
     <h2>Played In</h2>
-    <table id="playedintable" border="1">
+    <table id="playedInTable" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->

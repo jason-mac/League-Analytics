@@ -12,7 +12,7 @@
  *
  */
 
-// TODO: REMOVE UNNECESSARY CONSOLE LOG STATEMENTS WHEN FINISHED
+// TODO: REMOVE DEBUGGING CONSOLE LOG STATEMENTS WHEN FINISHED
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -68,7 +68,6 @@ async function fetchAndDisplayTable(tableid) {
   });
 }
 
-
 // Inserts new records into the player table.
 async function insertChampion(event) {
   event.preventDefault();
@@ -83,7 +82,7 @@ async function insertChampion(event) {
   console.log(classValue);
   console.log("InsertChampion end");
 
-  const response = await fetch("/insert-champion", {
+  const response = await fetch("/insertChampion", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -123,7 +122,7 @@ async function insertPlayer(event) {
   console.log(dateCreatedValue);
   console.log(emailValue);
 
-  const response = await fetch("/insert-player", {
+  const response = await fetch("/insertPlayer", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -193,7 +192,9 @@ async function updateChampion(event) {
   });
 
   const data = await response.json();
-  const messageElement = document.getElementById("updateChampionClassResultMsg");
+  const messageElement = document.getElementById(
+    "updateChampionClassResultMsg",
+  );
 
   if (data.success) {
     messageElement.textContent = "Data updated successfully!";
@@ -203,6 +204,133 @@ async function updateChampion(event) {
   }
 }
 
+async function playerRegionCountData(event) {
+  event.preventDefault();
+  console.log("ran in here");
+  const tableElement = document.getElementById("regionPlayerCountTable");
+  const tableBody = tableElement.querySelector("tbody");
+
+  if (!tableElement) {
+    console.error(`Table with id regionPlayerCountTable not found.`);
+    return;
+  }
+
+  const numInput = document.getElementById("minPlayerCount");
+  const num = numInput.value;
+  console.log(num);
+
+  const response = await fetch(`/playerRegionCount?num=${num}`, {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
+async function fetchPlayerAvgKda() {
+  const tableElement = document.getElementById("playerAvgKdaTable");
+  const tableBody = tableElement.querySelector("tbody");
+
+  if (!tableElement) {
+    console.error(`Table with id playerAvgKdaTable not found.`);
+    return;
+  }
+  const response = await fetch("/playerAvgKda", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  // Always clear old, already fetched data before new fetching process.
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
+async function fetchPlayerWinRate() {
+  const tableElement = document.getElementById("playerWinRateTable");
+  const tableBody = tableElement.querySelector("tbody");
+
+  if (!tableElement) {
+    console.error(`Table with id playerWinRateTable not found.`);
+    return;
+  }
+
+  const response = await fetch("/playerWinRate", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  // Always clear old, already fetched data before new fetching process.
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
+async function fetchChampionBanRate() {
+  const tableName = "championBanRateTable";
+  const tableElement = document.getElementById(tableName);
+  const tableBody = tableElement.querySelector("tbody");
+
+  console.log("avg kda ");
+
+  if (!tableElement) {
+    console.error(`Table with id ${tableName} not found.`);
+    return;
+  }
+  console.log("avg kda ");
+
+  const response = await fetch("/championBanRate", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  // Always clear old, already fetched data before new fetching process.
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -216,12 +344,26 @@ window.onload = function () {
   document
     .getElementById("insertChampion")
     .addEventListener("submit", insertChampion);
+
   document
     .getElementById("updatePlayerEmail")
     .addEventListener("submit", updatePlayer);
   document
     .getElementById("updateChampionClass")
-    .addEventListener("submit", updateChampion)
+    .addEventListener("submit", updateChampion);
+
+  document
+    .getElementById("fetchPlayerWinRate")
+    .addEventListener("click", fetchPlayerWinRate);
+  document
+    .getElementById("fetchChampionBanRate")
+    .addEventListener("click", fetchChampionBanRate);
+  document
+    .getElementById("fetchPlayerRegionCountData")
+    .addEventListener("submit", playerRegionCountData);
+  document
+    .getElementById("fetchPlayerKda")
+    .addEventListener("click", fetchPlayerAvgKda);
 };
 
 // General function to refresh the displayed table data.
@@ -229,12 +371,11 @@ window.onload = function () {
 function fetchTableData() {
   // Add table name for fetching more tables, ensure to add router function in appController file
   const tableNames = [
-    "championtable",
-    "playertable",
-    "playedintable",
-    "gameperformancetable",
-    "matchtable",
-    "demotable",
+    "championTable",
+    "playerTable",
+    "playedInTable",
+    "gamePerformanceTable",
+    "matchTable",
   ];
   for (const tableName of tableNames) {
     fetchAndDisplayTable(tableName);
