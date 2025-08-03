@@ -406,6 +406,35 @@ function toggleButton(button, tableId, msgId, onText, offText, fetchFunction) {
   }
 }
 
+async function filterChampions(event) {
+  event.preventDefault();
+
+  const cCid = document.getElementById("filterChampionID").value;
+  const cClass = document.getElementById("filterClass").value;
+  const cRace = document.getElementById("filterRace").value;
+
+  const tableBody = document.querySelector("#filterChampionsTable tbody");
+
+
+  const response = await fetch(`/filterChampions?cID=${cCid}&cClass=${cClass}&cRace=${cRace}`, {
+    method: "GET",
+  });
+  const responseData = await response.json();
+  const data = responseData.data;
+
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -501,6 +530,9 @@ window.onload = function () {
   } catch (e) {
     console.log(e.message);
   }
+  document
+  .getElementById("filterChampions")
+  .addEventListener("submit", filterChampions)
 };
 
 // General function to refresh the displayed table data.

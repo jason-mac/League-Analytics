@@ -180,4 +180,21 @@ router.get("/playersUseAllSS", async (req, res) => {
   }
 });
 
+router.get("/filterChampions", async (req, res) => {
+  const { cCid, cClass, cRace } = req.query;
+  const result = await appService.filterChampions(cCid, cClass, cRace);
+
+  if (result && result.length > 0) {
+    res.json({
+      success: true,
+      data: result
+    });
+    } else {
+      res.status(400).json({
+        success: false
+    });
+    }
+
+})
+
 module.exports = router;
