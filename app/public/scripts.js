@@ -394,7 +394,10 @@ function toggleButton(button, tableId, msgId, onText, offText, fetchFunction) {
 
   if (table.style.display === "none" || table.style.display === "") {
     table.style.display = "table";
-    fetchFunction();
+    if (typeof fetchFunction === "function") {
+      fetchFunction();
+    }
+    console.log("hi");
     button.textContent = onText; // hide table
   } else {
     table.style.display = "none";
@@ -435,6 +438,30 @@ window.onload = function () {
     document
       .getElementById("findPlayersUseAllSS")
       .addEventListener("submit", findPlayersUseAllSS);
+    document
+      .getElementById("championTableToggle")
+      .addEventListener("click", function () {
+        toggleButton(
+          this,
+          "championTable",
+          "championTableMsg",
+          "Hide",
+          "Show Champions Table",
+          null,
+        );
+      });
+    document
+      .getElementById("playerTableToggle")
+      .addEventListener("click", function () {
+        toggleButton(
+          this,
+          "playerTable",
+          "playerTableMsg",
+          "Hide",
+          "Show Players Table",
+          null,
+        );
+      });
     document
       .getElementById("fetchPlayerWinRate")
       .addEventListener("click", function () {

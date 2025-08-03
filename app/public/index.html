@@ -109,7 +109,8 @@
     <!-- Table 2 -->
 
     <h2>Players</h2>
-    <table id="playerTable" border="1">
+    <button type = "button" id = "playerTableToggle">Show Players Table</button>
+    <table id="playerTable" style = "display: none;" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->
@@ -121,6 +122,7 @@
       </thead>
       <tbody></tbody>
     </table>
+    <div id="playerTableMsg"></div>
 
     <br />
     <hr />
@@ -283,7 +285,8 @@
     <!-- Table 3 -->
 
     <h2>Champions</h2>
-    <table id="championTable" border="1">
+    <button type = "button" id = "championTableToggle">Show Champions Table</button>
+    <table id="championTable" style = "display: none;" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->
@@ -454,7 +457,6 @@
     </form>
     <!-- A placeholder to display messages related to the update operation. -->
     <div id="updateNameResultMsg"></div>
-    playedintable
     <h2>Number of Matches in Database</h2>
 
     <!-- Table 5 -->
