@@ -222,9 +222,47 @@ async function findPlayersUseAllSS(event) {
   }
 }
 
+async function fetchPlayerPlayedInJoin(event) {
+  event.preventDefault();
+
+  const playerID = document.getElementById("playerPlayedInID").value;
+  // Specify table????
+  const tableBody = document.querySelector("#playerPlayedInTable tbody");
+  const msgDiv = document.getElementById("joinPlayerPlayedInMsg");
+
+  if (!playerID) {
+    console.log(`No playerID given`);
+    return;
+  }
+
+  const response = await fetch(`/joinPlayersPlayedIn?playerID=${playerID}`, {
+    method: "GET",
+  });
+  const responseData = await response.json();
+  const data = responseData.data;
+  if (!data || data.length === 0) {
+    tableBody.innerHTML = "";
+    msgDiv.textContent = "User Not Found!";
+    return;
+  } else {
+    msgDiv.textContent = "";
+  }
+
+  if (tableBody) {
+    tableBody.innerHTML = "";
+  }
+
+  data.forEach((element) => {
+    const row = tableBody.insertRow();
+    element.forEach((field, index) => {
+      const cell = row.insertCell(index);
+      cell.textContent = field;
+    });
+  });
+}
+
 async function playerRegionCountData(event) {
   event.preventDefault();
-  console.log("ran in here");
   const tableElement = document.getElementById("regionPlayerCountTable");
   const tableBody = tableElement.querySelector("tbody");
 
@@ -235,7 +273,6 @@ async function playerRegionCountData(event) {
 
   const numInput = document.getElementById("minPlayerCount");
   const num = numInput.value;
-  console.log(num);
 
   const response = await fetch(`/playerRegionCount?num=${num}`, {
     method: "GET",
@@ -392,6 +429,9 @@ window.onload = function () {
     document
       .getElementById("deleteSS")
       .addEventListener("submit", deleteSummonerSpell);
+    document
+      .getElementById("fetchPlayerPlayedInJoin")
+      .addEventListener("submit", fetchPlayerPlayedInJoin);
     document
       .getElementById("findPlayersUseAllSS")
       .addEventListener("submit", findPlayersUseAllSS);

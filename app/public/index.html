@@ -709,6 +709,35 @@
 
     <h2>Number of Played Ins in Database</h2>
 
+  <h2>Player Match History (Join)</h2>
+
+    <form id="fetchPlayerPlayedInJoin">
+      <label for="playerPlayedInID">Provide a valid PlayerID:</label>
+      <input
+        type="text"
+        id="playerPlayedInID"
+        placeholder="Enter PlayerID"
+        required
+      />
+      <button type ="submit">Search</button>
+    </form>
+
+    <table id="playerPlayedInTable" border="1">
+      <thead>
+        <tr>
+          <th>PlayerID</th>
+          <th>MatchID</th>
+          <th>Champion</th>
+          <th>Kills</th>
+          <th>Assists</th>
+          <th>Deaths</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="joinPlayerPlayedInMsg"></div>
+
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>
