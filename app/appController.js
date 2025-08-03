@@ -48,10 +48,10 @@ router.get("/ssTable", async (req, res) => {
 });
 
 router.get("/playerBuildsItemTable", async (req, res) => {
-  const tableContent = await appService.fetchTableDataFromDb("PlayerBuildsItems");
+  const tableContent =
+    await appService.fetchTableDataFromDb("PlayerBuildsItems");
   res.json({ data: tableContent });
 });
-
 
 router.post("/insertPlayer", async (req, res) => {
   const { playerId, country, dateCreated, email } = req.body;
@@ -112,7 +112,6 @@ router.post("/updateChampionClass", async (req, res) => {
   }
 });
 
-
 router.get("/playerRegionCount", async (req, res) => {
   const num = parseInt(req.query.num) || 0;
   const result = await appService.fetchNumPlayersByRegionDataFromDb(num);
@@ -132,55 +131,53 @@ router.get("/playerWinRate", async (req, res) => {
 router.get("/championBanRate", async (req, res) => {
   const tableContent = await appService.fetchChampionBanRate();
   res.json({ data: tableContent });
-})
+});
 
 router.get("/joinPlayersPlayedIn", async (req, res) => {
-	const { playerID } = req.query;
-	const result = await appService.joinPlayersPlayedIn(playerID);
+  const { playerID } = req.query;
+  const result = await appService.joinPlayersPlayedIn(playerID);
 
-	if (result && result.length > 0) {
-	res.json({
-		success: true,
-		data: result
-	});
-	} else {
-		res.status(400).json({
-			success: false
-	});
-	}
-
+  if (result && result.length > 0) {
+    res.json({
+      success: true,
+      data: result,
+    });
+  } else {
+    res.status(400).json({
+      success: false,
+    });
+  }
 });
 
 router.delete("/summonerSpell", async (req, res) => {
-	const { summonSpellID } = req.body;
-	const result = await appService.deleteSummonerSpell(summonSpellID);
+  const { summonSpellID } = req.body;
+  const result = await appService.deleteSummonerSpell(summonSpellID);
   console.log(result);
-	if (result) {
+  if (result) {
     res.json({
       success: true,
-      data: result
+      data: result,
     });
-	} else {
-		res.status(400).json({
-			success: false
-	});
-	}
+  } else {
+    res.status(400).json({
+      success: false,
+    });
+  }
 });
 
 router.get("/playersUseAllSS", async (req, res) => {
-	const result = await appService.findPlayersUseAllSS();
-  
+  const result = await appService.findPlayersUseAllSS();
+
   if (result === false) {
     res.status(400).json({
-			success: false
-	  });
+      success: false,
+    });
   } else {
     res.json({
-		  success: true,
-		  data: result
-	  });
+      success: true,
+      data: result,
+    });
   }
-	
 });
 
 module.exports = router;

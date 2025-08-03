@@ -199,7 +199,6 @@ async function deleteSummonerSpell(event) {
   } else {
     messageElement.textContent = "Error updating data!";
   }
-  
 }
 
 async function findPlayersUseAllSS(event) {
@@ -221,7 +220,6 @@ async function findPlayersUseAllSS(event) {
   } else {
     messageElement.textContent = "Error retrieving data!";
   }
-  
 }
 
 async function playerRegionCountData(event) {
@@ -267,6 +265,7 @@ async function fetchPlayerAvgKda() {
     console.error(`Table with id playerAvgKdaTable not found.`);
     return;
   }
+
   const response = await fetch("/playerAvgKda", {
     method: "GET",
   });
@@ -352,35 +351,19 @@ async function fetchChampionBanRate() {
   });
 }
 
-async function fetchPlayerPlayedInJoin(event) {
-  event.preventDefault();
+function toggleButton(button, tableId, msgId, onText, offText, fetchFunction) {
+  const table = document.getElementById(tableId);
+  const msg = document.getElementById(msgId);
 
-  const playerID = document.getElementById("playerPlayedInID").value;
-  // Specify table????
-  const tableBody = document.querySelector("#playerPlayedInTable tbody");
-
-  if (!playerID) {
-    console.log(`No playerID given`);
-    return;
+  if (table.style.display === "none" || table.style.display === "") {
+    table.style.display = "table";
+    fetchFunction();
+    button.textContent = onText; // hide table
+  } else {
+    table.style.display = "none";
+    button.textContent = offText; // show table
+    msg.textContent = "";
   }
-
-  const  response = await fetch(`/joinPlayersPlayedIn?playerID=${playerID}`, {
-    method: "GET",
-  });
-  const responseData = await response.json();
-  const data = responseData.data;
-  
-  if (tableBody) {
-    tableBody.innerHTML ="";
-  }
-
-  data.forEach((element) => {
-    const row = tableBody.insertRow();
-    element.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
 }
 
 // ---------------------------------------------------------------
@@ -391,43 +374,66 @@ window.onload = function () {
   fetchTableData();
   try {
     document
-    .getElementById("insertPlayerTable")
-    .addEventListener("submit", insertPlayer);
-  document
-    .getElementById("insertChampion")
-    .addEventListener("submit", insertChampion);
+      .getElementById("insertPlayerTable")
+      .addEventListener("submit", insertPlayer);
+    document
+      .getElementById("insertChampion")
+      .addEventListener("submit", insertChampion);
 
-  document
-    .getElementById("updatePlayerEmail")
-    .addEventListener("submit", updatePlayer);
-  document
-    .getElementById("fetchPlayerWinRate")
-    .addEventListener("click", fetchPlayerWinRate);
-  document
-    .getElementById("fetchChampionBanRate")
-    .addEventListener("click", fetchChampionBanRate);
-  document
-    .getElementById("fetchPlayerRegionCountData")
-    .addEventListener("submit", playerRegionCountData);
-  document
-    .getElementById("fetchPlayerKda")
-    .addEventListener("click", fetchPlayerAvgKda);
-  document
-    .getElementById("updatePlayerEmail")
-    .addEventListener("submit", updatePlayer);
-  document
-    .getElementById("deleteSS")
-    .addEventListener("submit", deleteSummonerSpell);
-  document
-    .getElementById("findPlayersUseAllSS")
-    .addEventListener('submit', findPlayersUseAllSS);
+    document
+      .getElementById("updatePlayerEmail")
+      .addEventListener("submit", updatePlayer);
+    document
+      .getElementById("fetchPlayerRegionCountData")
+      .addEventListener("submit", playerRegionCountData);
+    document
+      .getElementById("updatePlayerEmail")
+      .addEventListener("submit", updatePlayer);
+    document
+      .getElementById("deleteSS")
+      .addEventListener("submit", deleteSummonerSpell);
+    document
+      .getElementById("findPlayersUseAllSS")
+      .addEventListener("submit", findPlayersUseAllSS);
+    document
+      .getElementById("fetchPlayerWinRate")
+      .addEventListener("click", function () {
+        toggleButton(
+          this,
+          "playerWinRateTable",
+          "playerWinRateMsg",
+          "Close",
+          "Display Win Rates",
+          fetchPlayerWinRate,
+        );
+      });
+    document
+      .getElementById("fetchChampionBanRate")
+      .addEventListener("click", function () {
+        toggleButton(
+          this,
+          "championBanRateTable",
+          "championBanRateMsg",
+          "Close",
+          "Display Ban Rates",
+          fetchChampionBanRate,
+        );
+      });
+    document
+      .getElementById("fetchPlayerKda")
+      .addEventListener("click", function () {
+        toggleButton(
+          this,
+          "playerAvgKdaTable",
+          "playersAvgKdaMsg",
+          "Close",
+          "Display Avergage KDA",
+          fetchPlayerAvgKda,
+        );
+      });
   } catch (e) {
     console.log(e.message);
   }
-  document 
-  .getElementById("fetchPlayerPlayedInJoin")
-  .addEventListener("submit", fetchPlayerPlayedInJoin);
-  
 };
 
 // General function to refresh the displayed table data.
@@ -440,14 +446,9 @@ function fetchTableData() {
     "playedInTable",
     "gamePerformanceTable",
     "matchTable",
-    "championtable",
-    "playertable",
     "playedintable",
-    "gameperformancetable",
-    "matchtable",
-    "demotable",
-    'ssTable',
-    'playerBuildsItemTable'
+    "ssTable",
+    //"playerBuildsItemTable",
   ];
   for (const tableName of tableNames) {
     fetchAndDisplayTable(tableName);
