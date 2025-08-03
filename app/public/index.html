@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.jpeg">
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <!-- <link rel="stylesheet" href="styles.css">   -->
 
-    <title>Database Application</title>
+    <title>GG.op</title>
   </head>
   <body style>
     <!-- ===================================================================================== -->
@@ -32,6 +33,80 @@
     <hr />
     <br />
     <!-- ========================================================================= -->
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr;">
+        <div>
+            <h2>Summoner Spells</h2>
+            <table id="ssTable" border="1">
+            <thead>
+                <tr>
+                <th>ssID</th>
+                <th>Cool Down</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            </table>
+        </div>
+        <div>
+            <h2>Played In</h2>
+    <table id="playedintable" border="1">
+            <thead>
+                <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>MatchID</th>
+                <th>PlayerID</th>
+                <th>ChampionID</th>
+                <th>Spell (D-key)</th>
+                <th>Spell (F-key)</th>
+                <th>Rune (Primary)</th>
+                <th>Rune (Secondary)</th>
+                <th>Role</th>
+                <th>Team</th>
+                <th>Kills</th>
+                <th>Deaths</th>
+                <th>Assists</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <!-- ========================================================================= -->
+    <h2>Delete Summoner Spell</h2>
+    <form id="deleteSS">
+      ItemID:
+      <input
+        type="text"
+        id="deleteSSID"
+        placeholder="Enter itemID"
+        required
+      />
+      <br /><br />
+
+      <button type="submit">Delete</button> <br />
+    </form>
+    <p id="deleteSSMsg"></p>
+    
+    <br/>
+
+    <h2>All players who have used all summoner spells</h2>
+    <table id="playersWhoUseAllSS" border="1">
+          <thead>
+              <tr>
+              <th>PlayerID</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+          </table>
+        </div>
+      <br>
+    <form id="findPlayersUseAllSS">
+      <button type="submit">Find Players</button>
+    </form>
+
+    <p id="findPlayerUseAllSSMsg"></p>
+    
+    <!-- Table 2 -->
 
     <h2>Players</h2>
     <table id="playerTable" border="1">
@@ -81,8 +156,7 @@
         type="text"
         id="insertPlayerCountry"
         placeholder="Enter Country"
-        maxlength="20"
-      /insertPlayerEmail>
+        maxlength="20">
       <br /><br />
       Date Created:
       <input
@@ -128,14 +202,14 @@
         type="text"
         id="updateNewEmail"
         placeholder="Enter new email"
-        maxlength="20"
+        required
       />
       <br /><br />
 
       <button type="submit">update</button> <br />
     </form>
     <!-- A placeholder to display messages related to the update operation. -->
-    <div id="updateEmailResultMsg"></div>
+    <div id="updateEmafilResultMsg"></div>
 
     <br />
     <hr />
@@ -238,6 +312,7 @@
     <br />
     <hr />
     <br />
+
     <!-- ========================================================================= -->
 
     <h2>Insert New Champion</h2>
@@ -352,36 +427,6 @@
     <br />
     <!-- ========================================================================= -->
 
-    <h2>Insert New Matches</h2>
-    <form id="insertDemotable">
-      MatchID:
-      <input type="number" id="insertId" placeholder="Enter ID" required />
-      <br /><br />
-      Winning Team:
-      <input
-        type="text"
-        id="insertName"
-        placeholder="Enter Team"
-        maxlength="4"
-      />
-      <br /><br />
-      Game Mode:
-      <input
-        type="text"
-        id="insertName"
-        placeholder="Enter Mode"
-        maxlength="20"
-      />
-      <br /><br />
-      <button type="submit">insert</button> <br />
-    </form>
-    <div id="insertResultMsg"></div>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
-
     <h2>Update Winning Team for Match</h2>
     <p>
       The values are case sensitive and if you enter in the wrong case, the
@@ -441,34 +486,6 @@
     <button id="resetDemotable">reset</button> <br />
     <!-- A placeholder to display messages related to the reset operation. -->
     <div id="resetResultMsg"></div>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
-
-    <h2>Insert New Game Performanes</h2>
-    <form id="insertDemotable">
-      Kills:
-      <input type="number" id="insertId" placeholder="Enter Kills" required />
-      <br /><br />
-      Deaths:
-      <input type="number" id="insertId" placeholder="Enter Deaths" required />
-      <br /><br />
-      Assists:
-      <input type="number" id="insertId" placeholder="Enter Assists" required />
-      <br /><br />
-      Performance:
-      <input
-        type="text"
-        id="insertName"
-        placeholder="Enter Performance"
-        maxlength="20"
-      />
-      <br /><br />
-      <button type="submit">insert</button> <br />
-    </form>
-    <div id="insertResultMsg"></div>
 
     <br />
     <hr />

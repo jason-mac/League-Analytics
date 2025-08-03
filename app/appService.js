@@ -230,6 +230,7 @@ async function fetchChampionBanRate() {
   }).catch(() => {
     return [];
   });
+}
   
 async function joinPlayersPlayedIn(playerID) {
 	return await withOracleDB(async (connection) => {
@@ -242,20 +243,50 @@ async function joinPlayersPlayedIn(playerID) {
 	});
 }
 
+async function deleteSummonerSpell(ssID) {
+  return await withOracleDB(async (connection) => {
+		const result = await connection.execute(
+      `DELETE FROM SummonerSpell WHERE ssID = :ssID`,
+      [ssID],
+      { autoCommit: true },
+    );
+		return result.rowsAffected && result.rowsAffected > 0;
+	}).catch(() => {
+	  return false
+	});
+}
+
+async function findPlayersUseAllSS() {
+  return await withOracleDB(async (connection) => {
+		const result = await connection.execute(
+      `SELECT playerID FROM Player P
+       WHERE NOT EXISTS
+      ((SELECT ssID 
+	      FROM SummonerSpell S)
+	      MINUS 
+  	    (SELECT sName_F FROM PlayedIn P_i WHERE P.playerID = P_i.uName
+        UNION
+        SELECT sName_D FROM PlayedIn P_i WHERE P.playerID = P_i.uName))`,
+    );
+		return result.rows
+	}).catch(() => {
+	  return false
+	});
+}
+
 module.exports = {
   testOracleConnection,
-
   insertPlayer,
   insertChampion,
-
   updatePlayer,
   updateChampion,
-
   fetchPlayerAvgKda,
   fetchPlayersWinRate,
   fetchTableDataFromDb,
   fetchChampionBanRate,
   fetchNumPlayersByRegionDataFromDb,
   fetchPlayersWinRate,
-  joinPlayersPlayedIn
-};
+  joinPlayersPlayedIn,
+  deleteSummonerSpell,
+  findPlayersUseAllSS
+}

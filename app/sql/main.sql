@@ -1,5 +1,5 @@
 -- Drop table statements
-DROP TABLE PlayedIn
+DROP TABLE PlayedIn;
 DROP TABLE PlayerBuildsItems;
 DROP TABLE BannedChampion;
 DROP TABLE AffectedPatch;
@@ -7,7 +7,6 @@ DROP TABLE PlayerPlaysChampion;
 DROP TABLE ChampionHasSkin;
 DROP TABLE Rune;
 DROP TABLE Player;
-DROP TABLE Item;
 DROP TABLE Match;
 DROP TABLE SummonerSpell;
 DROP TABLE GamePerformance;
@@ -16,6 +15,9 @@ DROP TABLE RuneFamily;
 DROP TABLE Champion;
 DROP TABLE Location;
 DROP TABLE ItemInfo;
+DROP TABLE Item;
+
+
 
 CREATE TABLE Location (
   country VARCHAR2(50) NOT NULL,
@@ -31,7 +33,7 @@ CREATE TABLE Champion (
 );
 
 CREATE TABLE SkinCollection (
-  collectionName VARCHAR(50) NOT NULL,
+  collectionName VARCHAR2(50) NOT NULL,
   colour VARCHAR2(50),
   cost NUMBER(8, 2),
   CONSTRAINT pk_SkinCollection PRIMARY KEY (collectionName)
@@ -75,7 +77,7 @@ CREATE TABLE Player (
     playerID VARCHAR2(50) NOT NULL,
     country VARCHAR2(50) NOT NULL,
     dateCreated DATE, 
-    email VARCHAR2(50),
+    email VARCHAR2(50) UNIQUE,
     CONSTRAINT pk_Player PRIMARY KEY (playerID),
     CONSTRAINT fk_Player FOREIGN KEY (country) REFERENCES Location(country)
 );
@@ -146,8 +148,8 @@ CREATE TABLE PlayedIn (
   matchID INTEGER NOT NULL,
   uName VARCHAR2(50) NOT NULL,
   cName VARCHAR2(50) NOT NULL,
-  sName_F VARCHAR2(50) NOT NULL,
-  sName_D VARCHAR2(50) NOT NULL,
+  sName_F VARCHAR2(50),
+  sName_D VARCHAR2(50),
   rPrincipal VARCHAR2(50) NOT NULL,
   rSecondary VARCHAR2(50) NOT NULL,
   role CHAR(10) NOT NULL,
@@ -160,7 +162,9 @@ CREATE TABLE PlayedIn (
   CONSTRAINT fk1_PlayedIn FOREIGN KEY (matchID) REFERENCES Match (matchID) ON DELETE CASCADE,
   CONSTRAINT fk2_PlayedIn FOREIGN KEY (uName, cName) REFERENCES PlayerPlaysChampion (pName, cName),
   CONSTRAINT fk3_PlayedIn FOREIGN KEY (rPrincipal, rSecondary) REFERENCES Rune (principal, secondary),
-  CONSTRAINT fK4_PlayedIn FOREIGN KEY (kills, deaths, assists) REFERENCES GamePerformance(kills, deaths, assists)
+  CONSTRAINT fK4_PlayedIn FOREIGN KEY (kills, deaths, assists) REFERENCES GamePerformance(kills, deaths, assists),
+  CONSTRAINT fK5_PlayedIN FOREIGN KEY (sName_F) REFERENCES SummonerSpell(ssID) ON DELETE SET NULL,
+  CONSTRAINT fK6_PlayedIN FOREIGN KEY (sName_D) REFERENCES SummonerSpell(ssID) ON DELETE SET NULL
 );
 
 

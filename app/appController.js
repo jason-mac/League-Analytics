@@ -42,6 +42,17 @@ router.get("/gamePerformanceTable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/ssTable", async (req, res) => {
+  const tableContent = await appService.fetchTableDataFromDb("SummonerSpell");
+  res.json({ data: tableContent });
+});
+
+router.get("/playerBuildsItemTable", async (req, res) => {
+  const tableContent = await appService.fetchTableDataFromDb("PlayerBuildsItems");
+  res.json({ data: tableContent });
+});
+
+
 router.post("/insertPlayer", async (req, res) => {
   const { playerId, country, dateCreated, email } = req.body;
   const insertResult = await appService.insertPlayer(
@@ -121,6 +132,7 @@ router.get("/playerWinRate", async (req, res) => {
 router.get("/championBanRate", async (req, res) => {
   const tableContent = await appService.fetchChampionBanRate();
   res.json({ data: tableContent });
+})
 
 router.get("/joinPlayersPlayedIn", async (req, res) => {
 	const { playerID } = req.query;
@@ -137,6 +149,38 @@ router.get("/joinPlayersPlayedIn", async (req, res) => {
 	});
 	}
 
+});
+
+router.delete("/summonerSpell", async (req, res) => {
+	const { summonSpellID } = req.body;
+	const result = await appService.deleteSummonerSpell(summonSpellID);
+  console.log(result);
+	if (result) {
+    res.json({
+      success: true,
+      data: result
+    });
+	} else {
+		res.status(400).json({
+			success: false
+	});
+	}
+});
+
+router.get("/playersUseAllSS", async (req, res) => {
+	const result = await appService.findPlayersUseAllSS();
+  
+  if (result === false) {
+    res.status(400).json({
+			success: false
+	  });
+  } else {
+    res.json({
+		  success: true,
+		  data: result
+	  });
+  }
+	
 });
 
 module.exports = router;
