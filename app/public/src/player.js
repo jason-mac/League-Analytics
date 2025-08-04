@@ -1,34 +1,86 @@
-async function checkDbConnection() {
-  const statusElem = document.getElementById("dbStatus");
-  const loadingGifElem = document.getElementById("loadingGif");
+async function displaySelectPlayerTable(event) {
+  event.preventDefault();
 
-  const response = await fetch("/check-db-connection", {
-    method: "GET",
-  });
+  // Get selected attributes
+  const select = document.getElementById("playerAttributesSelect");
+  const selectedAttributes = Array.from(select.selectedOptions).map(
+    (option) => option.value,
+  );
+  console.log(selectedAttributes);
 
-  // Hide the loading GIF once the response is received.
-  loadingGifElem.style.display = "none";
-  // Display the statusElem's text in the placeholder.
-  statusElem.style.display = "inline";
+  // Optional: build your query based on selected attributes
 
-  response
-    .text()
-    .then((text) => {
-      statusElem.textContent = text;
-    })
-    .catch((error) => {
-      statusElem.textContent = "connection timed out"; // Adjust error handling if required.
+  try {
+    // Dummy fetch — replace this with your real DB/API call
+    const response = await fetch(`/playerTable`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ attributes: selectedAttributes }),
     });
+
+    const json = await response.json();
+    const data = json.data;
+
+    const table = document.getElementById("playerTable");
+    const tbody = table.querySelector("tbody");
+    const thead = table.getElementsByTagName("thead")[0];
+    tbody.innerHTML = ""; // Clear old rows
+    thead.innerHTML = "";
+
+    let headerRow = thead.querySelector("tr");
+    if (headerRow == null || !headerRow) {
+      headerRow = document.createElement("tr");
+      thead.appendChild(headerRow);
+    }
+
+    const addTh = function (attribute) {
+      let newTh = document.createElement("th");
+      newTh.textContent = attribute;
+      headerRow.appendChild(newTh);
+    };
+
+    // dynamically building the headers
+    if (selectedAttributes.includes("playerID")) {
+      addTh("Player ID");
+    }
+    if (selectedAttributes.includes("country")) {
+      addTh("Country");
+    }
+    if (selectedAttributes.includes("dateCreated")) {
+      addTh("Date Created");
+    }
+    if (selectedAttributes.includes("email")) {
+      addTh("Email");
+    }
+
+    // building the actual table
+    for (const rowData of data) {
+      const newRow = document.createElement("tr");
+      for (const cellData of rowData) {
+        const newCell = document.createElement("td");
+        newCell.textContent = cellData;
+        newRow.appendChild(newCell);
+      }
+      console.log("row of dtta ");
+      tbody.appendChild(newRow);
+    }
+
+    table.style.display = "table"; // Show table
+    document.getElementById("playerTableMsg").textContent = "";
+  } catch (err) {
+    console.error(err);
+    document.getElementById("playerTableMsg").textContent =
+      "Failed to load players.";
+  }
 }
 
-async function fetchAndDisplayTable(tableid) {
+async function fetchAndDisplayTable() {
   const tableElement = document.getElementById(tableid);
-  const tableBody = tableElement.querySelector("tbody");
-
   if (!tableElement) {
     console.error(`Table with id ${tableid} not found.`);
     return;
   }
+  const tableBody = tableElement.querySelector("tbody");
 
   const response = await fetch("/" + tableid, {
     method: "GET",
@@ -162,7 +214,6 @@ async function fetchPlayerWinRate() {
   });
 }
 
-
 async function fetchPlayerAvgKda() {
   const tableElement = document.getElementById("playerAvgKdaTable");
   const tableBody = tableElement.querySelector("tbody");
@@ -227,7 +278,6 @@ async function playerRegionCountData(event) {
 }
 
 window.onload = function () {
-  checkDbConnection();
   fetchTableData();
   try {
     document
@@ -275,6 +325,10 @@ window.onload = function () {
           null,
         );
       });
+
+    document
+      .getElementById("selectPlayerTableButton")
+      .addEventListener("click", displaySelectPlayerTable);
   } catch (e) {
     console.log(e.message);
   }
@@ -284,11 +338,8 @@ window.onload = function () {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
   // Add table name for fetching more tables, ensure to add router function in appController file
-  const tableNames = [
-    "playerTable",
-  ];
+  const tableNames = ["playerTable"];
   for (const tableName of tableNames) {
-    fetchAndDisplayTable(tableName);
+    // fetchAndDisplayTable(tableName);
   }
 }
-

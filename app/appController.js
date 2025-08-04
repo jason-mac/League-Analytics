@@ -23,33 +23,38 @@ router.get("/matchTable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
-router.get("/playerTable", async (req, res) => {
-  const { attributes } = req.query;
+router.post("/playerTable", async (req, res) => {
+  console.log("entere player table router");
+  const { attributes } = req.body;
   const tableContent = await appService.fetchPlayerTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/championTable", async (req, res) => {
   const { attributes } = req.query;
-  const tableContent = await appService.fetchChampionTableDataFromDb(attributes);
+  const tableContent =
+    await appService.fetchChampionTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/playedInTable", async (req, res) => {
   const { attributes } = req.query;
-  const tableContent = await appService.fetchPlayedInTableDataFromDb(attributes);
+  const tableContent =
+    await appService.fetchPlayedInTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/gamePerformanceTable", async (req, res) => {
   const { attributes } = req.query;
-  const tableContent = await appService.fetchGamePerformanceTableDataFromDb(attributes);
+  const tableContent =
+    await appService.fetchGamePerformanceTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/ssTable", async (req, res) => {
   const { attributes } = req.query;
-  const tableContent = await appService.fetchSummonerSpellTableDataFromDb(attributes);
+  const tableContent =
+    await appService.fetchSummonerSpellTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
@@ -193,14 +198,13 @@ router.get("/filterChampions", async (req, res) => {
   if (result && result.length > 0) {
     res.json({
       success: true,
-      data: result
+      data: result,
     });
-    } else {
-      res.status(400).json({
-        success: false
+  } else {
+    res.status(400).json({
+      success: false,
     });
-    }
-
-})
+  }
+});
 
 module.exports = router;

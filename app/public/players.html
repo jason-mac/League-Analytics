@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="favicon.jpeg">
+    <link rel="icon" type="image/x-icon" href="favicon.jpeg" />
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <!--<link rel="stylesheet" href="styles.css">   -->
@@ -13,34 +13,25 @@
 
   <body>
     <nav>
-      <a href="index.html">Home</a> |
-      <a href="players.html">Players</a> |
+      <a href="index.html">Home</a> | <a href="players.html">Players</a> |
       <a href="champions.html">Champions</a> |
       <a href="matches.html">Matches</a>
     </nav>
 
-  <h2>Players</h2>
+    <h2>Players</h2>
     <form id="playerAttributes">
-        <select id="playerAttributesSel" multiple>
+      <select id="playerAttributesSelect" multiple>
         <option value="playerID" selected>PlayerID</option>
         <option value="country" selected>Country</option>
         <option value="dateCreated" selected>Date Created</option>
         <option value="email" selected>Email</option>
       </select>
-      <br>
-      <button type="submit">Get Table</button>
+      <br />
+      <button type="submit" id="selectPlayerTableButton">Get Table</button>
     </form>
-    <button type = "button" id = "playerTableToggle">Show Players Table</button>
-    <table id="playerTable" style = "display: none;" border="1">
-      <thead>
-        <tr>
-          <!--Table head, need to be adjusted accordingly to align with your own.-->
-          <th>PlayerID</th>
-          <th>Country</th>
-          <th>Date Created</th>
-          <th>Email</th>
-        </tr>
-      </thead>
+    <button type="button" id="playerTableToggle">Show Players Table</button>
+    <table id="playerTable" style="display: none" border="1">
+      <thead></thead>
       <tbody></tbody>
     </table>
     <div id="playerTableMsg"></div>
@@ -67,19 +58,15 @@
     <h2>Insert New Players</h2>
     <form id="insertPlayerTable">
       PlayerID:
-      <input
-        type="text"
-        id="insertPlayerID"
-        placeholder="Enter ID"
-        required
-      />
+      <input type="text" id="insertPlayerID" placeholder="Enter ID" required />
       <br /><br />
       Country:
       <input
         type="text"
         id="insertPlayerCountry"
         placeholder="Enter Country"
-        maxlength="20">
+        maxlength="20"
+      />
       <br /><br />
       Date Created:
       <input
@@ -140,8 +127,8 @@
     <!-- ========================================================================= -->
 
     <h2>Player Win Rates</h2>
-      <button type = "button" id = "fetchPlayerWinRate"> Display Win Rates </button>
-      <table id="playerWinRateTable" style = "display: none;" border="1">
+    <button type="button" id="fetchPlayerWinRate">Display Win Rates</button>
+    <table id="playerWinRateTable" style="display: none" border="1">
       <thead>
         <tr>
           <!--Table head, need to be adjusted accordingly to align with your own.-->
@@ -153,16 +140,15 @@
       </thead>
       <tbody></tbody>
     </table>
-   <div id="playerWinRateMsg"></div>
+    <div id="playerWinRateMsg"></div>
 
     <br />
     <hr />
     <br />
 
-
     <h2>Average KDA of Players with at Least Two Games Played</h2>
-      <button type = "button" id = "fetchPlayerKda">Display Average KDA</button>
-    <table id="playerAvgKdaTable" style = 'display: none;' border="1">
+    <button type="button" id="fetchPlayerKda">Display Average KDA</button>
+    <table id="playerAvgKdaTable" style="display: none" border="1">
       <thead>
         <tr>
           <th>Player ID</th>
@@ -180,7 +166,7 @@
 
     <h2>Group Users By Region Having more than x Players</h2>
     <form id="fetchPlayerRegionCountData">
-      Minimum Player Count: 
+      Minimum Player Count:
       <input type="number" id="minPlayerCount" required />
       <button type="submit">Filter</button>
     </form>
@@ -199,7 +185,8 @@
     <br />
     <hr />
     <br />
-     
+
     <script src="src/player.js"></script>
   </body>
 </html>
+

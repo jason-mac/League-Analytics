@@ -85,79 +85,79 @@ async function fetchTableDataFromDb(tableName) {
 async function fetchMatchTableDataFromDb(attributes) {
   return await withOracleDB(async (connection) => {
     if (!attributes || attributes.length == 0) {
-      return []
+      return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM MATCH`;
     const result = await connection.execute(query);
     return result.rows;
   }).catch(() => {
     return [];
-  })
+  });
 }
 
 async function fetchPlayerTableDataFromDb(attributes) {
   return await withOracleDB(async (connection) => {
     if (!attributes || attributes.length == 0) {
-      return []
+      return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM PLAYER`;
     const result = await connection.execute(query);
     return result.rows;
   }).catch(() => {
     return [];
-  })
+  });
 }
 
 async function fetchChampionTableDataFromDb(attributes) {
   return await withOracleDB(async (connection) => {
     if (!attributes || attributes.length == 0) {
-      return []
+      return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM CHAMPION`;
     const result = await connection.execute(query);
     return result.rows;
   }).catch(() => {
     return [];
-  })
+  });
 }
 
 async function fetchPlayedInTableDataFromDb(attributes) {
   return await withOracleDB(async (connection) => {
     if (!attributes || attributes.length == 0) {
-      return []
+      return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM PLAYEDIN`;
     const result = await connection.execute(query);
     return result.rows;
   }).catch(() => {
     return [];
-  })
+  });
 }
 
 async function fetchGamePerformanceTableDataFromDb(attributes) {
   return await withOracleDB(async (connection) => {
     if (!attributes || attributes.length == 0) {
-      return []
+      return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM GAMEPERFORMANCE`;
     const result = await connection.execute(query);
     return result.rows;
   }).catch(() => {
     return [];
-  })
+  });
 }
 
 async function fetchSummonerSpellTableDataFromDb(attributes) {
   return await withOracleDB(async (connection) => {
     if (!attributes || attributes.length == 0) {
-      return []
+      return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM SUMMONERSPELL`;
     const result = await connection.execute(query);
     return result.rows;
   }).catch(() => {
     return [];
-  })
+  });
 }
 
 async function insertPlayer(playerId, country, dateCreated, email) {
@@ -218,7 +218,6 @@ async function updateChampion(championID, championClass) {
     return false;
   });
 }
-
 
 async function fetchNumPlayersByRegionDataFromDb(num) {
   console.log(num);
@@ -311,7 +310,7 @@ async function fetchChampionBanRate() {
 }
 
 async function joinPlayersPlayedIn(playerID) {
-	return await withOracleDB(async (connection) => {
+  return await withOracleDB(async (connection) => {
     const query = `
     SELECT p.playerID, m.matchID, m.cname, m.kills, m.assists, m.deaths
     FROM player p, playedin m
@@ -319,27 +318,27 @@ async function joinPlayersPlayedIn(playerID) {
     `;
     const result = await connection.execute(query, [playerID]);
     return result.rows;
-	}).catch(() => {
-	return [];
-	});
+  }).catch(() => {
+    return [];
+  });
 }
 
 async function deleteSummonerSpell(ssID) {
   return await withOracleDB(async (connection) => {
-		const result = await connection.execute(
+    const result = await connection.execute(
       `DELETE FROM SummonerSpell WHERE ssID = :ssID`,
       [ssID],
       { autoCommit: true },
     );
-		return result.rowsAffected && result.rowsAffected > 0;
-	}).catch(() => {
-	  return false
-	});
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
 }
 
 async function findPlayersUseAllSS() {
   return await withOracleDB(async (connection) => {
-		const result = await connection.execute(
+    const result = await connection.execute(
       `SELECT playerID FROM Player P
        WHERE NOT EXISTS
       ((SELECT ssID 
@@ -349,10 +348,10 @@ async function findPlayersUseAllSS() {
         UNION
         SELECT sName_D FROM PlayedIn P_i WHERE P.playerID = P_i.uName))`,
     );
-		return result.rows
-	}).catch(() => {
-	  return false
-	});
+    return result.rows;
+  }).catch(() => {
+    return false;
+  });
 }
 
 async function filterChampions(cID, cClass, cRace) {
@@ -381,7 +380,7 @@ async function filterChampions(cID, cClass, cRace) {
     return result.rows;
   }).catch(() => {
     return [];
-    });
+  });
 }
 
 module.exports = {
@@ -399,5 +398,11 @@ module.exports = {
   joinPlayersPlayedIn,
   deleteSummonerSpell,
   findPlayersUseAllSS,
-  filterChampions
-}
+  filterChampions,
+  fetchPlayerTableDataFromDb,
+  fetchChampionTableDataFromDb,
+  fetchPlayedInTableDataFromDb,
+  fetchGamePerformanceTableDataFromDb,
+  fetchMatchTableDataFromDb,
+  fetchSummonerSpellTableDataFromDb,
+};
