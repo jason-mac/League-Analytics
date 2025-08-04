@@ -82,6 +82,84 @@ async function fetchTableDataFromDb(tableName) {
   });
 }
 
+async function fetchMatchTableDataFromDb(attributes) {
+  return await withOracleDB(async (connection) => {
+    if (!attributes || attributes.length == 0) {
+      return []
+    }
+    const query = `SELECT ${attributes.join(", ")} FROM MATCH`;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  })
+}
+
+async function fetchPlayerTableDataFromDb(attributes) {
+  return await withOracleDB(async (connection) => {
+    if (!attributes || attributes.length == 0) {
+      return []
+    }
+    const query = `SELECT ${attributes.join(", ")} FROM PLAYER`;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  })
+}
+
+async function fetchChampionTableDataFromDb(attributes) {
+  return await withOracleDB(async (connection) => {
+    if (!attributes || attributes.length == 0) {
+      return []
+    }
+    const query = `SELECT ${attributes.join(", ")} FROM CHAMPION`;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  })
+}
+
+async function fetchPlayedInTableDataFromDb(attributes) {
+  return await withOracleDB(async (connection) => {
+    if (!attributes || attributes.length == 0) {
+      return []
+    }
+    const query = `SELECT ${attributes.join(", ")} FROM PLAYEDIN`;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  })
+}
+
+async function fetchGamePerformanceTableDataFromDb(attributes) {
+  return await withOracleDB(async (connection) => {
+    if (!attributes || attributes.length == 0) {
+      return []
+    }
+    const query = `SELECT ${attributes.join(", ")} FROM GAMEPERFORMANCE`;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  })
+}
+
+async function fetchSummonerSpellTableDataFromDb(attributes) {
+  return await withOracleDB(async (connection) => {
+    if (!attributes || attributes.length == 0) {
+      return []
+    }
+    const query = `SELECT ${attributes.join(", ")} FROM SUMMONERSPELL`;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  })
+}
+
 async function insertPlayer(playerId, country, dateCreated, email) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(

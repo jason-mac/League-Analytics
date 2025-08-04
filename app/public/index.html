@@ -43,6 +43,14 @@
     <div style="display:grid; grid-template-columns: 1fr 1fr;">
         <div>
             <h2>Summoner Spells</h2>
+            <form id="summonerSpellAttributes">
+            <select id="summonerSpellAttributesSel" multiple><
+              <option value="ssID" selected>ssID</option>
+              <option value="cooldown" selected>Cool Down</option>
+            </select>
+            <br>
+            <button type="submit">Get Table</button>
+            </form>
             <table id="ssTable" border="1">
             <thead>
                 <tr>

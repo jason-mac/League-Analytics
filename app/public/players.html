@@ -20,6 +20,16 @@
     </nav>
 
   <h2>Players</h2>
+    <form id="playerAttributes">
+        <select id="playerAttributesSel" multiple>
+        <option value="playerID" selected>PlayerID</option>
+        <option value="country" selected>Country</option>
+        <option value="dateCreated" selected>Date Created</option>
+        <option value="email" selected>Email</option>
+      </select>
+      <br>
+      <button type="submit">Get Table</button>
+    </form>
     <button type = "button" id = "playerTableToggle">Show Players Table</button>
     <table id="playerTable" style = "display: none;" border="1">
       <thead>

@@ -18,32 +18,38 @@ router.get("/check-db-connection", async (req, res) => {
 });
 
 router.get("/matchTable", async (req, res) => {
-  const tableContent = await appService.fetchTableDataFromDb("match");
+  const { attributes } = req.query;
+  const tableContent = await appService.fetchMatchTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/playerTable", async (req, res) => {
-  const tableContent = await appService.fetchTableDataFromDb("player");
+  const { attributes } = req.query;
+  const tableContent = await appService.fetchPlayerTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/championTable", async (req, res) => {
-  const tableContent = await appService.fetchTableDataFromDb("champion");
+  const { attributes } = req.query;
+  const tableContent = await appService.fetchChampionTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/playedInTable", async (req, res) => {
-  const tableContent = await appService.fetchTableDataFromDb("playedin");
+  const { attributes } = req.query;
+  const tableContent = await appService.fetchPlayedInTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/gamePerformanceTable", async (req, res) => {
-  const tableContent = await appService.fetchTableDataFromDb("gameperformance");
+  const { attributes } = req.query;
+  const tableContent = await appService.fetchGamePerformanceTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
 router.get("/ssTable", async (req, res) => {
-  const tableContent = await appService.fetchTableDataFromDb("SummonerSpell");
+  const { attributes } = req.query;
+  const tableContent = await appService.fetchSummonerSpellTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 

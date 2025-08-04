@@ -23,6 +23,15 @@
        <!-- Table 3 -->
 
     <h2>Champions</h2>
+    <form id="championAttributes">
+        <select id="championAttributesSel" multiple>
+        <option value="championID" selected>ChampionID</option>
+        <option value="class" selected>Class</option>
+        <option value="race" selected>Race</option>
+        </select>
+        <br>
+        <button type="submit">Get Table</button>
+      </form>
     <button type = "button" id = "championTableToggle">Show Champions Table</button>
     <table id="championTable" style = "display: none;" border="1">
         <thead>

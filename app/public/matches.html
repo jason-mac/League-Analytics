@@ -21,6 +21,15 @@
     </nav>
 
     <h2>Match</h2>
+    <form id="matchAttributes">
+      <select id="matchAttributesSel" multiple>
+      <option value="matchID" selected>MatchID</option>
+      <option value="winningTeam" selected>Winning Team</option>
+      <option value="gameMode" selected>Game Mode</option>
+      </select>
+      <button type="submit">Get Table</button>
+    </form>
+    <br>
     <table id="matchTable" border="1">
       <thead>
         <tr>
@@ -88,6 +97,17 @@
 <br />
 
     <h2>Game Performance</h2>
+    <form id="gamePerformanceAttributes">
+      <select id="gamePerformanceSel" multiple>
+        <option value="kills" selected>Kills</option>
+        <option value="deaths" selected>Deaths</option>
+        <option value="assists" selected>Assists</option>
+        <option value="performance" selected>Performance</option>
+      </select>
+      <br>
+      <button type="submit">Get Table</button>
+    </form>
+    <br>
     <table id="gamePerformanceTable" border="1">
       <thead>
         <tr>
@@ -158,6 +178,24 @@
     <!-- Table 6 -->
 
     <h2>Played In</h2>
+    <form id="playedInAttributes">
+      <select id="playedInAttributesSel" multiple>
+        <option value="matchID" selected>MatchID</option>
+        <option value="uName" selected>PlayedID</option>
+        <option value="cName" selected>ChampionID</option>
+        <option value="sName_F" selected>Spell (F-key)</option>
+        <option value="sName_D" selected>Spell (D-key)</option>
+        <option value="rPrincipal" selected>Rune (Primary)</option>
+        <option value="rSecondary" selected>SRune (Secondary)</option>
+        <option value="role" selected>Role</option>
+        <option value="team" selected>Team</option>
+        <option value="kills" selected>Kills</option>
+        <option value="assists" selected>Assists</option>
+        <option value="deaths" selected>Deaths</option>
+      </select>
+      <button type="submit">Get Table</button>
+    </form>
+    <br>
     <table id="playedInTable" border="1">
       <thead>
         <tr>
@@ -165,15 +203,15 @@
           <th>MatchID</th>
           <th>PlayerID</th>
           <th>ChampionID</th>
-          <th>Spell (D-key)</th>
           <th>Spell (F-key)</th>
+          <th>Spell (D-key)</th>
           <th>Rune (Primary)</th>
           <th>Rune (Secondary)</th>
           <th>Role</th>
           <th>Team</th>
           <th>Kills</th>
-          <th>Deaths</th>
           <th>Assists</th>
+          <th>Deaths</th>
         </tr>
       </thead>
       <tbody></tbody>
