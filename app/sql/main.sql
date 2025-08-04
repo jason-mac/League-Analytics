@@ -18,7 +18,6 @@ DROP TABLE ItemInfo;
 DROP TABLE Item;
 
 
-
 CREATE TABLE Location (
   country VARCHAR2(50) NOT NULL,
   region VARCHAR2(3),
@@ -199,7 +198,7 @@ INSERT INTO Champion (championID, class, race) VALUES ('Caitlyn', 'Marksman', 'P
 INSERT INTO Champion (championID, class, race) VALUES ('Lulu', 'Enchanter', 'Yordle');
 INSERT INTO Champion (championID, class, race) VALUES ('Irelia', 'Fighter', 'Ionia');
 INSERT INTO Champion (championID, class, race) VALUES ('Ahri', 'Mage', 'Ionia');
-INSERT INTO Champion (championID, class, race) VALUES ('K’Sante', 'Tank', 'Nazumah');
+INSERT INTO Champion (championID, class, race) VALUES ('KSante', 'Tank', 'Nazumah');
 INSERT INTO Champion (championID, class, race) VALUES ('Yasuo', 'Skirmisher', 'Ionia');
 INSERT INTO Champion (championID, class, race) VALUES ('Lucian', 'Marksman', 'Demacia');
 INSERT INTO Champion (championID, class, race) VALUES ('Azir', 'Mage', 'Shurima');
@@ -220,7 +219,7 @@ INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Caitlyn', '
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lulu', 'Lulu001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Irelia', 'Irelia001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Ahri', 'Ahri001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('K’Sante', 'KSante001', 'Default');
+INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('KSante', 'KSante001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Yasuo', 'Yasuo001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lucian', 'Lucian001', 'Default');
 INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Azir', 'Azir001', 'Default');
@@ -243,6 +242,7 @@ INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (2, 'Red', 'Unrated');
 INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (3, 'Blue', 'Unrated');
 INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (4, 'Red', 'Unrated');
 INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (5, 'Blue', 'Ranked');
+INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (6, 'Red', 'Ranked');
 
 
 -- Inserting into AffectedPatch Table
@@ -289,7 +289,7 @@ INSERT INTO Item (itemID, bonus) VALUES ('Dark Seal', 'Glory');
 INSERT INTO Item (itemID, bonus) VALUES ('Eclipse', 'Ever Rising Moon');
 INSERT INTO Item (itemID, bonus) VALUES ('Manamune', 'Manaflow');
 INSERT INTO Item (itemID, bonus) VALUES ('Elixir of Wraith', 'Drain');
-INSERT INTO Item (itemID, bonus) VALUES ('Bami’s Cinder', 'Immolate');
+INSERT INTO Item (itemID, bonus) VALUES ('Bamis Cinder', 'Immolate');
 INSERT INTO Item (itemID, bonus) VALUES ('Sunfire Aegis', 'Resilience');
 INSERT INTO Item (itemID, bonus) VALUES ('Mejais Soulstealer', 'Focus');
 INSERT INTO Item (itemID, bonus) VALUES ('Muramana', 'Wave');
@@ -311,7 +311,7 @@ INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (1, 'theshy', 'Eclip
 INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (1, 'hideonbush', 'Dark Seal');
 INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (1, 'hideonbush', 'Manamune');
 INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (2, 'G2Caps', 'Elixir of Wraith');
-INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (3, 'topLaneLegend', 'Bami’s Cinder');
+INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (3, 'topLaneLegend', 'Bamis Cinder');
 INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (3, 'topLaneLegend', 'Eclipse');
 
 
@@ -323,6 +323,10 @@ INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('rekkless', 'Lulu',
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('doinb', 'Talon', 'Jungle');
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Azir', 'Mid');
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('topLaneLegend', 'Garen', 'Top');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Lulu', 'Mid');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'KSante', 'Mid');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Talon', 'Mid');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Garen', 'Mid');
 
 -- INSERT INTO GamePerformance
 -- Great: KDA >= 4.0 or 0 Deaths | Good: KDA >= 2.0 | Poor: KDA >= 1.0 | Bad: KDA < 1.0
@@ -351,3 +355,15 @@ VALUES (1, 'doinb', 'Talon', 'Flash', 'Smite', 'Domination', 'Sorcery', 'Jungle'
 
 INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
 VALUES (2, 'G2Caps', 'Azir', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (3, 'theshy', 'Lulu', 'Flash', 'Ignite', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (4, 'theshy', 'KSante', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (5, 'theshy', 'Talon', 'Ignite', 'Heal', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (6, 'theshy', 'Garen', 'Flash', 'Smite', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);

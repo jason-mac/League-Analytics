@@ -6,9 +6,7 @@ async function checkDbConnection() {
     method: "GET",
   });
 
-  // Hide the loading GIF once the response is received.
   loadingGifElem.style.display = "none";
-  // Display the statusElem's text in the placeholder.
   statusElem.style.display = "inline";
 
   response
@@ -17,7 +15,7 @@ async function checkDbConnection() {
       statusElem.textContent = text;
     })
     .catch((error) => {
-      statusElem.textContent = "connection timed out"; // Adjust error handling if required.
+      statusElem.textContent = "connection timed out";
     });
 }
 
@@ -90,10 +88,24 @@ async function findPlayersUseAllSS(event) {
 
   const data = await response.json();
   const messageElement = document.getElementById("findPlayerUseAllSSMsg");
+  const tableElement = document.getElementById("playersWhoUseAllSS");
+  const tableBody = tableElement.querySelector("tbody");
 
   if (data.success) {
     messageElement.textContent = "Data retrieved successfully!";
-    fetchTableData();
+    if (tableBody) {
+      tableBody.innerHTML = "";
+    }
+
+    const info = data.data;
+
+    info.forEach((element) => {
+      const row = tableBody.insertRow();
+      element.forEach((field, index) => {
+        const cell = row.insertCell(index);
+        cell.textContent = field;
+      });
+    });
   } else {
     messageElement.textContent = "Error retrieving data!";
   }
@@ -104,17 +116,17 @@ window.onload = function () {
   fetchTableData();
   try {
     document
-      .getElementById("insertPlayerTable")
-      .addEventListener("submit", insertPlayer);
+      .getElementById("deleteSS")
+      .addEventListener("submit", deleteSummonerSpell);
+    document
+      .getElementById("findPlayersUseAllSS")
+      .addEventListener("submit", findPlayersUseAllSS)
   } catch (e) {
     console.log(e.message);
   }
 };
 
-// General function to refresh the displayed table data.
-// You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-  // Add table name for fetching more tables, ensure to add router function in appController file
   const tableNames = [
     "playedintable",
     "ssTable",
