@@ -181,8 +181,8 @@ router.get("/playersUseAllSS", async (req, res) => {
 });
 
 router.get("/filterChampions", async (req, res) => {
-  const { cCid, cClass, cRace } = req.query;
-  const result = await appService.filterChampions(cCid, cClass, cRace);
+  const { cCID, cClass, cRace } = req.query;
+  const result = await appService.filterChampions(cCID, cClass, cRace);
 
   if (result && result.length > 0) {
     res.json({
