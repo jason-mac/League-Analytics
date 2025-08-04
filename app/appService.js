@@ -281,14 +281,14 @@ async function filterChampions(cID, cClass, cRace) {
   return await withOracleDB(async (connection) => {
     let query = `
     SELECT *
-    FROM champion C
-    WHERE TRUE`;
+    FROM Champion C
+    WHERE 1 = 1`;
 
     const arg = {};
 
     if (cID) {
       query += ` AND C.championID = :cID`;
-      arg.cID =cID;
+      arg.cID = cID;
     }
     if (cClass) {
       query += ` AND C.class = :cClass`;

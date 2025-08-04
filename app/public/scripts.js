@@ -175,53 +175,6 @@ async function updatePlayer(event) {
   }
 }
 
-async function deleteSummonerSpell(event) {
-  event.preventDefault();
-
-  const id = document.getElementById("deleteSSID").value;
-
-  const response = await fetch("/summonerSpell", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      summonSpellID: id,
-    }),
-  });
-
-  const data = await response.json();
-  const messageElement = document.getElementById("deleteSSMsg");
-
-  if (data.success) {
-    messageElement.textContent = "Data updated successfully!";
-    fetchTableData();
-  } else {
-    messageElement.textContent = "Error updating data!";
-  }
-}
-
-async function findPlayersUseAllSS(event) {
-  event.preventDefault();
-
-  const response = await fetch("/playersUseAllSS", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const data = await response.json();
-  const messageElement = document.getElementById("findPlayerUseAllSSMsg");
-
-  if (data.success) {
-    messageElement.textContent = "Data retrieved successfully!";
-    fetchTableData();
-  } else {
-    messageElement.textContent = "Error retrieving data!";
-  }
-}
-
 async function fetchPlayerPlayedInJoin(event) {
   event.preventDefault();
 
@@ -443,30 +396,8 @@ window.onload = function () {
   fetchTableData();
   try {
     document
-      .getElementById("insertPlayerTable")
-      .addEventListener("submit", insertPlayer);
-    document
       .getElementById("insertChampion")
       .addEventListener("submit", insertChampion);
-
-    document
-      .getElementById("updatePlayerEmail")
-      .addEventListener("submit", updatePlayer);
-    document
-      .getElementById("fetchPlayerRegionCountData")
-      .addEventListener("submit", playerRegionCountData);
-    document
-      .getElementById("updatePlayerEmail")
-      .addEventListener("submit", updatePlayer);
-    document
-      .getElementById("deleteSS")
-      .addEventListener("submit", deleteSummonerSpell);
-    document
-      .getElementById("fetchPlayerPlayedInJoin")
-      .addEventListener("submit", fetchPlayerPlayedInJoin);
-    document
-      .getElementById("findPlayersUseAllSS")
-      .addEventListener("submit", findPlayersUseAllSS);
     document
       .getElementById("championTableToggle")
       .addEventListener("click", function () {
@@ -477,30 +408,6 @@ window.onload = function () {
           "Hide",
           "Show Champions Table",
           null,
-        );
-      });
-    document
-      .getElementById("playerTableToggle")
-      .addEventListener("click", function () {
-        toggleButton(
-          this,
-          "playerTable",
-          "playerTableMsg",
-          "Hide",
-          "Show Players Table",
-          null,
-        );
-      });
-    document
-      .getElementById("fetchPlayerWinRate")
-      .addEventListener("click", function () {
-        toggleButton(
-          this,
-          "playerWinRateTable",
-          "playerWinRateMsg",
-          "Close",
-          "Display Win Rates",
-          fetchPlayerWinRate,
         );
       });
     document
@@ -515,24 +422,12 @@ window.onload = function () {
           fetchChampionBanRate,
         );
       });
-    document
-      .getElementById("fetchPlayerKda")
-      .addEventListener("click", function () {
-        toggleButton(
-          this,
-          "playerAvgKdaTable",
-          "playersAvgKdaMsg",
-          "Close",
-          "Display Avergage KDA",
-          fetchPlayerAvgKda,
-        );
-      });
   } catch (e) {
     console.log(e.message);
   }
-  document
-  .getElementById("filterChampions")
-  .addEventListener("submit", filterChampions)
+  // document
+  // .getElementById("filterChampions")
+  // .addEventListener("submit", filterChampions)
 };
 
 // General function to refresh the displayed table data.
@@ -541,13 +436,11 @@ function fetchTableData() {
   // Add table name for fetching more tables, ensure to add router function in appController file
   const tableNames = [
     "championTable",
-    "playerTable",
     "playedInTable",
     "gamePerformanceTable",
     "matchTable",
     "playedintable",
     "ssTable",
-    //"playerBuildsItemTable",
   ];
   for (const tableName of tableNames) {
     fetchAndDisplayTable(tableName);
