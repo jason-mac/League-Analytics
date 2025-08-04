@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.jpeg">
+
+    <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
+    <!--<link rel="stylesheet" href="styles.css">   -->
+
+    <title>Champion Data</title>
+  </head>
+
+  <body>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="players.html">Players</a> |
+      <a href="champions.html">Champions</a> |
+      <a href="matches.html">Matches</a>
+    </nav>
+
+       <!-- Table 3 -->
+
+    <h2>Champions</h2>
+    <button type = "button" id = "championTableToggle">Show Champions Table</button>
+    <table id="championTable" style = "display: none;" border="1">
+        <thead>
+        <tr>
+            <!--Table head, need to be adjusted accordingly to align with your own.-->
+            <th>ChampionID</th>
+            <th>Class</th>
+            <th>Race</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+    <!-- ========================================================================= -->
+
+    <h2>Reset Champions</h2>
+    <p>
+        If you wish to reset the table press on the reset button. If this is the
+        first time you're running this page, you MUST use reset
+    </p>
+    <button id="resetDemotable">reset</button> <br />
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <!-- ========================================================================= -->
+
+    <h2>Insert New Champion</h2>
+    <form id="insertChampion">
+        ChampionID:
+        <input type="text" id="insertChampionId" placeholder="Enter ID" required />
+        <br /><br />
+        Class:
+        <input
+        type="text"
+        id="insertChampionClass"
+        placeholder="Enter Class"
+        maxlength="20"
+        />
+        <br /><br />
+        Race:
+        <input
+        type="text"
+        id="insertChampionRace"
+        placeholder="Enter Race"
+        maxlength="20"
+        />
+        <br /><br />
+        <button type="submit">insert</button> <br />
+    </form>
+    <div id="insertResultMsgChampion"></div>
+
+    <br />
+    <hr />
+    <br />
+    <!-- ========================================================================= -->
+
+    <h2>Update Class for Champion</h2>
+    <p>
+        The values are case sensitive and if you enter in the wrong case, the
+        update statement will not do anything.
+    </p>
+    <form id="updateChampionClass">
+        ChampionID:
+        <input
+        type="text"
+        id="updateChampionID"
+        placeholder="Enter championID"
+        required
+        />
+        <br /><br />
+        New Class:
+        <input
+        type="text"
+        id="updateNewClass"
+        placeholder="Enter new class"
+        maxlength="20"
+        />
+        <br /><br />
+
+        <button type="submit">update</button> <br />
+    </form>
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateChampionClassResultMsg"></div>
+    <h2>Number of Champions in Database</h2>
+
+    <!-- Table 4 -->
+    <h2>Champion Ban Rates</h2>
+        <button type = "button" id = "fetchChampionBanRate"> Display Ban Rates </button>
+        <table id="championBanRateTable" style = 'display: none;' border="1">
+        <thead>
+        <tr>
+            <!--Table head, need to be adjusted accordingly to align with your own.-->
+            <th>Champion</th>
+            <th>Ban Rate</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="championBanRateMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <!-- ========================================================================= -->
+    <h2>Filter Champions (Select)</h2>
+
+    <form id="filterChampions">
+    ChampionID:
+    <input
+        type="text"
+        id="filterChampionID"
+        placeholder="Enter ChampionID"
+    />
+    <br /><br />
+    Class:
+    <input
+        type="text"
+        id="filterClass"
+        placeholder="Enter Class"
+    />
+    <br /><br />
+    Race:
+    <input
+        type="text"
+        id="filterRace"
+        placeholder="Enter Race"
+    />
+    <br /><br />
+    <button type ="submit">Search</button>
+    </form>
+    <br>
+    <table id="filterChampionsTable" border="1">
+    <thead>
+        <tr>
+        <th>ChampionID</th>
+        <th>Class</th>
+        <th>Race</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+    </table>
+
+    <div id="filterChampionsMsg"></div>
+     
+    <script src="scripts.js"></script>
+    
+  </body>
+</html>
