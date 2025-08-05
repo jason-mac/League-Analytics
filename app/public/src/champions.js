@@ -1,54 +1,72 @@
-async function checkDbConnection() {
-  const statusElem = document.getElementById("dbStatus");
-  const loadingGifElem = document.getElementById("loadingGif");
+async function displaySelectChampionTable(event) {
+  event.preventDefault();
 
-  const response = await fetch("/check-db-connection", {
-    method: "GET",
-  });
+  // Get selected attributes
+  const select = document.getElementById("championAttributesSelect");
+  const selectedAttributes = Array.from(select.selectedOptions).map(
+    (option) => option.value,
+  );
 
-  // Hide the loading GIF once the response is received.
-  loadingGifElem.style.display = "none";
-  // Display the statusElem's text in the placeholder.
-  statusElem.style.display = "inline";
+  const attributesMap = new Map([
+    ["championID", "Champion ID"],
+    ["class", "Class"],
+    ["race", "Race"],
+  ]);
 
-  response
-    .text()
-    .then((text) => {
-      statusElem.textContent = text;
-    })
-    .catch((error) => {
-      statusElem.textContent = "connection timed out"; // Adjust error handling if required.
+  try {
+    const response = await fetch(`/championTable`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ attributes: selectedAttributes }),
     });
-}
 
-async function fetchAndDisplayTable(tableid) {
-  const tableElement = document.getElementById(tableid);
-  const tableBody = tableElement.querySelector("tbody");
+    const json = await response.json();
+    const data = json.data;
+    console.log(data);
 
-  if (!tableElement) {
-    console.error(`Table with id ${tableid} not found.`);
-    return;
+    const table = document.getElementById("championTable");
+    const tbody = table.querySelector("tbody");
+    const thead = table.getElementsByTagName("thead")[0];
+    tbody.innerHTML = ""; // Clear old rows
+    thead.innerHTML = ""; // clear old headers
+
+    let headerRow = thead.querySelector("tr");
+    if (headerRow == null || !headerRow) {
+      headerRow = document.createElement("tr");
+      thead.appendChild(headerRow);
+    }
+
+    const addColumn = function (attribute) {
+      let newColumn = document.createElement("th");
+      newColumn.textContent = attribute;
+      headerRow.appendChild(newColumn);
+    };
+
+    // dynamically build the table header
+    for (const selectedAttribute of selectedAttributes) {
+      addColumn(attributesMap.get(selectedAttribute));
+    }
+
+    // building the actual table
+    for (const rowData of data) {
+      const newRow = document.createElement("tr");
+      for (const cellData of rowData) {
+        const newCell = document.createElement("td");
+        newCell.textContent = cellData;
+        newRow.appendChild(newCell);
+      }
+      console.log("row of dtta ");
+      tbody.appendChild(newRow);
+    }
+
+    table.style.display = "table"; // Show table
+    document.getElementById("championTableMsg").textContent = "";
+    document.getElementById("championTableToggle").textContent = "Hide Table";
+  } catch (err) {
+    console.error(err);
+    document.getElementById("championTableMsg").textContent =
+      "Failed to load Champions.";
   }
-
-  const response = await fetch("/" + tableid, {
-    method: "GET",
-  });
-
-  const responseData = await response.json();
-  const data = responseData.data;
-
-  // Always clear old, already fetched data before new fetching process.
-  if (tableBody) {
-    tableBody.innerHTML = "";
-  }
-
-  data.forEach((element) => {
-    const row = tableBody.insertRow();
-    element.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
 }
 
 function toggleButton(button, tableId, msgId, onText, offText, fetchFunction) {
@@ -112,10 +130,12 @@ async function filterChampions(event) {
 
   const tableBody = document.querySelector("#filterChampionsTable tbody");
 
-
-  const response = await fetch(`/filterChampions?cCID=${cCid}&cClass=${cClass}&cRace=${cRace}`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `/filterChampions?cCID=${cCid}&cClass=${cClass}&cRace=${cRace}`,
+    {
+      method: "GET",
+    },
+  );
 
   const responseData = await response.json();
   const data = responseData.data;
@@ -133,14 +153,8 @@ async function filterChampions(event) {
   });
 }
 
-
 window.onload = function () {
-  checkDbConnection();
-  fetchTableData();
   try {
-    document
-      .getElementById("insertChampion")
-      .addEventListener("submit", insertChampion);
     document
       .getElementById("fetchChampionBanRate")
       .addEventListener("click", function () {
@@ -153,32 +167,25 @@ window.onload = function () {
           fetchChampionBanRate,
         );
       });
-      document
+    document
       .getElementById("championTableToggle")
       .addEventListener("click", function () {
         toggleButton(
           this,
           "championTable",
           "championTableMsg",
-          "Hide",
-          "Show Champions Table",
+          "Hide Table",
+          "Show Table",
           null,
         );
       });
-      document
-        .getElementById("filterChampions")
-        .addEventListener("submit", filterChampions)
+    document
+      .getElementById("filterChampions")
+      .addEventListener("submit", filterChampions);
+    document
+      .getElementById("selectChampionTableButton")
+      .addEventListener("click", displaySelectChampionTable);
   } catch (e) {
     console.log(e.message);
   }
 };
-
-function fetchTableData() {
-  // Add table name for fetching more tables, ensure to add router function in appController file
-  const tableNames = [
-    "championTable",
-  ];
-  for (const tableName of tableNames) {
-    fetchAndDisplayTable(tableName);
-  }
-}

@@ -8,10 +8,7 @@ async function displaySelectPlayerTable(event) {
   );
   console.log(selectedAttributes);
 
-  // Optional: build your query based on selected attributes
-
   try {
-    // Dummy fetch — replace this with your real DB/API call
     const response = await fetch(`/playerTable`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

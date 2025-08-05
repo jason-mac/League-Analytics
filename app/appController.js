@@ -30,8 +30,8 @@ router.post("/playerTable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
-router.get("/championTable", async (req, res) => {
-  const { attributes } = req.query;
+router.post("/championTable", async (req, res) => {
+  const { attributes } = req.body;
   const tableContent =
     await appService.fetchChampionTableDataFromDb(attributes);
   res.json({ data: tableContent });
