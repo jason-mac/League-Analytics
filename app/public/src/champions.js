@@ -1,20 +1,19 @@
-async function displaySelectChampionTable(event) {
+async function displaySelectTable(event, tableName) {
   event.preventDefault();
 
-  // Get selected attributes
-  const select = document.getElementById("championAttributesSelect");
-  const selectedAttributes = Array.from(select.selectedOptions).map(
-    (option) => option.value,
-  );
+  const form = document.getElementById(`${tableName}Attributes`);
+  const checkedBoxes = form.querySelectorAll('input[name="attributes"]:checked');
 
-  const attributesMap = new Map([
-    ["championID", "Champion ID"],
-    ["class", "Class"],
-    ["race", "Race"],
-  ]);
+  const selectedAttributes = Array.from(checkedBoxes).map((cb) => cb.value);
+  const selectedColumns = [];
+  for (const checkBox of checkedBoxes) {
+    const selectedColumn = checkBox.parentElement.textContent.trim();
+    selectedColumns.push(selectedColumn);
+  }
 
+ 
   try {
-    const response = await fetch(`/championTable`, {
+    const response = await fetch(`/${tableName}Table`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ attributes: selectedAttributes }),
@@ -24,11 +23,18 @@ async function displaySelectChampionTable(event) {
     const data = json.data;
     console.log(data);
 
-    const table = document.getElementById("championTable");
+    const table = document.getElementById(`${tableName}Table`);
     const tbody = table.querySelector("tbody");
     const thead = table.getElementsByTagName("thead")[0];
     tbody.innerHTML = ""; // Clear old rows
     thead.innerHTML = ""; // clear old headers
+
+    if(checkedBoxes.length == 0) {
+      document.getElementById(`${tableName}TableMsg`).textContent = "Please Select At Least One Column!";
+      return  
+    } else{
+      document.getElementById(`${tableName}TableMsg`).textContent = "";
+    }
 
     let headerRow = thead.querySelector("tr");
     if (headerRow == null || !headerRow) {
@@ -36,15 +42,11 @@ async function displaySelectChampionTable(event) {
       thead.appendChild(headerRow);
     }
 
-    const addColumn = function (attribute) {
+    // dynamically create the header row
+    for (const selectedColumn of selectedColumns) {
       let newColumn = document.createElement("th");
-      newColumn.textContent = attribute;
+      newColumn.textContent = selectedColumn;
       headerRow.appendChild(newColumn);
-    };
-
-    // dynamically build the table header
-    for (const selectedAttribute of selectedAttributes) {
-      addColumn(attributesMap.get(selectedAttribute));
     }
 
     // building the actual table
@@ -55,17 +57,15 @@ async function displaySelectChampionTable(event) {
         newCell.textContent = cellData;
         newRow.appendChild(newCell);
       }
-      console.log("row of dtta ");
       tbody.appendChild(newRow);
     }
 
     table.style.display = "table"; // Show table
-    document.getElementById("championTableMsg").textContent = "";
-    document.getElementById("championTableToggle").textContent = "Hide Table";
+    document.getElementById(`${tableName}TableMsg`).textContent = "";
   } catch (err) {
     console.error(err);
-    document.getElementById("championTableMsg").textContent =
-      "Failed to load Champions.";
+    const errorMsgDiv = document.getElementById(`${tableName}TableMsg`);
+    errorMsgDiv.textContent = `Failed to load ${tableName} Table.`;
   }
 }
 
@@ -184,7 +184,7 @@ window.onload = function () {
       .addEventListener("submit", filterChampions);
     document
       .getElementById("selectChampionTableButton")
-      .addEventListener("click", displaySelectChampionTable);
+      .addEventListener("click", (e) => displaySelectTable(e, "champion"));
   } catch (e) {
     console.log(e.message);
   }

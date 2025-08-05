@@ -21,15 +21,14 @@
 
     <h2>Players</h2>
     <form id="playerAttributes">
-      <select id="playerAttributesSelect" multiple>
-        <option value="playerID" selected>PlayerID</option>
-        <option value="country" selected>Country</option>
-        <option value="dateCreated" selected>Date Created</option>
-        <option value="email" selected>Email</option>
-      </select>
+      <label><input type="checkbox" name="attributes" value="playerID" /> PlayerID</label>
+      <label><input type="checkbox" name="attributes" value="country" /> Country</label>
+      <label><input type="checkbox" name="attributes" value="dateCreated" /> Date Created</label>
+      <label><input type="checkbox" name="attributes" value="email" /> Email</label>
       <br />
       <button type="submit" id="selectPlayerTableButton">Select Table</button>
     </form>
+    <br />
     <button type="button" id="playerTableToggle">Show Players Table</button>
     <table id="playerTable" style="display: none" border="1">
       <thead></thead>

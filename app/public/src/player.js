@@ -1,15 +1,20 @@
-async function displaySelectPlayerTable(event) {
+
+async function displaySelectTable(event, tableName) {
   event.preventDefault();
 
-  // Get selected attributes
-  const select = document.getElementById("playerAttributesSelect");
-  const selectedAttributes = Array.from(select.selectedOptions).map(
-    (option) => option.value,
-  );
-  console.log(selectedAttributes);
+  const form = document.getElementById(`${tableName}Attributes`);
+  const checkedBoxes = form.querySelectorAll('input[name="attributes"]:checked');
 
+  const selectedAttributes = Array.from(checkedBoxes).map((cb) => cb.value);
+  const selectedColumns = [];
+  for (const checkBox of checkedBoxes) {
+    const selectedColumn = checkBox.parentElement.textContent.trim();
+    selectedColumns.push(selectedColumn);
+  }
+
+ 
   try {
-    const response = await fetch(`/playerTable`, {
+    const response = await fetch(`/${tableName}Table`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ attributes: selectedAttributes }),
@@ -17,12 +22,20 @@ async function displaySelectPlayerTable(event) {
 
     const json = await response.json();
     const data = json.data;
+    console.log(data);
 
-    const table = document.getElementById("playerTable");
+    const table = document.getElementById(`${tableName}Table`);
     const tbody = table.querySelector("tbody");
     const thead = table.getElementsByTagName("thead")[0];
     tbody.innerHTML = ""; // Clear old rows
-    thead.innerHTML = "";
+    thead.innerHTML = ""; // clear old headers
+
+    if(checkedBoxes.length == 0) {
+      document.getElementById(`${tableName}TableMsg`).textContent = "Please Select At Least One Column!";
+      return  
+    } else{
+      document.getElementById(`${tableName}TableMsg`).textContent = "";
+    }
 
     let headerRow = thead.querySelector("tr");
     if (headerRow == null || !headerRow) {
@@ -30,24 +43,11 @@ async function displaySelectPlayerTable(event) {
       thead.appendChild(headerRow);
     }
 
-    const addTh = function (attribute) {
-      let newTh = document.createElement("th");
-      newTh.textContent = attribute;
-      headerRow.appendChild(newTh);
-    };
-
-    // dynamically building the headers
-    if (selectedAttributes.includes("playerID")) {
-      addTh("Player ID");
-    }
-    if (selectedAttributes.includes("country")) {
-      addTh("Country");
-    }
-    if (selectedAttributes.includes("dateCreated")) {
-      addTh("Date Created");
-    }
-    if (selectedAttributes.includes("email")) {
-      addTh("Email");
+    // dynamically create the header row
+    for (const selectedColumn of selectedColumns) {
+      let newColumn = document.createElement("th");
+      newColumn.textContent = selectedColumn;
+      headerRow.appendChild(newColumn);
     }
 
     // building the actual table
@@ -58,16 +58,15 @@ async function displaySelectPlayerTable(event) {
         newCell.textContent = cellData;
         newRow.appendChild(newCell);
       }
-      console.log("row of dtta ");
       tbody.appendChild(newRow);
     }
 
     table.style.display = "table"; // Show table
-    document.getElementById("playerTableMsg").textContent = "";
+    document.getElementById(`${tableName}TableMsg`).textContent = "";
   } catch (err) {
     console.error(err);
-    document.getElementById("playerTableMsg").textContent =
-      "Failed to load players.";
+    const errorMsgDiv = document.getElementById(`${tableName}TableMsg`);
+    errorMsgDiv.textContent = `Failed to load ${tableName} Table.`;
   }
 }
 
@@ -330,7 +329,7 @@ window.onload = function () {
 
     document
       .getElementById("selectPlayerTableButton")
-      .addEventListener("click", displaySelectPlayerTable);
+      .addEventListener("click", (e) => displaySelectTable(e, "player"));
   } catch (e) {
     console.log(e.message);
   }
