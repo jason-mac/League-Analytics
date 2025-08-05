@@ -19,16 +19,17 @@ function toggleButton(button, tableId, msgId, onText, offText, fetchFunction) {
 async function displaySelectTable(event, tableName) {
   event.preventDefault();
 
-  // Get selected attributes
-  const select = document.getElementById(`${tableName}AttributesSelect`);
-  const selectedAttributes = Array.from(select.selectedOptions).map(
-    (option) => option.value,
-  );
+  const form = document.getElementById(`${tableName}Attributes`);
+  const checkedBoxes = form.querySelectorAll('input[name="attributes"]:checked');
 
-  const selectedColumns = Array.from(select.selectedOptions).map(
-    (option) => option.text,
-  );
+  const selectedAttributes = Array.from(checkedBoxes).map((cb) => cb.value);
+  const selectedColumns = [];
+  for (const checkBox of checkedBoxes) {
+    const selectedColumn = checkBox.parentElement.textContent.trim();
+    selectedColumns.push(selectedColumn);
+  }
 
+ 
   try {
     const response = await fetch(`/${tableName}Table`, {
       method: "POST",
@@ -45,6 +46,13 @@ async function displaySelectTable(event, tableName) {
     const thead = table.getElementsByTagName("thead")[0];
     tbody.innerHTML = ""; // Clear old rows
     thead.innerHTML = ""; // clear old headers
+
+    if(checkedBoxes.length == 0) {
+      document.getElementById(`${tableName}TableMsg`).textContent = "Please Select At Least One Column!";
+      return  
+    } else{
+      document.getElementById(`${tableName}TableMsg`).textContent = "";
+    }
 
     let headerRow = thead.querySelector("tr");
     if (headerRow == null || !headerRow) {
@@ -83,7 +91,6 @@ async function fetchPlayerPlayedInJoin(event) {
   event.preventDefault();
 
   const playerID = document.getElementById("playerPlayedInID").value;
-  // Specify table????
   const tableBody = document.querySelector("#playerPlayedInTable tbody");
   const msgDiv = document.getElementById("joinPlayerPlayedInMsg");
 

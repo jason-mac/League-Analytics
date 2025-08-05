@@ -21,12 +21,12 @@
 
     <h2>Match</h2>
     <form id="matchAttributes">
-      <select id="matchAttributesSelect" multiple>
-        <option value="matchID" selected>MatchID</option>
-        <option value="winningTeam" selected>Winning Team</option>
-        <option value="gameMode" selected>Game Mode</option>
-      </select>
-      <button type="submit" id="matchSelectTableButton">Select Table</button>
+      <label><input type="checkbox" name="attributes" value="matchID" /> MatchID</label>
+      <label><input type="checkbox" name="attributes" value="winningTeam" /> Winning Team</label>
+      <label><input type="checkbox" name="attributes" value="gameMode" /> Game Mode</label>
+
+      <br />
+      <button type="submit" id="matchSelectTableButton"> Select Table </button>
     </form>
     <br />
     <table id="matchTable" border="1">
@@ -47,68 +47,31 @@
     <br />
     <!-- ========================================================================= -->
 
-    <h2>Reset Matches</h2>
-    <p>
-      If you wish to reset the table press on the reset button. If this is the
-      first time you're running this page, you MUST use reset
-    </p>
-    <button id="resetDemotable">reset</button> <br />
-    <!-- A placeholder to display messages related to the reset operation. -->
-    <div id="resetResultMsg"></div>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
-
-    <h2>Update Winning Team for Match</h2>
-    <p>
-      The values are case sensitive and if you enter in the wrong case, the
-      update statement will not do anything.
-    </p>
-    <form id="updataNameDemotable">
-      Old Winning Team:
-      <input
-        type="text"
-        id="updateOldName"
-        placeholder="Enter Old Winning Team"
-        required
-      />
-      <br /><br />
-      New Winning Team:
-      <input
-        type="text"
-        id="updateNewName"
-        placeholder="Enter New Winning Team"
-        maxlength="20"
-      />
-      <br /><br />
-
-      <button type="submit">update</button> <br />
-    </form>
-    <!-- A placeholder to display messages related to the update operation. -->
-    <div id="updateNameResultMsg"></div>
-    <h2>Number of Matches in Database</h2>
-
-    <!-- Table 5 -->
-
-    <br />
-    <hr />
-    <br />
 
     <h2>Game Performance</h2>
     <form id="gamePerformanceAttributes">
-      <select id="gamePerformanceAttributesSelect" multiple>
-        <option value="kills" selected>Kills</option>
-        <option value="deaths" selected>Deaths</option>
-        <option value="assists" selected>Assists</option>
-        <option value="performance" selected>Performance</option>
-      </select>
+      <label
+        ><input type="checkbox" name="attributes" value="kills" /> Kills</label
+      >
+      <label
+        ><input type="checkbox" name="attributes" value="deaths" />
+        Deaths</label
+      >
+      <label
+        ><input type="checkbox" name="attributes" value="assists" />
+        Assists</label
+      >
+      <label
+        ><input type="checkbox" name="attributes" value="performance" />
+        Performance</label
+      >
+
       <br />
       <button type="submit" id="gamePerformanceSelectTableButton">
         Select Table
       </button>
     </form>
+
     <br />
     <table id="gamePerformanceTable" border="1">
       <thead></thead>
@@ -121,73 +84,23 @@
     <br />
     <!-- ========================================================================= -->
 
-    <h2>Reset Game Performance</h2>
-    <p>
-      If you wish to reset the table press on the reset button. If this is the
-      first time you're running this page, you MUST use reset
-    </p>
-    <button id="resetDemotable">reset</button> <br />
-    <!-- A placeholder to display messages related to the reset operation. -->
-    <div id="resetResultMsg"></div>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
-
-    <h2>Update Performance for Game Performance</h2>
-    <p>
-      The values are case sensitive and if you enter in the wrong case, the
-      update statement will not do anything.
-    </p>
-    <form id="updataNameDemotable">
-      Old Performance:
-      <input
-        type="text"
-        id="updateOldName"
-        placeholder="Enter Old Performance"
-        required
-      />
-      <br /><br />
-      New Winning Team:
-      <input
-        type="text"
-        id="updateNewName"
-        placeholder="Enter New Performance"
-        maxlength="20"
-      />
-      <br /><br />
-
-      <button type="submit">update</button> <br />
-    </form>
-    <!-- A placeholder to display messages related to the update operation. -->
-    <div id="updateNameResultMsg"></div>
-
-    <h2>Number of Game Performances in Database</h2>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
 
     <!-- Table 6 -->
 
     <h2>Played In</h2>
     <form id="playedInAttributes">
-      <select id="playedInAttributesSelect" multiple>
-        <option value="matchID" selected>MatchID</option>
-        <option value="uName" selected>PlayedID</option>
-        <option value="cName" selected>ChampionID</option>
-        <option value="sName_F" selected>Spell (F-key)</option>
-        <option value="sName_D" selected>Spell (D-key)</option>
-        <option value="rPrincipal" selected>Rune (Primary)</option>
-        <option value="rSecondary" selected>SRune (Secondary)</option>
-        <option value="role" selected>Role</option>
-        <option value="team" selected>Team</option>
-        <option value="kills" selected>Kills</option>
-        <option value="assists" selected>Assists</option>
-        <option value="deaths" selected>Deaths</option>
-      </select>
+      <label><input type="checkbox" name="attributes" value="matchID"  /> MatchID</label><br />
+      <label><input type="checkbox" name="attributes" value="uName"  /> PlayedID</label><br />
+      <label><input type="checkbox" name="attributes" value="cName"  /> ChampionID</label><br />
+      <label><input type="checkbox" name="attributes" value="sName_F"  /> Spell (F-key)</label><br />
+      <label><input type="checkbox" name="attributes" value="sName_D"  /> Spell (D-key)</label><br />
+      <label><input type="checkbox" name="attributes" value="rPrincipal"/> Rune (Primary)</label><br />
+      <label><input type="checkbox" name="attributes" value="rSecondary"/> SRune (Secondary)</label><br />
+      <label><input type="checkbox" name="attributes" value="role"/> Role</label><br />
+      <label><input type="checkbox" name="attributes" value="team"/> Team</label><br />
+      <label><input type="checkbox" name="attributes" value="kills"/> Kills</label><br />
+      <label><input type="checkbox" name="attributes" value="assists"/> Assists</label><br />
+      <label><input type="checkbox" name="attributes" value="deaths"/> Deaths</label><br />
       <button type="submit" id="playedInSelectTableButton">Select Table</button>
     </form>
     <br />
@@ -217,163 +130,6 @@
     <hr />
     <br />
     <!-- ========================================================================= -->
-
-    <h2>Reset Played In</h2>
-    <p>
-      If you wish to reset the table press on the reset button. If this is the
-      first time you're running this page, you MUST use reset
-    </p>
-    <button id="resetDemotable">reset</button> <br />
-    <!-- A placeholder to display messages related to the reset operation. -->
-    <div id="resetResultMsg"></div>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
-
-    <h2>Insert New Played In</h2>
-    <form id="insertDemotable">
-      MatchID:
-      <input type="number" id="insertId" placeholder="Enter MatchID" required />
-      <br /><br />
-      PlayerID:
-      <input
-        type="number"
-        id="insertId"
-        placeholder="Enter PlayerID"
-        required
-      />
-      <br /><br />
-      ChampionID:
-      <input
-        type="number"
-        id="insertId"
-        placeholder="Enter ChampionID"
-        required
-      />
-      <br /><br />
-      Spell (D-key):
-      <input
-        type="text"
-        id="insertName"
-        placeholder="Enter Spell"
-        maxlength="20"
-      />
-      <br /><br />
-      Spell (F-key):
-      <input type="number" id="insertId" placeholder="Enter Spell" required />
-      <br /><br />
-      Rune (Primary):
-      <input type="number" id="insertId" placeholder="Enter Rune" required />
-      <br /><br />
-      Rune (Secondary):
-      <input type="number" id="insertId" placeholder="Enter Rune" required />
-      <br /><br />
-      Role:
-      <input type="number" id="insertId" placeholder="Enter Role" required />
-      <br /><br />
-      Team:
-      <input type="number" id="insertId" placeholder="Enter Team" required />
-      <br /><br />
-      Kills:
-      <input type="number" id="insertId" placeholder="Enter Kills" required />
-      <br /><br />
-      Deaths:
-      <input type="number" id="insertId" placeholder="Enter Deaths" required />
-      <br /><br />
-      Assists:
-      <input type="number" id="insertId" placeholder="Enter Assists" required />
-      <br /><br />
-      <button type="submit">insert</button> <br />
-    </form>
-    <div id="insertResultMsg"></div>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
-
-    <h2>Update Player Loadout for PlayedIn</h2>
-    <p>
-      The values are case sensitive and if you enter in the wrong case, the
-      update statement will not do anything.
-    </p>
-    <form id="updataNameDemotable">
-      Old Spell (D-key):
-      <input
-        type="text"
-        id="updateOldName"
-        placeholder="Enter Old Spell"
-        required
-      />
-      <br /><br />
-      Old Spell (F-key):
-      <input
-        type="text"
-        id="updateOldName"
-        placeholder="Enter Old Spell"
-        required
-      />
-      <br /><br />
-      Old Rune (Primary):
-      <input
-        type="text"
-        id="updateOldName"
-        placeholder="Enter Old Rune"
-        required
-      />
-      <br /><br />
-      Old Spell (Secondary):
-      <input
-        type="text"
-        id="updateOldName"
-        placeholder="Enter Old Rune"
-        required
-      />
-      <br /><br />
-      New Spell (D-key):
-      <input
-        type="text"
-        id="updateNewName"
-        placeholder="Enter New Spell"
-        maxlength="20"
-      />
-      <br /><br />
-      New Spell (F-key):
-      <input
-        type="text"
-        id="updateNewName"
-        placeholder="Enter New Spell"
-        maxlength="20"
-      />
-      <br /><br />
-      New Rune (Primary):
-      <input
-        type="text"
-        id="updateNewName"
-        placeholder="Enter New Rune"
-        maxlength="20"
-      />
-      <br /><br />
-      New Rune (Secondary):
-      <input
-        type="text"
-        id="updateNewName"
-        placeholder="Enter New Rune"
-        maxlength="20"
-      />
-      <br /><br />
-      <button type="submit">update</button> <br />
-    </form>
-    <!-- A placeholder to display messages related to the update operation. -->
-    <div id="updateNameResultMsg"></div>
-
-    <h2>Number of Played Ins in Database</h2>
-
-    <br />
-    <hr />
-    <br />
 
     <h2>Player Match History (Join)</h2>
 
