@@ -156,17 +156,22 @@ async function insertPlayer(event) {
 async function updatePlayer(event) {
   event.preventDefault();
 
-  const id = document.getElementById("updatePlayerID").value;
-  const email = document.getElementById("updateNewEmail").value;
+  const id = document.getElementById("playerID").value;
+  const email = document.getElementById("newEmail").value;
+  const dateCreated = document.getElementById("newDateCreated").value;
+  console.log(dateCreated);
+  const country = document.getElementById("newCountry").value;
 
-  const response = await fetch("/updatePlayerEmail", {
+  const response = await fetch("/updatePlayer", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      playerId: id,
+      playerID: id,
       email: email,
+      dateCreated: dateCreated,
+      country: country
     }),
   });
 
@@ -174,7 +179,7 @@ async function updatePlayer(event) {
   const messageElement = document.getElementById("updateEmailResultMsg");
 
   if (data.success) {
-    messageElement.textContent = "Data updated successfully!";
+    messageElement.textContent = data.message;
     fetchTableData();
   } else {
     messageElement.textContent = "Error updating data!";

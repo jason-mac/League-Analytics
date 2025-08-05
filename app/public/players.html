@@ -5,6 +5,7 @@
     <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="favicon.jpeg" />
+    <link rel="stylesheet" href="styles.css">
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <!--<link rel="stylesheet" href="styles.css">   -->
@@ -93,7 +94,7 @@
     <br />
     <!-- ========================================================================= -->
 
-    <h2>Update Email for Players</h2>
+    <h2>Update attributes for Players</h2>
     <p>
       The values are case sensitive and if you enter in the wrong case, the
       update statement will not do anything.
@@ -102,24 +103,37 @@
       PlayerID:
       <input
         type="text"
-        id="updatePlayerID"
-        placeholder="Enter playerID"
+        id="playerID"
+        placeholder="Enter playerID to edit"
         required
       />
       <br /><br />
       New Email:
       <input
-        type="text"
-        id="updateNewEmail"
+        type="email"
+        id="newEmail"
         placeholder="Enter new email"
-        required
+      />
+      <br /><br />
+      Date Created:
+      <input
+        type="date"
+        id="newDateCreated"
+        placeholder="Enter new dateCreated"
+      />
+      <br /><br />
+      Country
+      <input
+        type="text"
+        id="newCountry"
+        placeholder="Enter country"
       />
       <br /><br />
 
       <button type="submit">update</button> <br />
     </form>
     <!-- A placeholder to display messages related to the update operation. -->
-    <div id="updateEmafilResultMsg"></div>
+    <div id="updateEmailResultMsg"></div>
 
     <br />
     <hr />

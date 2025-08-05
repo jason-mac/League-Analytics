@@ -93,13 +93,21 @@ router.post("/insertChampion", async (req, res) => {
   }
 });
 
-router.post("/updatePlayerEmail", async (req, res) => {
-  const { playerId, email } = req.body;
-  const result = await appService.updatePlayer(playerId, email);
+router.post("/updatePlayer", async (req, res) => {
+  const { playerID, email, dateCreated, country } = req.body;
+  if (!email && !dateCreated && !country) {
+    return res.json({
+      success: true,
+      message: "All fields were empty, no changes were made"
+    });
+  }
 
+
+  const result = await appService.updatePlayer(playerID, email, dateCreated, country);
   if (result) {
     res.json({
       success: true,
+      message: "Data updated successfully!"
     });
   } else {
     res.status(500).json({
