@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="favicon.jpeg">
+    <link rel="icon" type="image/x-icon" href="favicon.jpeg" />
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <!--<link rel="stylesheet" href="styles.css">   -->
@@ -14,22 +14,21 @@
 
   <body>
     <nav>
-      <a href="index.html">Home</a> |
-      <a href="players.html">Players</a> |
+      <a href="index.html">Home</a> | <a href="players.html">Players</a> |
       <a href="champions.html">Champions</a> |
       <a href="matches.html">Matches</a>
     </nav>
 
     <h2>Match</h2>
     <form id="matchAttributes">
-      <select id="matchAttributesSel" multiple>
-      <option value="matchID" selected>MatchID</option>
-      <option value="winningTeam" selected>Winning Team</option>
-      <option value="gameMode" selected>Game Mode</option>
+      <select id="matchAttributesSelect" multiple>
+        <option value="matchID" selected>MatchID</option>
+        <option value="winningTeam" selected>Winning Team</option>
+        <option value="gameMode" selected>Game Mode</option>
       </select>
-      <button type="submit">Get Table</button>
+      <button type="submit" id="matchSelectTableButton">Select Table</button>
     </form>
-    <br>
+    <br />
     <table id="matchTable" border="1">
       <thead>
         <tr>
@@ -41,6 +40,7 @@
       </thead>
       <tbody></tbody>
     </table>
+    <div id="matchTableMsg"></div>
 
     <br />
     <hr />
@@ -92,34 +92,29 @@
 
     <!-- Table 5 -->
 
-<br />
-<hr />
-<br />
+    <br />
+    <hr />
+    <br />
 
     <h2>Game Performance</h2>
     <form id="gamePerformanceAttributes">
-      <select id="gamePerformanceSel" multiple>
+      <select id="gamePerformanceAttributesSelect" multiple>
         <option value="kills" selected>Kills</option>
         <option value="deaths" selected>Deaths</option>
         <option value="assists" selected>Assists</option>
         <option value="performance" selected>Performance</option>
       </select>
-      <br>
-      <button type="submit">Get Table</button>
+      <br />
+      <button type="submit" id="gamePerformanceSelectTableButton">
+        Select Table
+      </button>
     </form>
-    <br>
+    <br />
     <table id="gamePerformanceTable" border="1">
-      <thead>
-        <tr>
-          <!--Table head, need to be adjusted accordingly to align with your own.-->
-          <th>Kills</th>
-          <th>Deaths</th>
-          <th>Assists</th>
-          <th>Performance</th>
-        </tr>
-      </thead>
+      <thead></thead>
       <tbody></tbody>
     </table>
+    <div id="gamePerformanceTableMsg"></div>
 
     <br />
     <hr />
@@ -179,7 +174,7 @@
 
     <h2>Played In</h2>
     <form id="playedInAttributes">
-      <select id="playedInAttributesSel" multiple>
+      <select id="playedInAttributesSelect" multiple>
         <option value="matchID" selected>MatchID</option>
         <option value="uName" selected>PlayedID</option>
         <option value="cName" selected>ChampionID</option>
@@ -193,9 +188,9 @@
         <option value="assists" selected>Assists</option>
         <option value="deaths" selected>Deaths</option>
       </select>
-      <button type="submit">Get Table</button>
+      <button type="submit" id="playedInSelectTableButton">Select Table</button>
     </form>
-    <br>
+    <br />
     <table id="playedInTable" border="1">
       <thead>
         <tr>
@@ -216,6 +211,7 @@
       </thead>
       <tbody></tbody>
     </table>
+    <div id="playedInTableMsg"></div>
 
     <br />
     <hr />
@@ -375,11 +371,11 @@
 
     <h2>Number of Played Ins in Database</h2>
 
-<br />
-<hr />
-<br />
+    <br />
+    <hr />
+    <br />
 
-  <h2>Player Match History (Join)</h2>
+    <h2>Player Match History (Join)</h2>
 
     <form id="fetchPlayerPlayedInJoin">
       <label for="playerPlayedInID">Provide a valid PlayerID:</label>
@@ -389,7 +385,7 @@
         placeholder="Enter PlayerID"
         required
       />
-      <button type ="submit">Search</button>
+      <button type="submit" id="searchPlayerButton">Search</button>
     </form>
 
     <table id="playerPlayedInTable" border="1">
@@ -408,8 +404,9 @@
 
     <div id="joinPlayerPlayedInMsg"></div>
 
-<br />
-<hr />
-<br />
+    <br />
+    <hr />
+    <br />
   </body>
-<script src="scripts.js"></script>
+  <script src="src/matches.js"></script>
+</html>

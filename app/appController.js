@@ -17,8 +17,8 @@ router.get("/check-db-connection", async (req, res) => {
   }
 });
 
-router.get("/matchTable", async (req, res) => {
-  const { attributes } = req.query;
+router.post("/matchTable", async (req, res) => {
+  const { attributes } = req.body;
   const tableContent = await appService.fetchMatchTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
@@ -37,15 +37,15 @@ router.post("/championTable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
-router.get("/playedInTable", async (req, res) => {
-  const { attributes } = req.query;
+router.post("/playedInTable", async (req, res) => {
+  const { attributes } = req.body;
   const tableContent =
     await appService.fetchPlayedInTableDataFromDb(attributes);
   res.json({ data: tableContent });
 });
 
-router.get("/gamePerformanceTable", async (req, res) => {
-  const { attributes } = req.query;
+router.post("/gamePerformanceTable", async (req, res) => {
+  const { attributes } = req.body;
   const tableContent =
     await appService.fetchGamePerformanceTableDataFromDb(attributes);
   res.json({ data: tableContent });
