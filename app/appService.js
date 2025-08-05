@@ -174,11 +174,31 @@ async function insertPlayer(playerId, country, dateCreated, email) {
   });
 }
 
-async function updatePlayer(playerId, email) {
+async function updatePlayer(playerID, email, dateCreated, country) {
   return await withOracleDB(async (connection) => {
+    let query = "UPDATE PLAYER SET "
+    const args = {email, dateCreated, country}
+    let keys = Object.keys(args).filter((arg) => args[arg]);
+    let attributes = []
+    
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i] === "dateCreated") {
+        query += "dateCreated = TO_DATE(:dateCreated, 'YYYY-MM-DD')"
+      } else {
+        query += `${keys[i]} = :${keys[i]}`
+      }
+      
+      if (i !== keys.length - 1) {
+        query += ", ";
+      }
+        attributes.push(args[keys[i]]);
+    }
+
+    query += " WHERE playerID = :playerID"
+    attributes.push(playerID);
     const result = await connection.execute(
-      `UPDATE PLAYER SET email = :email WHERE playerID = :playerID`,
-      [email, playerId],
+      query,
+      attributes,
       { autoCommit: true },
     );
 
