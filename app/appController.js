@@ -3,11 +3,6 @@ const appService = require("./appService");
 
 const router = express.Router();
 
-// ----------------------------------------------------------
-// API endpoints
-// Modify or extend these routes based on your project's needs.
-
-// TODO: REMOVE DEBUGGING CONSOLE LOG STATEMENTS WHEN FINISHED
 router.get("/check-db-connection", async (req, res) => {
   const isConnect = await appService.testOracleConnection();
   if (isConnect) {
@@ -24,7 +19,6 @@ router.post("/matchTable", async (req, res) => {
 });
 
 router.post("/playerTable", async (req, res) => {
-  console.log("entere player table router");
   const { attributes } = req.body;
   const tableContent = await appService.fetchPlayerTableDataFromDb(attributes);
   res.json({ data: tableContent });
@@ -171,7 +165,6 @@ router.get("/joinPlayersPlayedIn", async (req, res) => {
 router.delete("/summonerSpell", async (req, res) => {
   const { summonSpellID } = req.body;
   const result = await appService.deleteSummonerSpell(summonSpellID);
-  console.log(result);
   if (result) {
     res.json({
       success: true,

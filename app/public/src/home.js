@@ -72,7 +72,6 @@ async function displaySelectTable(event, tableName) {
 
     const json = await response.json();
     const data = json.data;
-    console.log(data);
 
     const table = document.getElementById(`${tableName}Table`);
     const tbody = table.querySelector("tbody");
@@ -192,7 +191,6 @@ window.onload = function () {
       .addEventListener("submit", findPlayersUseAllSS)
     const tableNames = ["playedIn", "ss"];
     for (const tableName of tableNames) {
-      console.log(`${tableName}SelectTableButton`);
       try {
         document
           .getElementById(`${tableName}SelectTableButton`)

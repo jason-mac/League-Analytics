@@ -7,7 +7,6 @@ function toggleButton(button, tableId, msgId, onText, offText, fetchFunction) {
     if (typeof fetchFunction === "function") {
       fetchFunction();
     }
-    console.log("hi");
     button.textContent = onText; // hide table
   } else {
     table.style.display = "none";
@@ -39,7 +38,6 @@ async function displaySelectTable(event, tableName) {
 
     const json = await response.json();
     const data = json.data;
-    console.log(data);
 
     const table = document.getElementById(`${tableName}Table`);
     const tbody = table.querySelector("tbody");
@@ -128,7 +126,6 @@ async function fetchPlayerPlayedInJoin(event) {
 window.onload = function () {
   const tableNames = ["match", "gamePerformance", "playedIn"];
   for (const tableName of tableNames) {
-    console.log(`${tableName}SelectTableButton`);
     try {
       document
         .getElementById(`${tableName}SelectTableButton`)

@@ -22,7 +22,6 @@ async function displaySelectTable(event, tableName) {
 
     const json = await response.json();
     const data = json.data;
-    console.log(data);
 
     const table = document.getElementById(`${tableName}Table`);
     const tbody = table.querySelector("tbody");
@@ -158,7 +157,6 @@ async function updatePlayer(event) {
   const id = document.getElementById("playerID").value;
   const email = document.getElementById("newEmail").value;
   const dateCreated = document.getElementById("newDateCreated").value;
-  console.log(dateCreated);
   const country = document.getElementById("newCountry").value;
 
   const response = await fetch("/updatePlayer", {

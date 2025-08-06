@@ -215,9 +215,6 @@ async function insertChampion(championId, championClass, race) {
       [championId, championClass, race],
       { autoCommit: true },
     );
-    console.log(championId);
-    console.log(championClass);
-    console.log(race);
 
     return result.rowsAffected && result.rowsAffected > 0;
   }).catch(() => {
@@ -240,7 +237,6 @@ async function updateChampion(championID, championClass) {
 }
 
 async function fetchNumPlayersByRegionDataFromDb(num) {
-  console.log(num);
   return await withOracleDB(async (connection) => {
     const query = `
     SELECT l.region, count(p.playerId) AS PlayerCount
@@ -258,7 +254,6 @@ async function fetchNumPlayersByRegionDataFromDb(num) {
 }
 
 async function fetchNumPlayersByRegionDataFromDb(num) {
-  console.log(num);
   return await withOracleDB(async (connection) => {
     const query = `
     SELECT l.region, count(p.playerId) AS PlayerCount

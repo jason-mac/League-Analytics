@@ -21,7 +21,6 @@ async function displaySelectTable(event, tableName) {
 
     const json = await response.json();
     const data = json.data;
-    console.log(data);
 
     const table = document.getElementById(`${tableName}Table`);
     const tbody = table.querySelector("tbody");
@@ -92,13 +91,10 @@ async function fetchChampionBanRate() {
   const tableElement = document.getElementById(tableName);
   const tableBody = tableElement.querySelector("tbody");
 
-  console.log("avg kda ");
-
   if (!tableElement) {
     console.error(`Table with id ${tableName} not found.`);
     return;
   }
-  console.log("avg kda ");
 
   const response = await fetch("/championBanRate", {
     method: "GET",
