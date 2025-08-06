@@ -154,7 +154,7 @@ async function insertPlayer(event) {
 async function updatePlayer(event) {
   event.preventDefault();
 
-  const id = document.getElementById("playerID").value;
+  const id = document.getElementById("updatePlayerID").value;
   const email = document.getElementById("newEmail").value;
   const dateCreated = document.getElementById("newDateCreated").value;
   const country = document.getElementById("newCountry").value;
@@ -283,7 +283,7 @@ window.onload = function () {
       .getElementById("insertPlayerTable")
       .addEventListener("submit", insertPlayer);
     document
-      .getElementById("updatePlayerEmail")
+      .getElementById("updatePlayer")
       .addEventListener("submit", updatePlayer);
     document
       .getElementById("fetchPlayerWinRate")
