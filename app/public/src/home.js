@@ -49,6 +49,76 @@ async function fetchAndDisplayTable(tableid) {
   });
 }
 
+async function displaySelectTable(event, tableName) {
+  event.preventDefault();
+
+  const form = document.getElementById(`${tableName}Attributes`);
+  const checkedBoxes = form.querySelectorAll('input[name="attributes"]:checked');
+
+  const selectedAttributes = Array.from(checkedBoxes).map((cb) => cb.value);
+  const selectedColumns = [];
+  for (const checkBox of checkedBoxes) {
+    const selectedColumn = checkBox.parentElement.textContent.trim();
+    selectedColumns.push(selectedColumn);
+  }
+
+ 
+  try {
+    const response = await fetch(`/${tableName}Table`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ attributes: selectedAttributes }),
+    });
+
+    const json = await response.json();
+    const data = json.data;
+    console.log(data);
+
+    const table = document.getElementById(`${tableName}Table`);
+    const tbody = table.querySelector("tbody");
+    const thead = table.getElementsByTagName("thead")[0];
+    tbody.innerHTML = ""; // Clear old rows
+    thead.innerHTML = ""; // clear old headers
+
+    if(checkedBoxes.length == 0) {
+      document.getElementById(`${tableName}TableMsg`).textContent = "Please Select At Least One Column!";
+      return  
+    } else{
+      document.getElementById(`${tableName}TableMsg`).textContent = "";
+    }
+
+    let headerRow = thead.querySelector("tr");
+    if (headerRow == null || !headerRow) {
+      headerRow = document.createElement("tr");
+      thead.appendChild(headerRow);
+    }
+
+    // dynamically create the header row
+    for (const selectedColumn of selectedColumns) {
+      let newColumn = document.createElement("th");
+      newColumn.textContent = selectedColumn;
+      headerRow.appendChild(newColumn);
+    }
+
+    // building the actual table
+    for (const rowData of data) {
+      const newRow = document.createElement("tr");
+      for (const cellData of rowData) {
+        const newCell = document.createElement("td");
+        newCell.textContent = cellData;
+        newRow.appendChild(newCell);
+      }
+      tbody.appendChild(newRow);
+    }
+
+    table.style.display = "table"; // Show table
+    document.getElementById(`${tableName}TableMsg`).textContent = "";
+  } catch (err) {
+    console.error(err);
+    const errorMsgDiv = document.getElementById(`${tableName}TableMsg`);
+    errorMsgDiv.textContent = `Failed to load ${tableName} Table.`;
+  }
+}
 
 async function deleteSummonerSpell(event) {
   event.preventDefault();
@@ -113,7 +183,6 @@ async function findPlayersUseAllSS(event) {
 
 window.onload = function () {
   checkDbConnection();
-  fetchTableData();
   try {
     document
       .getElementById("deleteSS")
@@ -121,17 +190,18 @@ window.onload = function () {
     document
       .getElementById("findPlayersUseAllSS")
       .addEventListener("submit", findPlayersUseAllSS)
+    const tableNames = ["playedIn", "ss"];
+    for (const tableName of tableNames) {
+      console.log(`${tableName}SelectTableButton`);
+      try {
+        document
+          .getElementById(`${tableName}SelectTableButton`)
+          .addEventListener("click", (e) => displaySelectTable(e, tableName));
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
   } catch (e) {
     console.log(e.message);
   }
 };
-
-function fetchTableData() {
-  const tableNames = [
-    "playedintable",
-    "ssTable",
-  ];
-  for (const tableName of tableNames) {
-    fetchAndDisplayTable(tableName);
-  }
-}

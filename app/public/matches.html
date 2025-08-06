@@ -10,21 +10,41 @@
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <!--<link rel="stylesheet" href="styles.css">   -->
 
-    <title>Matches Data</title>
+    <title>GG.op</title>
   </head>
 
   <body>
     <nav>
-      <a href="index.html">Home</a> | <a href="players.html">Players</a> |
-      <a href="champions.html">Champions</a> |
-      <a href="matches.html">Matches</a>
+      <div style="display: flex; justify-content: space-around; align-items: center; font-size: large; font-weight: bold;">
+        <h1>
+           GG.op
+        </h1>
+       
+        <a href="index.html">Home</a> |
+        <a href="players.html">Players</a> |
+        <a href="champions.html">Champions</a> |
+        <a href="matches.html">Matches</a>
+      </div>
+    
+      <br />
+      <hr />
+      <br />
     </nav>
 
     <h2>Match</h2>
     <form id="matchAttributes">
-      <label><input type="checkbox" name="attributes" value="matchID" /> MatchID</label>
-      <label><input type="checkbox" name="attributes" value="winningTeam" /> Winning Team</label>
-      <label><input type="checkbox" name="attributes" value="gameMode" /> Game Mode</label>
+      <div>
+        <label for="matchID">MatchID</label>
+        <input id="matchID" type="checkbox" name="attributes" value="matchID" />
+      </div>
+      <div>
+        <label for="winningTeam">Winning Team</label>
+        <input id="winningTeam" type="checkbox" name="attributes" value="winningTeam" />
+      </div>
+      <div>
+        <label for="gameMode">Game Mode</label>
+        <input id="gameMode" type="checkbox" name="attributes" value="gameMode" /> 
+      </div>
 
       <br />
       <button type="submit" id="matchSelectTableButton"> Select Table </button>
@@ -33,10 +53,6 @@
     <table id="matchTable" border="1">
       <thead>
         <tr>
-          <!--Table head, need to be adjusted accordingly to align with your own.-->
-          <th>MatchID</th>
-          <th>Winning Team</th>
-          <th>Game Mode</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -51,21 +67,23 @@
 
     <h2>Game Performance</h2>
     <form id="gamePerformanceAttributes">
-      <label
-        ><input type="checkbox" name="attributes" value="kills" /> Kills</label
-      >
-      <label
-        ><input type="checkbox" name="attributes" value="deaths" />
-        Deaths</label
-      >
-      <label
-        ><input type="checkbox" name="attributes" value="assists" />
-        Assists</label
-      >
-      <label
-        ><input type="checkbox" name="attributes" value="performance" />
-        Performance</label
-      >
+      <div>
+        <label for="kills">Kills</label>
+        <input id="kills" type="checkbox" name="attributes" value="kills" />
+      </div>
+      <div>
+        <label for="deaths">Deaths</label>
+        <input id="deaths" type="checkbox" name="attributes" value="deaths" />
+      </div>
+      <div>
+        <label for="assists">Assists</label>
+        <input id="assists" type="checkbox" name="attributes" value="assists" />
+      </div>
+      <div>
+        <label for="performance">Performance</label>
+      <input id="performance" type="checkbox" name="attributes" value="performance" />
+      </div>
+      
 
       <br />
       <button type="submit" id="gamePerformanceSelectTableButton">

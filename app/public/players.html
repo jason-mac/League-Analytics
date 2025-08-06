@@ -9,22 +9,43 @@
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <!--<link rel="stylesheet" href="styles.css">   -->
-    <title>Player Data</title>
+    <title>GG.op</title>
   </head>
 
   <body>
     <nav>
-      <a href="index.html">Home</a> | <a href="players.html">Players</a> |
-      <a href="champions.html">Champions</a> |
-      <a href="matches.html">Matches</a>
+      <div style="display: flex; justify-content: space-around; align-items: center; font-size: large; font-weight: bold;">
+        <h1>
+           GG.op
+        </h1>
+       
+        <a href="index.html">Home</a> |
+        <a href="players.html">Players</a> |
+        <a href="champions.html">Champions</a> |
+        <a href="matches.html">Matches</a>
+      </div>
+    
+      <br />
+      <hr />
+      <br />
     </nav>
 
     <h2>Players</h2>
     <form id="playerAttributes">
-      <label><input type="checkbox" name="attributes" value="playerID" /> PlayerID</label>
-      <label><input type="checkbox" name="attributes" value="country" /> Country</label>
-      <label><input type="checkbox" name="attributes" value="dateCreated" /> Date Created</label>
-      <label><input type="checkbox" name="attributes" value="email" /> Email</label>
+      <div>
+        <label for="playerID">PlayerID</label> <input id="playerID" type="checkbox" name="attributes" value="playerID" />
+      </div>
+      <div>
+        <label for="country">Country</label> <input id="country" type="checkbox" name="attributes" value="country" />
+      </div>
+       <div>
+        <label for="dateCreated">Date Created</label> <input id="dateCreated" type="checkbox" name="attributes" value="dateCreated" />
+       </div>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="checkbox" name="attributes" value="email" /> 
+      </div>
+      
       <br />
       <button type="submit" id="selectPlayerTableButton">Select Table</button>
     </form>
@@ -35,20 +56,6 @@
       <tbody></tbody>
     </table>
     <div id="playerTableMsg"></div>
-
-    <br />
-    <hr />
-    <br />
-    <!-- ========================================================================= -->
-
-    <h2>Reset Players</h2>
-    <p>
-      If you wish to reset the table press on the reset button. If this is the
-      first time you're running this page, you MUST use reset
-    </p>
-    <button id="resetDemotable">reset</button> <br />
-    <!-- A placeholder to display messages related to the reset operation. -->
-    <div id="resetResultMsg"></div>
 
     <br />
     <hr />

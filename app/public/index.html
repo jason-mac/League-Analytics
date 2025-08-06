@@ -13,79 +13,70 @@
     <title>GG.op</title>
   </head>
   <body style>
-    <!-- ===================================================================================== -->
-    <!-- Display the current status of the database connection. 
-         !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
-         -->
-    <h1>
-      Database Connection Status:
-      <!-- An in-line placeholder to display connection status. -->
-      <span id="dbStatus"> </span>
-      <!-- A loading GIF, will be hided once get the status. -->
-      <img
-        id="loadingGif"
-        class="loading-gif"
-        src="loading_100px.gif"
-        alt="Loading..."
-      />
-    </h1>
     <nav>
-      <a href="index.html">Home</a> |
-      <a href="players.html">Players</a> |
-      <a href="champions.html">Champions</a> |
-      <a href="matches.html">Matches</a>
+      <div style="display: flex; justify-content: space-around; align-items: center; font-size: large; font-weight: bold;">
+        <h1>
+           GG.op
+        </h1>
+       
+        <a href="index.html">Home</a> |
+        <a href="players.html">Players</a> |
+        <a href="champions.html">Champions</a> |
+        <a href="matches.html">Matches</a>
+      </div>
+    
+      <br />
+      <hr />
+      <br />
     </nav>
-
-    <br />
-    <hr />
-    <br />
     <!-- ========================================================================= -->
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr;">
+    <div style="width: 100%; display:grid; grid-template-columns: 1fr;">
         <div>
-            <h2>Summoner Spells</h2>
-            <form id="summonerSpellAttributes">
-            <select id="summonerSpellAttributesSel" multiple><
-              <option value="ssID" selected>ssID</option>
-              <option value="cooldown" selected>Cool Down</option>
-            </select>
-            <br>
-            <button type="submit">Get Table</button>
-            </form>
+          <h2>Summoner Spells</h2>
+          <form id="ssAttributes">
+              <label for="ssID">ssID</label> <input id="ssID" type="checkbox" name="attributes" value="ssID" /> <br />
+              <label for="cooldown">Cooldown</label> <input id="cooldown" type="checkbox" name="attributes" value="cooldown"/> <br />
+              <button type="submit" id="ssSelectTableButton">Select Table</button>
+          </form>
+            
             <table id="ssTable" border="1">
             <thead>
                 <tr>
-                <th>ssID</th>
-                <th>Cool Down</th>
                 </tr>
             </thead>
             <tbody></tbody>
             </table>
         </div>
+        <div id="ssTableMsg"></div>
         <div>
             <h2>Played In</h2>
-    <table id="playedintable" border="1">
-            <thead>
-                <tr>
-                <!--Table head, need to be adjusted accordingly to align with your own.-->
-                <th>MatchID</th>
-                <th>PlayerID</th>
-                <th>ChampionID</th>
-                <th>Spell (D-key)</th>
-                <th>Spell (F-key)</th>
-                <th>Rune (Primary)</th>
-                <th>Rune (Secondary)</th>
-                <th>Role</th>
-                <th>Team</th>
-                <th>Kills</th>
-                <th>Deaths</th>
-                <th>Assists</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-            </table>
+    <form id="playedInAttributes">
+      <label><input type="checkbox" name="attributes" value="matchID"  /> MatchID</label><br />
+      <label><input type="checkbox" name="attributes" value="uName"  /> PlayedID</label><br />
+      <label><input type="checkbox" name="attributes" value="cName"  /> ChampionID</label><br />
+      <label><input type="checkbox" name="attributes" value="sName_F"  /> Spell (F-key)</label><br />
+      <label><input type="checkbox" name="attributes" value="sName_D"  /> Spell (D-key)</label><br />
+      <label><input type="checkbox" name="attributes" value="rPrincipal"/> Rune (Primary)</label><br />
+      <label><input type="checkbox" name="attributes" value="rSecondary"/> SRune (Secondary)</label><br />
+      <label><input type="checkbox" name="attributes" value="role"/> Role</label><br />
+      <label><input type="checkbox" name="attributes" value="team"/> Team</label><br />
+      <label><input type="checkbox" name="attributes" value="kills"/> Kills</label><br />
+      <label><input type="checkbox" name="attributes" value="assists"/> Assists</label><br />
+      <label><input type="checkbox" name="attributes" value="deaths"/> Deaths</label><br />
+      <button type="submit" id="playedInSelectTableButton">Select Table</button>
+    </form>
+    <br />
+    <table id="playedInTable" border="1">
+      <thead>
+        <tr>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
         </div>
     </div>
+    <div id="playedInTableMsg"></div>
     <!-- ========================================================================= -->
     <h2>Delete Summoner Spell</h2>
     <form id="deleteSS">
@@ -121,12 +112,11 @@
 
     <p id="findPlayerUseAllSSMsg"></p>
     
-<!-- ========================================================================= -->
 
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="src/home.js"></script>
-    <!-- remove after project is done-->>
+    <!-- remove after project is done-->
     <script src="https://livejs.com/live.js"></script>
   </body>
 </html>

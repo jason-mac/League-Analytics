@@ -51,8 +51,8 @@ router.post("/gamePerformanceTable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
-router.get("/ssTable", async (req, res) => {
-  const { attributes } = req.query;
+router.post("/ssTable", async (req, res) => {
+  const { attributes } = req.body;
   const tableContent =
     await appService.fetchSummonerSpellTableDataFromDb(attributes);
   res.json({ data: tableContent });
