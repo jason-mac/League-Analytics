@@ -47,13 +47,16 @@
             </thead>
             <tbody></tbody>
             </table>
+            <br />
+            <hr />
+            <br />
         </div>
         <div id="ssTableMsg"></div>
         <div>
             <h2>Played In</h2>
     <form id="playedInAttributes">
       <label><input type="checkbox" name="attributes" value="matchID"  /> MatchID</label><br />
-      <label><input type="checkbox" name="attributes" value="uName"  /> PlayedID</label><br />
+      <label><input type="checkbox" name="attributes" value="uName"  /> PlayerID</label><br />
       <label><input type="checkbox" name="attributes" value="cName"  /> ChampionID</label><br />
       <label><input type="checkbox" name="attributes" value="sName_F"  /> Spell (F-key)</label><br />
       <label><input type="checkbox" name="attributes" value="sName_D"  /> Spell (D-key)</label><br />
@@ -74,9 +77,31 @@
       </thead>
       <tbody></tbody>
     </table>
+    <br />
+            <hr />
+            <br />
         </div>
     </div>
     <div id="playedInTableMsg"></div>
+    <h2>All players who have used all summoner spells</h2>
+    <table id="playersWhoUseAllSS" border="1">
+          <thead>
+              <tr>
+              <th>PlayerID</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+          </table>
+        </div>
+      <br>
+    <form id="findPlayersUseAllSS">
+      <button type="submit">Find Players</button>
+    </form>
+    <br />
+            <hr />
+            <br />
+
+    <p id="findPlayerUseAllSSMsg"></p>
     <!-- ========================================================================= -->
     <h2>Delete Summoner Spell</h2>
     <form id="deleteSS">
@@ -94,23 +119,6 @@
     <p id="deleteSSMsg"></p>
     
     <br/>
-
-    <h2>All players who have used all summoner spells</h2>
-    <table id="playersWhoUseAllSS" border="1">
-          <thead>
-              <tr>
-              <th>PlayerID</th>
-              </tr>
-          </thead>
-          <tbody></tbody>
-          </table>
-        </div>
-      <br>
-    <form id="findPlayersUseAllSS">
-      <button type="submit">Find Players</button>
-    </form>
-
-    <p id="findPlayerUseAllSSMsg"></p>
     
 
     <!-- ===================================================================================== -->

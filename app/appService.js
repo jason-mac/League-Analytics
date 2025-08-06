@@ -312,7 +312,7 @@ async function fetchChampionBanRate() {
   return await withOracleDB(async (connection) => {
     const query = `
     WITH ChampBanRate AS (
-						SELECT cname, count(cname) / (SELECT count(m.matchid) FROM MATCH m WHERE m.gamemode = 'Ranked') AS BanRate 
+						SELECT cname, ROUND(count(cname) / (SELECT count(m.matchid) FROM MATCH m WHERE m.gamemode = 'Ranked'), 2) AS BanRate 
 						FROM bannedChampion bc 
 						GROUP BY cname)
     SELECT * FROM champbanrate

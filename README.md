@@ -37,3 +37,6 @@ To ensure a fair player-experience among their entire community, match data is a
 ### 2. Patch Maintenance
 Patches are roled out often and so it is important that developers can easily identify what the game state is up to a certain date.
 
+
+### Citations:
+Utilized CPSC304 Node Project template: https://github.students.cs.ubc.ca/CPSC304/CPSC304_Node_Project
