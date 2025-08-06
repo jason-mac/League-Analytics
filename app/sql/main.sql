@@ -327,6 +327,10 @@ INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Lulu', '
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'KSante', 'Mid');
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Talon', 'Mid');
 INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Garen', 'Mid');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Garen', 'Top');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Talon', 'ADC');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'KSante', 'ADC');
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Lulu', 'ADC');
 
 -- INSERT INTO GamePerformance
 -- Great: KDA >= 4.0 or 0 Deaths | Good: KDA >= 2.0 | Poor: KDA >= 1.0 | Bad: KDA < 1.0
@@ -336,6 +340,7 @@ INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (3, 4, 
 INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (8, 4, 3, 'Good');
 INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (5, 5, 2, 'Poor');
 INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (2, 7, 3, 'Bad');
+
 
 -- INSERT INTO PlayedIn
 INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
@@ -367,3 +372,15 @@ VALUES (5, 'theshy', 'Talon', 'Ignite', 'Heal', 'Sorcery', 'Inspiration', 'Mid',
 
 INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
 VALUES (6, 'theshy', 'Garen', 'Flash', 'Smite', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (3, 'G2Caps', 'Garen', 'Teleport', 'Ignite', 'Sorcery', 'Inspiration', 'Top', 'Blue', 3, 25, 4);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (4, 'G2Caps', 'Talon', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'ADC', 'Red', 3, 25, 4);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (5, 'G2Caps', 'KSante', 'Ignite', 'Heal', 'Sorcery', 'Inspiration', 'ADC', 'Blue', 3, 25, 4);
+
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
+VALUES (6, 'G2Caps', 'Lulu', 'Flash', 'Smite', 'Sorcery', 'Inspiration', 'ADC', 'Red', 3, 25, 4);
