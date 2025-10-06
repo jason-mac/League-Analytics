@@ -5,7 +5,7 @@
     <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="favicon.jpeg" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <!--<link rel="stylesheet" href="styles.css">   -->
@@ -15,17 +15,22 @@
 
   <body>
     <nav>
-      <div style="display: flex; justify-content: space-around; align-items: center; font-size: large; font-weight: bold;">
-        <h1>
-           GG.op
-        </h1>
-       
-        <a href="index.html">Home</a> |
-        <a href="players.html">Players</a> |
+      <div
+        style="
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          font-size: large;
+          font-weight: bold;
+        "
+      >
+        <h1>GG.op</h1>
+
+        <a href="index.html">Home</a> | <a href="players.html">Players</a> |
         <a href="champions.html">Champions</a> |
         <a href="matches.html">Matches</a>
       </div>
-    
+
       <br />
       <hr />
       <br />
@@ -39,21 +44,30 @@
       </div>
       <div>
         <label for="winningTeam">Winning Team</label>
-        <input id="winningTeam" type="checkbox" name="attributes" value="winningTeam" />
+        <input
+          id="winningTeam"
+          type="checkbox"
+          name="attributes"
+          value="winningTeam"
+        />
       </div>
       <div>
         <label for="gameMode">Game Mode</label>
-        <input id="gameMode" type="checkbox" name="attributes" value="gameMode" /> 
+        <input
+          id="gameMode"
+          type="checkbox"
+          name="attributes"
+          value="gameMode"
+        />
       </div>
 
       <br />
-      <button type="submit" id="matchSelectTableButton"> Select Table </button>
+      <button type="submit" id="matchSelectTableButton">Select Table</button>
     </form>
     <br />
     <table id="matchTable" border="1">
       <thead>
-        <tr>
-        </tr>
+        <tr></tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -63,7 +77,6 @@
     <hr />
     <br />
     <!-- ========================================================================= -->
-
 
     <h2>Game Performance</h2>
     <form id="gamePerformanceAttributes">
@@ -81,9 +94,13 @@
       </div>
       <div>
         <label for="performance">Performance</label>
-      <input id="performance" type="checkbox" name="attributes" value="performance" />
+        <input
+          id="performance"
+          type="checkbox"
+          name="attributes"
+          value="performance"
+        />
       </div>
-      
 
       <br />
       <button type="submit" id="gamePerformanceSelectTableButton">
@@ -103,23 +120,55 @@
     <br />
     <!-- ========================================================================= -->
 
-
     <!-- Table 6 -->
 
     <h2>Played In</h2>
     <form id="playedInAttributes">
-      <label><input type="checkbox" name="attributes" value="matchID"  /> MatchID</label><br />
-      <label><input type="checkbox" name="attributes" value="uName"  /> PlayedID</label><br />
-      <label><input type="checkbox" name="attributes" value="cName"  /> ChampionID</label><br />
-      <label><input type="checkbox" name="attributes" value="sName_F"  /> Spell (F-key)</label><br />
-      <label><input type="checkbox" name="attributes" value="sName_D"  /> Spell (D-key)</label><br />
-      <label><input type="checkbox" name="attributes" value="rPrincipal"/> Rune (Primary)</label><br />
-      <label><input type="checkbox" name="attributes" value="rSecondary"/> SRune (Secondary)</label><br />
-      <label><input type="checkbox" name="attributes" value="role"/> Role</label><br />
-      <label><input type="checkbox" name="attributes" value="team"/> Team</label><br />
-      <label><input type="checkbox" name="attributes" value="kills"/> Kills</label><br />
-      <label><input type="checkbox" name="attributes" value="assists"/> Assists</label><br />
-      <label><input type="checkbox" name="attributes" value="deaths"/> Deaths</label><br />
+      <label
+        ><input type="checkbox" name="attributes" value="matchID" />
+        MatchID</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="uName" />
+        PlayedID</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="cName" />
+        ChampionID</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="sName_F" /> Spell
+        (F-key)</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="sName_D" /> Spell
+        (D-key)</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="rPrincipal" /> Rune
+        (Primary)</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="rSecondary" /> SRune
+        (Secondary)</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="role" /> Role</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="team" /> Team</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="kills" /> Kills</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="assists" />
+        Assists</label
+      ><br />
+      <label
+        ><input type="checkbox" name="attributes" value="deaths" />
+        Deaths</label
+      ><br />
       <button type="submit" id="playedInSelectTableButton">Select Table</button>
     </form>
     <br />
@@ -176,9 +225,7 @@
       </thead>
       <tbody></tbody>
     </table>
-
     <div id="joinPlayerPlayedInMsg"></div>
-
     <br />
     <hr />
     <br />

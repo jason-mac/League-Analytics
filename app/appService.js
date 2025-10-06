@@ -1,33 +1,33 @@
-const oracledb = require("oracledb");
+const { Pool } = require("pg");
 const loadEnvFile = require("./utils/envUtil");
 
 const envVariables = loadEnvFile("./.env");
 
-// Database configuration setup. Ensure your .env file has the required database credentials.
 const dbConfig = {
-  user: envVariables.ORACLE_USER,
-  password: envVariables.ORACLE_PASS,
-  connectString: `${envVariables.ORACLE_HOST}:${envVariables.ORACLE_PORT}/${envVariables.ORACLE_DBNAME}`,
-  poolMin: 1,
-  poolMax: 3,
-  poolIncrement: 1,
-  poolTimeout: 60,
+  user: envVariables.PG_USER,
+  password: envVariables.PG_PASS,
+  host: envVariables.PG_HOST,
+  port: envVariables.PG_PORT,
+  database: envVariables.PG_DB,
+  max: 3,
+  idleTimeoutMillis: 60000,
 };
 
-// initialize connection pool
-async function initializeConnectionPool() {
-  try {
-    await oracledb.createPool(dbConfig);
-    console.log("Connection pool started");
-  } catch (err) {
-    console.error("Initialization error: " + err.message);
-  }
-}
+const pool = new Pool(dbConfig);
+
+pool.on("connect", () => {
+  console.log("PostgreSQL pool connected");
+});
+
+pool.on("error", (err) => {
+  console.error("Unexpected error on idle client", err);
+  process.exit(-1);
+});
 
 async function closePoolAndExit() {
   console.log("\nTerminating");
   try {
-    await oracledb.getPool().close(10); // 10 seconds grace period for connections to finish
+    await pool.end();
     console.log("Pool closed");
     process.exit(0);
   } catch (err) {
@@ -36,242 +36,224 @@ async function closePoolAndExit() {
   }
 }
 
-initializeConnectionPool();
-
 process.once("SIGTERM", closePoolAndExit).once("SIGINT", closePoolAndExit);
 
-// ----------------------------------------------------------
-// Wrapper to manage OracleDB actions, simplifying connection handling.
-async function withOracleDB(action) {
-  let connection;
+async function withPostgres(action) {
+  const client = await pool.connect();
   try {
-    connection = await oracledb.getConnection(); // Gets a connection from the default pool
-    return await action(connection);
+    return await action(client);
   } catch (err) {
     console.error(err);
     throw err;
   } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    client.release();
   }
 }
 
-// ----------------------------------------------------------
-// Core functions for database operations
-// Modify these functions, especially the SQL queries, based on your project's requirements and design.
-async function testOracleConnection() {
-  return await withOracleDB(async (connection) => {
-    return true;
-  }).catch(() => {
-    return false;
-  });
+async function testPostgresConnection() {
+  return await withPostgres(async (client) => {
+    const res = await client.query("SELECT 1");
+    return res.rowCount === 1;
+  }).catch(() => false);
 }
+
+testPostgresConnection().then((ok) => {
+  console.log("Postgres connection test:", ok ? "SUCCESS" : "FAIL");
+});
 
 // Fetch table data
 async function fetchTableDataFromDb(tableName) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(`SELECT * FROM ${tableName}`);
+  try {
+    const result = await pool.query(`SELECT * FROM ${tableName.toLowerCase()}`);
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error(err);
     return [];
-  });
+  }
 }
 
 async function fetchMatchTableDataFromDb(attributes) {
-  return await withOracleDB(async (connection) => {
+  try {
     if (!attributes || attributes.length == 0) {
       return [];
     }
-    const query = `SELECT ${attributes.join(", ")} FROM MATCH`;
-    const result = await connection.execute(query);
+    const query = `SELECT ${attributes.join(", ")} FROM match`;
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
-    return [];
-  });
+  } catch (err) {
+    console.error(err);
+    return;
+  }
 }
 
 async function fetchPlayerTableDataFromDb(attributes) {
-  return await withOracleDB(async (connection) => {
+  try {
     if (!attributes || attributes.length == 0) {
       return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM PLAYER`;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
-    return [];
-  });
+  } catch (err) {
+    console.error(err);
+    return;
+  }
 }
 
 async function fetchChampionTableDataFromDb(attributes) {
-  return await withOracleDB(async (connection) => {
+  try {
     if (!attributes || attributes.length == 0) {
       return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM CHAMPION`;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
-    return [];
-  });
+  } catch (err) {
+    console.error(err);
+    return;
+  }
 }
 
 async function fetchPlayedInTableDataFromDb(attributes) {
-  return await withOracleDB(async (connection) => {
+  try {
     if (!attributes || attributes.length == 0) {
       return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM PLAYEDIN`;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
-    return [];
-  });
+  } catch (err) {
+    console.error(err);
+    return;
+  }
 }
 
 async function fetchGamePerformanceTableDataFromDb(attributes) {
-  return await withOracleDB(async (connection) => {
+  try {
     if (!attributes || attributes.length == 0) {
       return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM GAMEPERFORMANCE`;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
-    return [];
-  });
+  } catch (err) {
+    console.error(err);
+    return;
+  }
 }
 
 async function fetchSummonerSpellTableDataFromDb(attributes) {
-  return await withOracleDB(async (connection) => {
+  try {
     if (!attributes || attributes.length == 0) {
       return [];
     }
     const query = `SELECT ${attributes.join(", ")} FROM SUMMONERSPELL`;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
-    return [];
-  });
+  } catch (err) {
+    console.error(err);
+    return;
+  }
 }
 
 async function insertPlayer(playerId, country, dateCreated, email) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `INSERT INTO PLAYER (playerId, country, dateCreated, email) VALUES (:playerId, :country, TO_DATE(:dateCreated, 'YYYY-MM-DD'), :email)`,
-      [playerId, country, dateCreated, email],
-      { autoCommit: true },
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  try {
+    const query = `
+        INSERT INTO PLAYER (playerId, country, dateCreated, email)  
+        VALUES ($1, $2, $3, $4)`;
+    const values = [playerId, country, dateCreated, email];
+    const result = await pool.query(query, values);
+    return result.rowCount > 0;
+  } catch (err) {
+    console.error("Error inserting player:", err);
     return false;
-  });
+  }
 }
 
 async function updatePlayer(playerID, email, dateCreated, country) {
-  return await withOracleDB(async (connection) => {
-    let query = "UPDATE PLAYER SET "
-    const args = {email, dateCreated, country}
-    let keys = Object.keys(args).filter((arg) => args[arg]);
-    let attributes = []
-    
-    for (let i = 0; i < keys.length; i++) {
-      if (keys[i] === "dateCreated") {
-        query += "dateCreated = TO_DATE(:dateCreated, 'YYYY-MM-DD')"
-      } else {
-        query += `${keys[i]} = :${keys[i]}`
-      }
-      
-      if (i !== keys.length - 1) {
-        query += ", ";
-      }
-        attributes.push(args[keys[i]]);
-    }
-
-    query += " WHERE playerID = :playerID"
-    attributes.push(playerID);
-    const result = await connection.execute(
-      query,
-      attributes,
-      { autoCommit: true },
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  try {
+    let query = `
+      UPDATE player 
+      SET email = $1, dateCreated = $2, country = $3
+      WHERE playerId = $4;
+      `;
+    const values = [email, dateCreated, country, playerID];
+    const result = await pool.query(query, values);
+    return result.rowCount > 0;
+  } catch (err) {
+    console.error("Error updating player:", err);
     return false;
-  });
+  }
 }
 
 async function insertChampion(championId, championClass, race) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `INSERT INTO CHAMPION (championId, class, race) VALUES (:championId, :championClass, :race)`,
-      [championId, championClass, race],
-      { autoCommit: true },
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  try {
+    const query = `
+        INSERT INTO champion (championId, championClass, race)  
+        VALUES ($1, $2, $3, $4)
+        `;
+    const values = [championId, championClass, race];
+    const result = await pool.query(query, values);
+    return result.rowCount > 0;
+  } catch (err) {
+    console.error("Error inserting champion:", err);
     return false;
-  });
+  }
 }
 
 async function updateChampion(championID, championClass) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `UPDATE CHAMPION SET class = :championClass WHERE championId = :championID`,
-      [championClass, championID],
-      { autoCommit: true },
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  try {
+    let query = `
+      UPDATE champion
+      SET championClass = $1
+      WHERE championId = $2;
+      `;
+    const values = [championClass, championID];
+    const result = await pool.query(query, values);
+    return result.rowCount > 0;
+  } catch (err) {
+    console.error("Error updating champion:", err);
     return false;
-  });
+  }
 }
 
 async function fetchNumPlayersByRegionDataFromDb(num) {
-  return await withOracleDB(async (connection) => {
+  try {
+    const query = `
+    SELECT l.region, count(p.playerId) AS PlayerCount
+    FROM Player p INNER JOIN Location l ON p.country = l.country
+    GROUP BY l.region 
+    HAVING count(p.playerId) >= $1
+    ORDER BY count(p.playerId) ASC, l.region ASC
+    `;
+    const result = await pool.query(query, [num]);
+    return result.rows;
+  } catch (err) {
+    console.error("Error fetching region player count", err);
+    return [];
+  }
+}
+
+async function fetchNumPlayersByRegionDataFromDb(num) {
+  try {
     const query = `
     SELECT l.region, count(p.playerId) AS PlayerCount
     FROM Player p INNER JOIN Location l
     ON p.country = l.country
     GROUP BY l.region 
-    HAVING count(p.playerId) >= :num
-    ORDER BY count(p.playerId) Asc, l.region Asc
+    HAVING count(p.playerId) >= $1
+    ORDER BY count(p.playerId) ASC, l.region ASC
     `;
-    const result = await connection.execute(query, [num]);
+    const result = await pool.query(query, [num]);
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error("Error fetching number of players by region", err);
     return [];
-  });
-}
-
-async function fetchNumPlayersByRegionDataFromDb(num) {
-  return await withOracleDB(async (connection) => {
-    const query = `
-    SELECT l.region, count(p.playerId) AS PlayerCount
-    FROM Player p INNER JOIN Location l
-    ON p.country = l.country
-    GROUP BY l.region 
-    HAVING count(p.playerId) >= :num
-    ORDER BY count(p.playerId) Asc, l.region Asc
-    `;
-    const result = await connection.execute(query, [num]);
-    return result.rows;
-  }).catch(() => {
-    return [];
-  });
+  }
 }
 
 async function fetchPlayerAvgKda() {
-  return await withOracleDB(async (connection) => {
+  try {
     const query = `
     SELECT p.uName, TRUNC((sum(p.kills) + sum(p.assists)) / GREATEST(1, sum(p.deaths)), 2) AS KDA
     FROM playedin p
@@ -279,127 +261,139 @@ async function fetchPlayerAvgKda() {
     HAVING 1 < (SELECT COUNT(*) 
 		            FROM playedin p2
 		            WHERE p2.uName = p.uName)
-    ORDER BY KDA Desc, p.uName Asc
+    ORDER BY KDA DESC, p.uName ASC
     `;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error("Error fetching average kda by player", err);
     return [];
-  });
+  }
 }
 
 async function fetchPlayersWinRate() {
-  return await withOracleDB(async (connection) => {
+  try {
     const query = `
-  WITH PlayerWinCounts AS ( SELECT uName, count(*) AS winCount
-                            FROM playedin pi INNER JOIN MATCH m
-                            ON pi.matchid = m.matchid
-                            WHERE pi.team = m.winningteam
-                            GROUP BY uName)
-  SELECT pwc.uName, pwc.winCount, count(pi2.matchid) AS MatchesPlayed, 1.0 * pwc.winCount / count(pi2.matchid) AS WinRate
-  FROM playerWinCounts pwc 
-  LEFT OUTER JOIN playedin pi2 ON pwc.uName = pi2.uName
-  GROUP BY pwc.uName, pwc.winCount
+      WITH PlayerWinCounts AS ( SELECT uName, count(*) AS winCount
+                                FROM playedin pi INNER JOIN MATCH m
+                                ON pi.matchid = m.matchid
+                                WHERE pi.team = m.winningteam
+                                GROUP BY uName)
+      SELECT pwc.uName, pwc.winCount, count(pi2.matchid) AS MatchesPlayed, ROUND(pwc.winCount / count(pi2.matchid), 2) AS WinRate
+      FROM playerWinCounts pwc 
+      LEFT OUTER JOIN playedin pi2 ON pwc.uName = pi2.uName
+      GROUP BY pwc.uName, pwc.winCount
     `;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error("Error fetching player win rate", err);
     return [];
-  });
+  }
 }
 
 async function fetchChampionBanRate() {
-  return await withOracleDB(async (connection) => {
+  try {
     const query = `
     WITH ChampBanRate AS (
-						SELECT cname, ROUND(count(cname) / (SELECT count(m.matchid) FROM MATCH m WHERE m.gamemode = 'Ranked'), 2) AS BanRate 
+						SELECT cname, ROUND(COUNT(cname)::numeric / (SELECT count(m.matchid) FROM match m WHERE m.gamemode = 'Ranked'), 2) AS BanRate 
 						FROM bannedChampion bc 
 						GROUP BY cname)
-    SELECT * FROM champbanrate
+    SELECT * FROM ChampBanRate
     `;
-    const result = await connection.execute(query);
+    const result = await pool.query(query);
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error("Error fetching champion ban rate", err);
     return [];
-  });
+  }
 }
 
 async function joinPlayersPlayedIn(playerID) {
-  return await withOracleDB(async (connection) => {
+  try {
     const query = `
     SELECT p.playerID, m.matchID, m.cname, m.kills, m.assists, m.deaths
     FROM player p, playedin m
-    WHERE p.playerID = m.uName AND p.playerID = :playerID
+    WHERE p.playerID = m.uName AND p.playerID = $1
     `;
-    const result = await connection.execute(query, [playerID]);
+    const result = await pool.query(query, [playerID]);
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error("Error Joining Players with PlayedIn", err);
     return [];
-  });
+  }
 }
 
 async function deleteSummonerSpell(ssID) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `DELETE FROM SummonerSpell WHERE ssID = :ssID`,
-      [ssID],
-      { autoCommit: true },
-    );
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  try {
+    const query = `DELETE FROM SummonerSpell WHERE ssID = $1`;
+    const result = await pool.query(query, [ssID]);
+    return result.rowCount > 0;
+  } catch (err) {
+    console.error("Error deleting summoner spell", err);
     return false;
-  });
+  }
 }
 
 async function findPlayersUseAllSS() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
+  try {
+    const result = await pool.query(
       `SELECT playerID FROM Player P
        WHERE NOT EXISTS
       ((SELECT ssID 
 	      FROM SummonerSpell S)
-	      MINUS 
+	      EXCEPT
   	    (SELECT sName_F FROM PlayedIn P_i WHERE P.playerID = P_i.uName
         UNION
         SELECT sName_D FROM PlayedIn P_i WHERE P.playerID = P_i.uName))`,
     );
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error(
+      "Error finding all players that used all summoner spells",
+      err,
+    );
     return false;
-  });
+  }
 }
 
 async function filterChampions(cID, cClass, cRace) {
-  return await withOracleDB(async (connection) => {
+  try {
     let query = `
     SELECT *
     FROM Champion C
     WHERE 1 = 1`;
 
-    const arg = {};
+    const values = [];
+    let idx = 1;
 
     if (cID) {
-      query += ` AND C.championID = :cID`;
-      arg.cID = cID;
+      query += ` AND C.championID = $${idx}`;
+      values.push(cID);
+      idx++;
     }
     if (cClass) {
-      query += ` AND C.class = :cClass`;
-      arg.cClass = cClass;
+      query += ` AND C.class = $${idx}`;
+      values.push(cClass);
+      idx++;
     }
     if (cRace) {
-      query += ` AND C.race = :cRace`;
-      arg.cRace = cRace;
+      query += ` AND C.race = $${idx}`;
+      values.push(cRace);
+      idx++;
     }
-
-    const result = await connection.execute(query, arg);
+    const result = await pool.query(query, values);
     return result.rows;
-  }).catch(() => {
+  } catch (err) {
+    console.error("Error filtering champions", err);
     return [];
-  });
+  }
 }
 
 module.exports = {
-  testOracleConnection,
+  pool,
+  withPostgres,
+  testPostgresConnection,
   insertPlayer,
   insertChampion,
   updatePlayer,
@@ -409,7 +403,6 @@ module.exports = {
   fetchTableDataFromDb,
   fetchChampionBanRate,
   fetchNumPlayersByRegionDataFromDb,
-  fetchPlayersWinRate,
   joinPlayersPlayedIn,
   deleteSummonerSpell,
   findPlayersUseAllSS,

@@ -4,6 +4,7 @@ function toggleButton(button, tableId, msgId, onText, offText, fetchFunction) {
 
   if (table.style.display === "none" || table.style.display === "") {
     table.style.display = "table";
+    console.log("button");
     if (typeof fetchFunction === "function") {
       fetchFunction();
     }
@@ -19,7 +20,9 @@ async function displaySelectTable(event, tableName) {
   event.preventDefault();
 
   const form = document.getElementById(`${tableName}Attributes`);
-  const checkedBoxes = form.querySelectorAll('input[name="attributes"]:checked');
+  const checkedBoxes = form.querySelectorAll(
+    'input[name="attributes"]:checked',
+  );
 
   const selectedAttributes = Array.from(checkedBoxes).map((cb) => cb.value);
   const selectedColumns = [];
@@ -28,14 +31,12 @@ async function displaySelectTable(event, tableName) {
     selectedColumns.push(selectedColumn);
   }
 
- 
   try {
     const response = await fetch(`/${tableName}Table`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ attributes: selectedAttributes }),
     });
-
     const json = await response.json();
     const data = json.data;
 
@@ -45,10 +46,11 @@ async function displaySelectTable(event, tableName) {
     tbody.innerHTML = ""; // Clear old rows
     thead.innerHTML = ""; // clear old headers
 
-    if(checkedBoxes.length == 0) {
-      document.getElementById(`${tableName}TableMsg`).textContent = "Please Select At Least One Column!";
-      return  
-    } else{
+    if (checkedBoxes.length == 0) {
+      document.getElementById(`${tableName}TableMsg`).textContent =
+        "Please Select At Least One Column!";
+      return;
+    } else {
       document.getElementById(`${tableName}TableMsg`).textContent = "";
     }
 
@@ -66,9 +68,11 @@ async function displaySelectTable(event, tableName) {
     }
 
     // building the actual table
-    for (const rowData of data) {
+    for (const keyData in data) {
+      const rowData = data[keyData];
       const newRow = document.createElement("tr");
-      for (const cellData of rowData) {
+      for (const keyRowData in rowData) {
+        const cellData = rowData[keyRowData];
         const newCell = document.createElement("td");
         newCell.textContent = cellData;
         newRow.appendChild(newCell);
@@ -114,13 +118,15 @@ async function fetchPlayerPlayedInJoin(event) {
     tableBody.innerHTML = "";
   }
 
-  data.forEach((element) => {
+  for (const keyData in data) {
     const row = tableBody.insertRow();
-    element.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
+    const element = data[keyData];
+    var idx = 0;
+    for (const keyElement in element) {
+      const cell = row.insertCell(idx);
+      cell.textContent = element[keyElement];
+    }
+  }
 }
 
 window.onload = function () {

@@ -4,7 +4,7 @@ const appService = require("./appService");
 const router = express.Router();
 
 router.get("/check-db-connection", async (req, res) => {
-  const isConnect = await appService.testOracleConnection();
+  const isConnect = await appService.testPostgresConnection();
   if (isConnect) {
     res.send("connected");
   } else {
@@ -92,16 +92,20 @@ router.post("/updatePlayer", async (req, res) => {
   if (!email && !dateCreated && !country) {
     return res.json({
       success: true,
-      message: "All fields were empty, no changes were made"
+      message: "All fields were empty, no changes were made",
     });
   }
 
-
-  const result = await appService.updatePlayer(playerID, email, dateCreated, country);
+  const result = await appService.updatePlayer(
+    playerID,
+    email,
+    dateCreated,
+    country,
+  );
   if (result) {
     res.json({
       success: true,
-      message: "Data updated successfully!"
+      message: "Data updated successfully!",
     });
   } else {
     res.status(500).json({

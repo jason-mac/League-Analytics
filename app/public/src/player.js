@@ -1,9 +1,10 @@
-
 async function displaySelectTable(event, tableName) {
   event.preventDefault();
 
   const form = document.getElementById(`${tableName}Attributes`);
-  const checkedBoxes = form.querySelectorAll('input[name="attributes"]:checked');
+  const checkedBoxes = form.querySelectorAll(
+    'input[name="attributes"]:checked',
+  );
 
   const selectedAttributes = Array.from(checkedBoxes).map((cb) => cb.value);
   const selectedColumns = [];
@@ -12,7 +13,6 @@ async function displaySelectTable(event, tableName) {
     selectedColumns.push(selectedColumn);
   }
 
- 
   try {
     const response = await fetch(`/${tableName}Table`, {
       method: "POST",
@@ -29,10 +29,11 @@ async function displaySelectTable(event, tableName) {
     tbody.innerHTML = ""; // Clear old rows
     thead.innerHTML = ""; // clear old headers
 
-    if(checkedBoxes.length == 0) {
-      document.getElementById(`${tableName}TableMsg`).textContent = "Please Select At Least One Column!";
-      return  
-    } else{
+    if (checkedBoxes.length == 0) {
+      document.getElementById(`${tableName}TableMsg`).textContent =
+        "Please Select At Least One Column!";
+      return;
+    } else {
       document.getElementById(`${tableName}TableMsg`).textContent = "";
     }
 
@@ -52,9 +53,9 @@ async function displaySelectTable(event, tableName) {
     // building the actual table
     for (const rowData of data) {
       const newRow = document.createElement("tr");
-      for (const cellData of rowData) {
+      for (const key of Object.keys(rowData)) {
         const newCell = document.createElement("td");
-        newCell.textContent = cellData;
+        newCell.textContent = rowData[key];
         newRow.appendChild(newCell);
       }
       tbody.appendChild(newRow);
@@ -168,7 +169,7 @@ async function updatePlayer(event) {
       playerID: id,
       email: email,
       dateCreated: dateCreated,
-      country: country
+      country: country,
     }),
   });
 
@@ -204,13 +205,25 @@ async function fetchPlayerWinRate() {
     tableBody.innerHTML = "";
   }
 
-  data.forEach((element) => {
-    const row = tableBody.insertRow();
-    element.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
+  var row;
+  var element;
+
+  const handleCell = (key, idx) => {
+    const cell = row.insertCell(idx);
+    cell.textContent = element[key];
+  };
+
+  const handleRow = (element) => {
+    Object.keys(element).forEach(handleCell);
+  };
+
+  const handleData = (key) => {
+    row = tableBody.insertRow();
+    element = data[key];
+    handleRow(element);
+  };
+
+  Object.keys(data).forEach(handleData);
 }
 
 async function fetchPlayerAvgKda() {
@@ -234,13 +247,25 @@ async function fetchPlayerAvgKda() {
     tableBody.innerHTML = "";
   }
 
-  data.forEach((element) => {
-    const row = tableBody.insertRow();
-    element.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
+  var row;
+  var element;
+
+  const handleCell = (key, idx) => {
+    const cell = row.insertCell(idx);
+    cell.textContent = element[key];
+  };
+
+  const handleRow = (element) => {
+    Object.keys(element).forEach(handleCell);
+  };
+
+  const handleData = (key) => {
+    row = tableBody.insertRow();
+    element = data[key];
+    handleRow(element);
+  };
+
+  Object.keys(data).forEach(handleData);
 }
 
 async function playerRegionCountData(event) {
@@ -267,13 +292,25 @@ async function playerRegionCountData(event) {
     tableBody.innerHTML = "";
   }
 
-  data.forEach((element) => {
-    const row = tableBody.insertRow();
-    element.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
+  var row;
+  var element;
+
+  const handleCell = (key, idx) => {
+    const cell = row.insertCell(idx);
+    cell.textContent = element[key];
+  };
+
+  const handleRow = (element) => {
+    Object.keys(element).forEach(handleCell);
+  };
+
+  const handleData = (key) => {
+    row = tableBody.insertRow();
+    element = data[key];
+    handleRow(element);
+  };
+
+  Object.keys(data).forEach(handleData);
 }
 
 window.onload = function () {

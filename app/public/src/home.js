@@ -1,22 +1,11 @@
 async function checkDbConnection() {
-  const statusElem = document.getElementById("dbStatus");
-  const loadingGifElem = document.getElementById("loadingGif");
-
-  const response = await fetch("/check-db-connection", {
-    method: "GET",
-  });
-
-  loadingGifElem.style.display = "none";
-  statusElem.style.display = "inline";
-
-  response
-    .text()
-    .then((text) => {
-      statusElem.textContent = text;
-    })
-    .catch((error) => {
-      statusElem.textContent = "connection timed out";
-    });
+  try {
+    const response = await fetch("/check-db-connection", { method: "GET" });
+    const text = await response.text();
+    console.log("DB status:", text); // or update some existing element if you want
+  } catch (error) {
+    console.error("DB connection timed out");
+  }
 }
 
 async function fetchAndDisplayTable(tableid) {
@@ -40,20 +29,34 @@ async function fetchAndDisplayTable(tableid) {
     tableBody.innerHTML = "";
   }
 
-  data.forEach((element) => {
-    const row = tableBody.insertRow();
-    element.forEach((field, index) => {
-      const cell = row.insertCell(index);
-      cell.textContent = field;
-    });
-  });
+  var row;
+  var element;
+
+  const handleCell = (key, idx) => {
+    const cell = row.insertCell(idx);
+    cell.textContent = element[key];
+  };
+
+  const handleRow = (element) => {
+    Object.keys(element).forEach(handleCell);
+  };
+
+  const handleData = (key) => {
+    row = tableBody.insertRow();
+    element = data[key];
+    handleRow(element);
+  };
+
+  Object.keys(data).forEach(handleData);
 }
 
 async function displaySelectTable(event, tableName) {
   event.preventDefault();
 
   const form = document.getElementById(`${tableName}Attributes`);
-  const checkedBoxes = form.querySelectorAll('input[name="attributes"]:checked');
+  const checkedBoxes = form.querySelectorAll(
+    'input[name="attributes"]:checked',
+  );
 
   const selectedAttributes = Array.from(checkedBoxes).map((cb) => cb.value);
   const selectedColumns = [];
@@ -62,7 +65,6 @@ async function displaySelectTable(event, tableName) {
     selectedColumns.push(selectedColumn);
   }
 
- 
   try {
     const response = await fetch(`/${tableName}Table`, {
       method: "POST",
@@ -79,10 +81,11 @@ async function displaySelectTable(event, tableName) {
     tbody.innerHTML = ""; // Clear old rows
     thead.innerHTML = ""; // clear old headers
 
-    if(checkedBoxes.length == 0) {
-      document.getElementById(`${tableName}TableMsg`).textContent = "Please Select At Least One Column!";
-      return  
-    } else{
+    if (checkedBoxes.length == 0) {
+      document.getElementById(`${tableName}TableMsg`).textContent =
+        "Please Select At Least One Column!";
+      return;
+    } else {
       document.getElementById(`${tableName}TableMsg`).textContent = "";
     }
 
@@ -100,9 +103,11 @@ async function displaySelectTable(event, tableName) {
     }
 
     // building the actual table
-    for (const rowData of data) {
+    for (const keyData in data) {
+      const rowData = data[keyData];
       const newRow = document.createElement("tr");
-      for (const cellData of rowData) {
+      for (const keyRowData in rowData) {
+        const cellData = rowData[keyRowData];
         const newCell = document.createElement("td");
         newCell.textContent = cellData;
         newRow.appendChild(newCell);
@@ -139,7 +144,6 @@ async function deleteSummonerSpell(event) {
 
   if (data.success) {
     messageElement.textContent = "Data updated successfully!";
-    fetchTableData();
   } else {
     messageElement.textContent = "Error updating data!";
   }
@@ -168,13 +172,16 @@ async function findPlayersUseAllSS(event) {
 
     const info = data.data;
 
-    info.forEach((element) => {
+    for (const infoKey in info) {
       const row = tableBody.insertRow();
-      element.forEach((field, index) => {
-        const cell = row.insertCell(index);
-        cell.textContent = field;
-      });
-    });
+      const element = info[infoKey];
+      var idx = 0;
+      for (const elementKey in element) {
+        const cell = row.insertCell(idx);
+        cell.textContent = element[elementKey];
+        idx++;
+      }
+    }
   } else {
     messageElement.textContent = "Error retrieving data!";
   }
@@ -188,7 +195,7 @@ window.onload = function () {
       .addEventListener("submit", deleteSummonerSpell);
     document
       .getElementById("findPlayersUseAllSS")
-      .addEventListener("submit", findPlayersUseAllSS)
+      .addEventListener("submit", findPlayersUseAllSS);
     const tableNames = ["playedIn", "ss"];
     for (const tableName of tableNames) {
       try {
@@ -203,3 +210,4 @@ window.onload = function () {
     console.log(e.message);
   }
 };
+

@@ -368,10 +368,12 @@ async function filterChampions(event) {
 
   const tableBody = document.querySelector("#filterChampionsTable tbody");
 
-
-  const response = await fetch(`/filterChampions?cID=${cCid}&cClass=${cClass}&cRace=${cRace}`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `/filterChampions?cID=${cCid}&cClass=${cClass}&cRace=${cRace}`,
+    {
+      method: "GET",
+    },
+  );
   const responseData = await response.json();
   const data = responseData.data;
 

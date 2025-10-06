@@ -1,142 +1,133 @@
--- Drop table statements
-DROP TABLE PlayedIn;
-DROP TABLE PlayerBuildsItems;
-DROP TABLE BannedChampion;
-DROP TABLE AffectedPatch;
-DROP TABLE PlayerPlaysChampion;
-DROP TABLE ChampionHasSkin;
-DROP TABLE Rune;
-DROP TABLE Player;
-DROP TABLE Match;
-DROP TABLE SummonerSpell;
-DROP TABLE GamePerformance;
-DROP TABLE SkinCollection;
-DROP TABLE RuneFamily;
-DROP TABLE Champion;
-DROP TABLE Location;
-DROP TABLE ItemInfo;
-DROP TABLE Item;
+-- ========================================
+-- DROP TABLES
+-- ========================================
+DROP TABLE IF EXISTS PlayedIn CASCADE;
+DROP TABLE IF EXISTS PlayerBuildsItems CASCADE;
+DROP TABLE IF EXISTS BannedChampion CASCADE;
+DROP TABLE IF EXISTS AffectedPatch CASCADE;
+DROP TABLE IF EXISTS PlayerPlaysChampion CASCADE;
+DROP TABLE IF EXISTS ChampionHasSkin CASCADE;
+DROP TABLE IF EXISTS Rune CASCADE;
+DROP TABLE IF EXISTS Player CASCADE;
+DROP TABLE IF EXISTS Match CASCADE;
+DROP TABLE IF EXISTS SummonerSpell CASCADE;
+DROP TABLE IF EXISTS GamePerformance CASCADE;
+DROP TABLE IF EXISTS SkinCollection CASCADE;
+DROP TABLE IF EXISTS RuneFamily CASCADE;
+DROP TABLE IF EXISTS Champion CASCADE;
+DROP TABLE IF EXISTS Location CASCADE;
+DROP TABLE IF EXISTS ItemInfo CASCADE;
+DROP TABLE IF EXISTS Item CASCADE;
 
-
+-- ========================================
+-- CREATE TABLES
+-- ========================================
 CREATE TABLE Location (
-  country VARCHAR2(50) NOT NULL,
-  region VARCHAR2(3),
-  CONSTRAINT pk_Location PRIMARY KEY (country)
+  country VARCHAR(50) NOT NULL PRIMARY KEY,
+  region VARCHAR(3)
 );
 
 CREATE TABLE Champion (
-  championID VARCHAR2(50) NOT NULL,
-  class VARCHAR2(50),
-  race VARCHAR2(50),
-  CONSTRAINT pk_Champion PRIMARY KEY (championID)
+  championID VARCHAR(50) NOT NULL PRIMARY KEY,
+  class VARCHAR(50),
+  race VARCHAR(50)
 );
 
 CREATE TABLE SkinCollection (
-  collectionName VARCHAR2(50) NOT NULL,
-  colour VARCHAR2(50),
-  cost NUMBER(8, 2),
-  CONSTRAINT pk_SkinCollection PRIMARY KEY (collectionName)
+  collectionName VARCHAR(50) NOT NULL PRIMARY KEY,
+  colour VARCHAR(50),
+  cost NUMERIC(8,2)
 );
 
 CREATE TABLE RuneFamily (
-  principal VARCHAR2(50) NOT NULL,
-  statBonus VARCHAR2(50),
-  CONSTRAINT pk_RuneFamily PRIMARY KEY (principal)
+  principal VARCHAR(50) NOT NULL PRIMARY KEY,
+  statBonus VARCHAR(50)
 );
 
 CREATE TABLE Item (
-  itemID VARCHAR2(50),
-  bonus VARCHAR2(50) UNIQUE,
-  CONSTRAINT pk_Item PRIMARY KEY (itemID)
+  itemID VARCHAR(50) PRIMARY KEY,
+  bonus VARCHAR(50) UNIQUE
 );
 
 CREATE TABLE Match (
-  matchID INTEGER,
+  matchID INTEGER PRIMARY KEY,
   winningTeam CHAR(10),
-  gameMode CHAR(10),
-  CONSTRAINT pk_Match PRIMARY KEY (matchID)
+  gameMode CHAR(10)
 );
 
 CREATE TABLE SummonerSpell (
-  ssID  VARCHAR2(50),
-  cooldown INTEGER,
-  CONSTRAINT pk_SummonerSpell PRIMARY KEY (ssID)
+  ssID VARCHAR(50) PRIMARY KEY,
+  cooldown INTEGER
 );
 
 CREATE TABLE GamePerformance (
-    kills INTEGER,
-    deaths INTEGER,
-    assists INTEGER,
-  	performance VARCHAR2(50),
-    CONSTRAINT pk_gamePerformance PRIMARY KEY (kills, deaths, assists)
+  kills INTEGER,
+  deaths INTEGER,
+  assists INTEGER,
+  performance VARCHAR(50),
+  PRIMARY KEY (kills, deaths, assists)
 );
 
-
 CREATE TABLE Player (
-    playerID VARCHAR2(50) NOT NULL,
-    country VARCHAR2(50) NOT NULL,
-    dateCreated DATE, 
-    email VARCHAR2(50) UNIQUE,
-    CONSTRAINT pk_Player PRIMARY KEY (playerID),
-    CONSTRAINT fk_Player FOREIGN KEY (country) REFERENCES Location(country)
+  playerID VARCHAR(50) NOT NULL PRIMARY KEY,
+  country VARCHAR(50) NOT NULL REFERENCES Location(country),
+  dateCreated DATE,
+  email VARCHAR(50) UNIQUE
 );
 
 CREATE TABLE ChampionHasSkin (
-  cName VARCHAR2(50) NOT NULL,
-  skinID VARCHAR2(50) NOT NULL,
-  collectionName VARCHAR2(50) NOT NULL,
-  CONSTRAINT pk_ChampionHasSkin PRIMARY KEY (skinID, cName),
-  CONSTRAINT fk1_ChampionHasSkin FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE,
-  CONSTRAINT fk2_ChampionHasSkin FOREIGN KEY (collectionName) REFERENCES SkinCollection(collectionName) ON DELETE CASCADE
+  cName VARCHAR(50) NOT NULL,
+  skinID VARCHAR(50) NOT NULL,
+  collectionName VARCHAR(50) NOT NULL,
+  PRIMARY KEY (skinID, cName),
+  FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE,
+  FOREIGN KEY (collectionName) REFERENCES SkinCollection(collectionName) ON DELETE CASCADE
 );
 
 CREATE TABLE Rune (
-  principal VARCHAR2(50) NOT NULL,
-  secondary VARCHAR2(50) NOT NULL,
-  CONSTRAINT pk_Rune PRIMARY KEY (principal, secondary),
-  CONSTRAINT fk_Rune FOREIGN KEY (principal) REFERENCES RuneFamily (principal)
+  principal VARCHAR(50) NOT NULL,
+  secondary VARCHAR(50) NOT NULL,
+  PRIMARY KEY (principal, secondary),
+  FOREIGN KEY (principal) REFERENCES RuneFamily(principal)
 );
 
 CREATE TABLE ItemInfo (
-  bonus VARCHAR2(50), 
-  cost INTEGER, 
-  numberOfUses INTEGER, 		                 	
-  buildsInto VARCHAR2(50),
-  CONSTRAINT pk_ItemInfo PRIMARY KEY (bonus),
-  CONSTRAINT fk_BuildsInto FOREIGN KEY (buildsInto) REFERENCES Item(itemID) ON DELETE CASCADE
+  bonus VARCHAR(50) PRIMARY KEY,
+  cost INTEGER,
+  numberOfUses INTEGER,
+  buildsInto VARCHAR(50) REFERENCES Item(itemID) ON DELETE CASCADE
 );
 
 CREATE TABLE BannedChampion (
   matchID INTEGER,
-  cName VARCHAR2(50),
-  CONSTRAINT pk_BannedChampion PRIMARY KEY (matchID, cName),
-  CONSTRAINT fk1_BannedChampion FOREIGN KEY (matchID) REFERENCES Match(matchID) ON DELETE CASCADE,
-  CONSTRAINT fk2_BannedChampion FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE SET NULL 
+  cName VARCHAR(50),
+  PRIMARY KEY (matchID, cName),
+  FOREIGN KEY (matchID) REFERENCES Match(matchID) ON DELETE CASCADE,
+  FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE SET NULL
 );
 
 CREATE TABLE AffectedPatch (
-  cName VARCHAR2(50),
+  cName VARCHAR(50),
   patchID INTEGER,
-  description VARCHAR2(50),
-  patchType VARCHAR2(50),
-  CONSTRAINT pk_AffectedPatch PRIMARY KEY (cName, patchID),
-  CONSTRAINT fk_AffectedPatch FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE
+  description VARCHAR(50),
+  patchType VARCHAR(50),
+  PRIMARY KEY (cName, patchID),
+  FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE
 );
 
-
 CREATE TABLE PlayerPlaysChampion (
-  pName VARCHAR2(50),
-  cName VARCHAR2(50),
+  pName VARCHAR(50),
+  cName VARCHAR(50),
   role CHAR(10),
-  CONSTRAINT pk_PlayerPlaysChampion PRIMARY KEY (pName, cName),
-  CONSTRAINT fk1_PlayerPlaysChampion FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE,
-  CONSTRAINT fk2_PlayerPlaysChampion FOREIGN KEY (pName) REFERENCES Player(playerID) ON DELETE CASCADE
+  PRIMARY KEY (pName, cName),
+  FOREIGN KEY (cName) REFERENCES Champion(championID) ON DELETE CASCADE,
+  FOREIGN KEY (pName) REFERENCES Player(playerID) ON DELETE CASCADE
 );
 
 CREATE TABLE PlayerBuildsItems (
   matchID INTEGER,
-  pName VARCHAR2(50),
-  item VARCHAR2(50),
+  pName VARCHAR(50),
+  item VARCHAR(50),
   PRIMARY KEY (matchID, pName, item),
   FOREIGN KEY (matchID) REFERENCES Match(matchID),
   FOREIGN KEY (pName) REFERENCES Player(playerID),
@@ -145,242 +136,206 @@ CREATE TABLE PlayerBuildsItems (
 
 CREATE TABLE PlayedIn (
   matchID INTEGER NOT NULL,
-  uName VARCHAR2(50) NOT NULL,
-  cName VARCHAR2(50) NOT NULL,
-  sName_F VARCHAR2(50),
-  sName_D VARCHAR2(50),
-  rPrincipal VARCHAR2(50) NOT NULL,
-  rSecondary VARCHAR2(50) NOT NULL,
+  uName VARCHAR(50) NOT NULL,
+  cName VARCHAR(50) NOT NULL,
+  sName_F VARCHAR(50),
+  sName_D VARCHAR(50),
+  rPrincipal VARCHAR(50) NOT NULL,
+  rSecondary VARCHAR(50) NOT NULL,
   role CHAR(10) NOT NULL,
   team CHAR(10) NOT NULL,
   kills INTEGER,
   assists INTEGER,
   deaths INTEGER,
-  CONSTRAINT pk_PlayedIn PRIMARY KEY (matchID, uName, cName),
-  CONSTRAINT ck_PlayedIn UNIQUE (matchID, role, team),
-  CONSTRAINT fk1_PlayedIn FOREIGN KEY (matchID) REFERENCES Match (matchID) ON DELETE CASCADE,
-  CONSTRAINT fk2_PlayedIn FOREIGN KEY (uName, cName) REFERENCES PlayerPlaysChampion (pName, cName),
-  CONSTRAINT fk3_PlayedIn FOREIGN KEY (rPrincipal, rSecondary) REFERENCES Rune (principal, secondary),
-  CONSTRAINT fK4_PlayedIn FOREIGN KEY (kills, deaths, assists) REFERENCES GamePerformance(kills, deaths, assists),
-  CONSTRAINT fK5_PlayedIN FOREIGN KEY (sName_F) REFERENCES SummonerSpell(ssID) ON DELETE SET NULL,
-  CONSTRAINT fK6_PlayedIN FOREIGN KEY (sName_D) REFERENCES SummonerSpell(ssID) ON DELETE SET NULL
+  PRIMARY KEY (matchID, uName, cName),
+  UNIQUE (matchID, role, team),
+  FOREIGN KEY (matchID) REFERENCES Match(matchID) ON DELETE CASCADE,
+  FOREIGN KEY (uName, cName) REFERENCES PlayerPlaysChampion(pName, cName),
+  FOREIGN KEY (rPrincipal, rSecondary) REFERENCES Rune(principal, secondary),
+  FOREIGN KEY (kills, deaths, assists) REFERENCES GamePerformance(kills, deaths, assists),
+  FOREIGN KEY (sName_F) REFERENCES SummonerSpell(ssID) ON DELETE SET NULL,
+  FOREIGN KEY (sName_D) REFERENCES SummonerSpell(ssID) ON DELETE SET NULL
 );
 
+-- ========================================
+-- INSERT DATA
+-- ========================================
+-- Location
+INSERT INTO Location (country, region) VALUES 
+('USA','NA'),('Canada','NA'),('Germany','EU'),('France','EU'),
+('South Korea','KR'),('England','EU'),('China','CN'),('Nigeria','AF'),('Pakistan','AP');
 
--- Data insertion statements
--- Inserting into Location Table
-INSERT INTO Location (country, region) VALUES ('USA', 'NA');
-INSERT INTO Location (country, region) VALUES ('Canada', 'NA');
-INSERT INTO Location (country, region) VALUES ('Germany', 'EU');
-INSERT INTO Location (country, region) VALUES ('France', 'EU');
-INSERT INTO Location (country, region) VALUES ('South Korea', 'KR');
-INSERT INTO Location (country, region) VALUES ('England', 'EU');
-INSERT INTO Location (country, region) VALUES ('China', 'CN');
-INSERT INTO Location (country, region) VALUES ('Nigeria', 'AF');
-INSERT INTO Location (country, region) VALUES ('Pakistan', 'AP');
+-- Player
+INSERT INTO Player (playerID, dateCreated, email, country) VALUES 
+('topLaneLegend','2014-12-01'::DATE,'ses_ela@gmail.com','Canada'),
+('DoubleLift','2015-06-25'::DATE,'pengyilang@hotmail.com','Pakistan'),
+('hideonbush','2013-01-21'::DATE,'midgap@gmail.com','South Korea'),
+('midOrFeed','2016-04-20'::DATE,'johnsmith@hotmail.com','China'),
+('G2Caps','2014-02-15'::DATE,'rasmuswinther@yahoo.com','France'),
+('Buasffs','2015-03-19'::DATE,'simonhof@gmail.com','Germany'),
+('theshy','2017-02-20'::DATE,'seunglok@hotmail.com','Germany'),
+('rekkless','2018-09-18'::DATE,'carlmartin@gmail.com','Nigeria'),
+('GenChovy','2020-05-16'::DATE,'jihoon@hotmail.com','South Korea'),
+('doinb','2023-02-18'::DATE,'supercarry@hotmail.com','England');
 
--- Inserting into Player Table
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('topLaneLegend', TO_DATE('2014-12-01', 'YYYY-MM-DD'), 'ses_ela@gmail.com', 'Canada');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('DoubleLift', TO_DATE('2015-06-25', 'YYYY-MM-DD'), 'pengyilang@hotmail.com', 'Pakistan');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('hideonbush', TO_DATE('2013-01-21', 'YYYY-MM-DD'), 'midgap@gmail.com', 'South Korea');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('midOrFeed', TO_DATE('2016-04-20', 'YYYY-MM-DD'), 'johnsmith@hotmail.com', 'China');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('G2Caps', TO_DATE('2014-02-15', 'YYYY-MM-DD'), 'rasmuswinther@yahoo.com', 'France');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('Buasffs', TO_DATE('2015-03-19', 'YYYY-MM-DD'), 'simonhof@gmail.com', 'Germany');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('theshy', TO_DATE('2017-02-20', 'YYYY-MM-DD'), 'seunglok@hotmail.com', 'Germany');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('rekkless', TO_DATE('2018-09-18', 'YYYY-MM-DD'), 'carlmartin@gmail.com', 'Nigeria');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('GenChovy', TO_DATE('2020-05-16', 'YYYY-MM-DD'), 'jihoon@hotmail.com', 'South Korea');
-INSERT INTO Player (playerID, dateCreated, email, country) VALUES ('doinb', TO_DATE('2023-02-18', 'YYYY-MM-DD'), 'supercarry@hotmail.com', 'England');
+-- Champion
+INSERT INTO Champion (championID, class, race) VALUES
+('Garen','Bruiser','Demacia'),
+('Caitlyn','Marksman','Piltover'),
+('Lulu','Enchanter','Yordle'),
+('Irelia','Fighter','Ionia'),
+('Ahri','Mage','Ionia'),
+('KSante','Tank','Nazumah'),
+('Yasuo','Skirmisher','Ionia'),
+('Lucian','Marksman','Demacia'),
+('Azir','Mage','Shurima'),
+('Talon','Assassin','Noxus');
 
+-- SkinCollection
+INSERT INTO SkinCollection (collectionName, colour, cost) VALUES
+('God-King','Blue',25.00),
+('Star Guardian','Pink',90.00),
+('Arcade','Purple',250.00),
+('High Noon','Orange',10.00),
+('Enduring Sword','Blue',15.25),
+('Warring Kingdoms','Gold',500.00),
+('Default','Default',0.00);
 
--- Inserting into Champion Table
-INSERT INTO Champion (championID, class, race) VALUES ('Garen', 'Bruiser', 'Demacia');
-INSERT INTO Champion (championID, class, race) VALUES ('Caitlyn', 'Marksman', 'Piltover');
-INSERT INTO Champion (championID, class, race) VALUES ('Lulu', 'Enchanter', 'Yordle');
-INSERT INTO Champion (championID, class, race) VALUES ('Irelia', 'Fighter', 'Ionia');
-INSERT INTO Champion (championID, class, race) VALUES ('Ahri', 'Mage', 'Ionia');
-INSERT INTO Champion (championID, class, race) VALUES ('KSante', 'Tank', 'Nazumah');
-INSERT INTO Champion (championID, class, race) VALUES ('Yasuo', 'Skirmisher', 'Ionia');
-INSERT INTO Champion (championID, class, race) VALUES ('Lucian', 'Marksman', 'Demacia');
-INSERT INTO Champion (championID, class, race) VALUES ('Azir', 'Mage', 'Shurima');
-INSERT INTO Champion (championID, class, race) VALUES ('Talon', 'Assassin', 'Noxus');
+-- ChampionHasSkin
+INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES
+('Garen','Garen001','Default'),
+('Caitlyn','Caitlyn001','Default'),
+('Lulu','Lulu001','Default'),
+('Irelia','Irelia001','Default'),
+('Ahri','Ahri001','Default'),
+('KSante','KSante001','Default'),
+('Yasuo','Yasuo001','Default'),
+('Lucian','Lucian001','Default'),
+('Azir','Azir001','Default'),
+('Talon','Talon001','Default'),
+('Garen','Garen002','God-King'),
+('Garen','Garen003','High Noon'),
+('Ahri','Ahri002','Star Guardian'),
+('Yasuo','Yasuo002','Enduring Sword'),
+('Lulu','Lulu002','Star Guardian'),
+('Irelia','Irelia002','Arcade'),
+('Azir','Azir002','Warring Kingdoms');
 
--- Inserting into SkinCollection
-INSERT INTO SkinCollection (collectionName, colour, cost) VALUES ('God-King', 'Blue', 25.00);
-INSERT INTO SkinCollection (collectionName, colour, cost) VALUES ('Star Guardian', 'Pink', 90.00);
-INSERT INTO SkinCollection (collectionName, colour, cost) VALUES ('Arcade', 'Purple', 250.00);
-INSERT INTO SkinCollection (collectionName, colour, cost) VALUES ('High Noon', 'Orange', 10.00);
-INSERT INTO SkinCollection (collectionName, colour, cost) VALUES ('Enduring Sword', 'Blue', 15.25);
-INSERT INTO SkinCollection (collectionName, colour, cost) VALUES ('Warring Kingdoms', 'Gold', 500.00);
-INSERT INTO SkinCollection (collectionName, colour, cost) VALUES ('Default', 'Default', 0.00);
+-- Match
+INSERT INTO Match (matchID, winningTeam, gameMode) VALUES
+(1,'Blue','Ranked'),
+(2,'Red','Unrated'),
+(3,'Blue','Unrated'),
+(4,'Red','Unrated'),
+(5,'Blue','Ranked'),
+(6,'Red','Ranked');
 
--- Inserting into ChampionHasSkin table using default skins
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Garen', 'Garen001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Caitlyn', 'Caitlyn001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lulu', 'Lulu001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Irelia', 'Irelia001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Ahri', 'Ahri001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('KSante', 'KSante001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Yasuo', 'Yasuo001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lucian', 'Lucian001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Azir', 'Azir001', 'Default');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Talon', 'Talon001', 'Default');
+-- AffectedPatch
+INSERT INTO AffectedPatch (cName, patchID, description, patchType) VALUES
+('Garen',101,'Increased base health','buff'),
+('Caitlyn',101,'Reduced attack speed','debuff'),
+('Lulu',102,'Improved shield strength','buff'),
+('Irelia',102,'Lowered cooldown on Q','buff'),
+('Ahri',103,'Increased mana cost on E','debuff');
 
+-- SummonerSpell
+INSERT INTO SummonerSpell (ssID, cooldown) VALUES
+('Flash',300),
+('Barrier',300),
+('Ignite',180),
+('Teleport',360),
+('Smite',90),
+('Heal',240);
 
--- Inserting into ChampionHasSkin table without using default skins
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Garen', 'Garen002', 'God-King');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Garen', 'Garen003', 'High Noon');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Ahri', 'Ahri002', 'Star Guardian');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Yasuo', 'Yasuo002', 'Enduring Sword');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Lulu', 'Lulu002', 'Star Guardian');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Irelia', 'Irelia002', 'Arcade');
-INSERT INTO ChampionHasSkin (cName, skinID, collectionName) VALUES ('Azir', 'Azir002', 'Warring Kingdoms');
+-- RuneFamily
+INSERT INTO RuneFamily (principal, statBonus) VALUES
+('Precision','Attack Speed'),
+('Domination','Adaptive Force'),
+('Sorcery','Ability Power'),
+('Resolve','Bonus Health'),
+('Inspiration','Cooldown Reduction');
 
+-- Rune
+INSERT INTO Rune (principal, secondary) VALUES
+('Precision','Domination'),
+('Domination','Sorcery'),
+('Sorcery','Inspiration'),
+('Resolve','Precision'),
+('Inspiration','Resolve');
 
--- Inserting into Match Table
-INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (1, 'Blue', 'Ranked');
-INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (2, 'Red', 'Unrated');
-INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (3, 'Blue', 'Unrated');
-INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (4, 'Red', 'Unrated');
-INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (5, 'Blue', 'Ranked');
-INSERT INTO Match (matchID, winningTeam, gameMode) VALUES (6, 'Red', 'Ranked');
+-- BannedChampion
+INSERT INTO BannedChampion (matchID, cName) VALUES
+(1,'Garen'),(1,'Irelia'),(1,'Ahri'),(1,'Lulu'),
+(5,'Garen'),(5,'Azir'),(5,'Talon'),(5,'Yasuo');
 
+-- Item
+INSERT INTO Item (itemID, bonus) VALUES
+('Dark Seal','Glory'),
+('Eclipse','Ever Rising Moon'),
+('Manamune','Manaflow'),
+('Elixir of Wraith','Drain'),
+('Bamis Cinder','Immolate'),
+('Sunfire Aegis','Resilience'),
+('Mejais Soulstealer','Focus'),
+('Muramana','Wave');
 
--- Inserting into AffectedPatch Table
-INSERT INTO AffectedPatch (cName, patchID, description, patchType) VALUES ('Garen', 101, 'Increased base health', 'buff');
-INSERT INTO AffectedPatch (cName, patchID, description, patchType) VALUES ('Caitlyn', 101, 'Reduced attack speed', 'debuff');
-INSERT INTO AffectedPatch (cName, patchID, description, patchType) VALUES ('Lulu', 102, 'Improved shield strength', 'buff');
-INSERT INTO AffectedPatch (cName, patchID, description, patchType) VALUES ('Irelia', 102, 'Lowered cooldown on Q', 'buff');
-INSERT INTO AffectedPatch (cName, patchID, description, patchType) VALUES ('Ahri', 103, 'Increased mana cost on E', 'debuff');
-
--- Insert into SummonserSpell Table
-INSERT INTO SummonerSpell (ssID, cooldown) VALUES ('Flash', 300);
-INSERT INTO SummonerSpell (ssID, cooldown) VALUES ('Barrier', 300);
-INSERT INTO SummonerSpell (ssID, cooldown) VALUES ('Ignite', 180);
-INSERT INTO SummonerSpell (ssID, cooldown) VALUES ('Teleport', 360);
-INSERT INTO SummonerSpell (ssID, cooldown) VALUES ('Smite', 90);
-INSERT INTO SummonerSpell (ssID, cooldown) VALUES ('Heal', 240);
-
--- Insert into RuneFamily 
-INSERT INTO RuneFamily (principal, statBonus) VALUES ('Precision', 'Attack Speed');
-INSERT INTO RuneFamily (principal, statBonus) VALUES ('Domination', 'Adaptive Force');
-INSERT INTO RuneFamily (principal, statBonus) VALUES ('Sorcery', 'Ability Power');
-INSERT INTO RuneFamily (principal, statBonus) VALUES ('Resolve', 'Bonus Health');
-INSERT INTO RuneFamily (principal, statBonus) VALUES ('Inspiration', 'Cooldown Reduction');
-
--- Insert into Rune Table
-INSERT INTO Rune (principal, secondary) VALUES ('Precision', 'Domination');
-INSERT INTO Rune (principal, secondary) VALUES ('Domination', 'Sorcery');
-INSERT INTO Rune (principal, secondary) VALUES ('Sorcery', 'Inspiration');
-INSERT INTO Rune (principal, secondary) VALUES ('Resolve', 'Precision');
-INSERT INTO Rune (principal, secondary) VALUES ('Inspiration', 'Resolve');
-
--- INSERT INTO BannedChampion Table
-INSERT INTO BannedChampion (matchID, cName) VALUES (1, 'Garen');
-INSERT INTO BannedChampion (matchID, cName) VALUES (1, 'Irelia');
-INSERT INTO BannedChampion (matchID, cName) VALUES (1, 'Ahri');
-INSERT INTO BannedChampion (matchID, cName) VALUES (1, 'Lulu');
-INSERT INTO BannedChampion (matchID, cName) VALUES (5, 'Garen');
-INSERT INTO BannedChampion (matchID, cName) VALUES (5, 'Azir');
-INSERT INTO BannedChampion (matchID, cName) VALUES (5, 'Talon');
-INSERT INTO BannedChampion (matchID, cName) VALUES (5, 'Yasuo');
-
--- INSERT INTO Item Table
-INSERT INTO Item (itemID, bonus) VALUES ('Dark Seal', 'Glory');
-INSERT INTO Item (itemID, bonus) VALUES ('Eclipse', 'Ever Rising Moon');
-INSERT INTO Item (itemID, bonus) VALUES ('Manamune', 'Manaflow');
-INSERT INTO Item (itemID, bonus) VALUES ('Elixir of Wraith', 'Drain');
-INSERT INTO Item (itemID, bonus) VALUES ('Bamis Cinder', 'Immolate');
-INSERT INTO Item (itemID, bonus) VALUES ('Sunfire Aegis', 'Resilience');
-INSERT INTO Item (itemID, bonus) VALUES ('Mejais Soulstealer', 'Focus');
-INSERT INTO Item (itemID, bonus) VALUES ('Muramana', 'Wave');
-
--- INSERT INTO ItemInfo Table
+-- ItemInfo
 INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
-			('Glory', 350, NULL, 'Mejais Soulstealer');
-INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
-			('Ever Rising Moon', 2900, NULL, NULL);
-INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
-			('Manaflow', 2900, NULL, 'Muramana');
-INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
-			('Drain', 500, 1, NULL);
-INSERT INTO ItemInfo (bonus, cost, numberOfUses, buildsInto) VALUES
-			('Immolate', 900, NULL, 'Sunfire Aegis');
+('Glory',350,NULL,'Mejais Soulstealer'),
+('Ever Rising Moon',2900,NULL,NULL),
+('Manaflow',2900,NULL,'Muramana'),
+('Drain',500,1,NULL),
+('Immolate',900,NULL,'Sunfire Aegis');
 
--- INSERT INTO PlayerBuildsItems
-INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (1, 'theshy', 'Eclipse');
-INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (1, 'hideonbush', 'Dark Seal');
-INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (1, 'hideonbush', 'Manamune');
-INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (2, 'G2Caps', 'Elixir of Wraith');
-INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (3, 'topLaneLegend', 'Bamis Cinder');
-INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES (3, 'topLaneLegend', 'Eclipse');
+-- PlayerBuildsItems
+INSERT INTO PlayerBuildsItems (matchID, pName, item) VALUES
+(1,'theshy','Eclipse'),
+(1,'hideonbush','Dark Seal'),
+(1,'hideonbush','Manamune'),
+(2,'G2Caps','Elixir of Wraith'),
+(3,'topLaneLegend','Bamis Cinder'),
+(3,'topLaneLegend','Eclipse');
 
+-- PlayerPlaysChampion
+INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES
+('theshy','Irelia','Top'),
+('hideonbush','Ahri','Mid'),
+('DoubleLift','Caitlyn','ADC'),
+('rekkless','Lulu','Support'),
+('doinb','Talon','Jungle'),
+('G2Caps','Azir','Mid'),
+('topLaneLegend','Garen','Top'),
+('theshy','Lulu','Mid'),
+('theshy','KSante','Mid'),
+('theshy','Talon','Mid'),
+('theshy','Garen','Mid'),
+('G2Caps','Garen','Top'),
+('G2Caps','Talon','ADC'),
+('G2Caps','KSante','ADC'),
+('G2Caps','Lulu','ADC');
 
--- INSERT INTO PlayerPlaysChampion
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Irelia', 'Top');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('hideonbush', 'Ahri', 'Mid');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('DoubleLift', 'Caitlyn', 'ADC');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('rekkless', 'Lulu', 'Support');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('doinb', 'Talon', 'Jungle');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Azir', 'Mid');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('topLaneLegend', 'Garen', 'Top');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Lulu', 'Mid');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'KSante', 'Mid');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Talon', 'Mid');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('theshy', 'Garen', 'Mid');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Garen', 'Top');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Talon', 'ADC');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'KSante', 'ADC');
-INSERT INTO PlayerPlaysChampion (pName, cName, role) VALUES ('G2Caps', 'Lulu', 'ADC');
+-- GamePerformance
+INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES
+(15,1,5,'Great'),
+(10,2,8,'Great'),
+(3,4,25,'Great'),
+(8,4,3,'Good'),
+(5,5,2,'Poor'),
+(2,7,3,'Bad');
 
--- INSERT INTO GamePerformance
--- Great: KDA >= 4.0 or 0 Deaths | Good: KDA >= 2.0 | Poor: KDA >= 1.0 | Bad: KDA < 1.0
-INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (15, 1, 5, 'Great');
-INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (10, 2, 8, 'Great');
-INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (3, 4, 25, 'Great');
-INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (8, 4, 3, 'Good');
-INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (5, 5, 2, 'Poor');
-INSERT INTO GamePerformance (kills, deaths, assists, performance) VALUES (2, 7, 3, 'Bad');
-
-
--- INSERT INTO PlayedIn
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'theshy', 'Irelia', 'Flash', 'Teleport', 'Precision', 'Domination', 'Top', 'Blue', 10, 8, 2);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'hideonbush', 'Ahri', 'Flash', 'Ignite', 'Domination', 'Sorcery', 'Mid', 'Blue', 15, 5, 1);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'DoubleLift', 'Caitlyn', 'Flash', 'Heal', 'Precision', 'Domination', 'ADC', 'Blue', 3, 25, 4);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'rekkless', 'Lulu', 'Flash', 'Heal', 'Sorcery', 'Inspiration', 'Support', 'Blue', 8, 3, 4);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (1, 'doinb', 'Talon', 'Flash', 'Smite', 'Domination', 'Sorcery', 'Jungle', 'Blue', 5, 2, 5);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (2, 'G2Caps', 'Azir', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (3, 'theshy', 'Lulu', 'Flash', 'Ignite', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (4, 'theshy', 'KSante', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (5, 'theshy', 'Talon', 'Ignite', 'Heal', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (6, 'theshy', 'Garen', 'Flash', 'Smite', 'Sorcery', 'Inspiration', 'Mid', 'Red', 2, 3, 7);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (3, 'G2Caps', 'Garen', 'Teleport', 'Ignite', 'Sorcery', 'Inspiration', 'Top', 'Blue', 3, 25, 4);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (4, 'G2Caps', 'Talon', 'Flash', 'Barrier', 'Sorcery', 'Inspiration', 'ADC', 'Red', 3, 25, 4);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (5, 'G2Caps', 'KSante', 'Ignite', 'Heal', 'Sorcery', 'Inspiration', 'ADC', 'Blue', 3, 25, 4);
-
-INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) 
-VALUES (6, 'G2Caps', 'Lulu', 'Flash', 'Smite', 'Sorcery', 'Inspiration', 'ADC', 'Red', 3, 25, 4);
+-- PlayedIn
+INSERT INTO PlayedIn (matchID, uName, cName, sName_F, sName_D, rPrincipal, rSecondary, role, team, kills, assists, deaths) VALUES
+(1,'theshy','Irelia','Flash','Teleport','Precision','Domination','Top','Blue',10,8,2),
+(1,'hideonbush','Ahri','Flash','Ignite','Domination','Sorcery','Mid','Blue',15,5,1),
+(1,'DoubleLift','Caitlyn','Flash','Heal','Precision','Domination','ADC','Blue',3,25,4),
+(1,'rekkless','Lulu','Flash','Heal','Sorcery','Inspiration','Support','Blue',8,3,4),
+(1,'doinb','Talon','Flash','Smite','Domination','Sorcery','Jungle','Blue',5,2,5),
+(2,'G2Caps','Azir','Flash','Barrier','Sorcery','Inspiration','Mid','Red',2,3,7),
+(3,'theshy','Lulu','Flash','Ignite','Sorcery','Inspiration','Mid','Red',2,3,7),
+(4,'theshy','KSante','Flash','Barrier','Sorcery','Inspiration','Mid','Red',2,3,7),
+(5,'theshy','Talon','Ignite','Heal','Sorcery','Inspiration','Mid','Red',2,3,7),
+(6,'theshy','Garen','Flash','Smite','Sorcery','Inspiration','Mid','Red',2,3,7),
+(3,'G2Caps','Garen','Teleport','Ignite','Sorcery','Inspiration','Top','Blue',3,25,4),
+(4,'G2Caps','Talon','Flash','Barrier','Sorcery','Inspiration','ADC','Red',3,25,4),
+(5,'G2Caps','KSante','Ignite','Heal','Sorcery','Inspiration','ADC','Blue',3,25,4),
+(6,'G2Caps','Lulu','Flash','Smite','Sorcery','Inspiration','ADC','Red',3,25,4);
