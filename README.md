@@ -40,3 +40,38 @@ Patches are roled out often and so it is important that developers can easily id
 
 ### Citations:
 Utilized CPSC304 Node Project template: https://github.students.cs.ubc.ca/CPSC304/CPSC304_Node_Project
+
+## DEMO
+
+### Demo 1: Init Database using Postgres
+
+![Demo 1](demo/demo_one.gif)
+
+
+### Demo 2: Server Initizaion, Frontend Showcase
+
+![Demo 2](demo/demo_two.gif)
+
+### Demo 3: Insert Player Into Database
+
+![Demo 3](demo/demo_three.gif)
+
+### Demo 4: Update Player Info From Database
+
+![Demo 4](demo/demo_four.gif)
+
+### Demo 5: Player Win Rate Qeury
+
+![Demo 5](demo/demo_five.png)
+
+### Demo 6: Player Count By Region Qeury
+
+![Demo 6](demo/demo_six.png)
+
+### Demo 7: Champion Ban Rate
+
+![Demo 7](demo/demo_seven.png)
+
+### Demo 8: Average Player KDA Qeury
+
+![Demo 8](demo/demo_eight.png)
