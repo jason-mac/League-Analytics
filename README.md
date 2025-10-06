@@ -1,5 +1,7 @@
 # LOL Data 📊
 
+This was a group project done at UBC for CPSC 304, Database Management Systems.
+
 ## Project Description 
 An application that stores player match data for the game *League of Legends*. Information about player history, match turnouts, previous builds, regional playerbases and champions. 
 
@@ -41,14 +43,23 @@ Patches are roled out often and so it is important that developers can easily id
 ### Citations:
 Utilized CPSC304 Node Project template: https://github.students.cs.ubc.ca/CPSC304/CPSC304_Node_Project
 
-## DEMO
+## Demoing My Main Contributions
+
+Amongst three group members, we all had an opportunity to interact with the frontend and backend code. As this course is less focused on front
+end client code, we were mainly responsible for writing efficient queries.
+
+Each of us were responsible for database design and schemas. 
+
+The following showcases the core responsibilities I had in this course project.
+
+NOTE: This project originally used an Oracle database for storing data. I no longer have to the school's Oracle Database so I ported this entire project from Oracle to Postgres. The following demo showcases queries written in Postgres that I was originally responsible for.
 
 ### Demo 1: Init Database using Postgres
 
 ![Demo 1](demo/demo_one.gif)
 
 
-### Demo 2: Server Initizaion, Frontend Showcase
+### Demo 2: Server Initializaion, Frontend Showcase
 
 ![Demo 2](demo/demo_two.gif)
 
